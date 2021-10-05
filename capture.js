@@ -16,8 +16,9 @@ function capture (options) {
     (async () => {
       try {
         const browser = await puppeteer.launch({
+          headless: false,
           args: [
-            '--headless',
+            //'--headless',
             '--hide-scrollbars',
             '--mute-audio'
           ]
@@ -42,9 +43,12 @@ function capture (options) {
           localStorage.setItem('kano-jwt', options.jwt)
           localStorage.setItem('kano-welcome', false)
           if (options.bbox) {
-            const bbox = _.split(options.bbox, ',')
-            const view = { south: bbox[0], west: bbox[1], north: bbox[2], east: bbox[3] }
-            localStorage.setItme('kano-mapActivity-view', JSON.stringify(view))
+            const view = JSON.stringify({ 
+              south: options.bbox[0], 
+              west: options.bbox[1], 
+              north: options.bbox[2], 
+              east: options.bbox[3] })
+            localStorage.setItem('kano-mapActivity-view', view)
           }
         }, options)
         await page.goto(options.url)

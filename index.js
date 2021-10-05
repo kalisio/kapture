@@ -26,7 +26,7 @@ app.get('/capture', async (req, res) => {
     width: req.query.width || 1024,
     height: req.query.height || 768,
     baseLayer: _.get(req.query, 'base-layer') || 'OSM_BRIGHT',
-    bbox: req.query.bbox
+    bbox: req.query.bbox ? _.split(req.query.bbox, ',') : null
   }
   const buffer = await capture(options)
   if (buffer) {
