@@ -1,11 +1,21 @@
 const puppeteer = require('puppeteer')
+const _ = require('lodash')
 
-function capture (url, jwt, options) {
+/** helper function to click on the right opener
+ */
+async function clickRightOpener (page) {
+  await page.waitForSelector('#right-opener')
+  await page.click('#right-opener')
+}
+
+/** Main capture function
+ */
+function capture (options) {
+  console.log('capture requested with the following options: ', options)
   return new Promise((resolve, reject) => {
     (async () => {
       try {
         const browser = await puppeteer.launch({
-          headless: false,
           args: [
             '--headless',
             '--hide-scrollbars',
@@ -13,41 +23,42 @@ function capture (url, jwt, options) {
           ]
         })
         const page = await browser.newPage()
-
+        // Listen to page error events
         page.on('error', err=> {
           console.log('error happen at the page: ', err);
         });
-      
         page.on('pageerror', pageerr=> {
           console.log('pageerror occurred: ', pageerr);
         })
-
+        // Process the page viewport
         await page.setViewport({
           width: options.width || 1024,
           height: options.height || 700,
           deviceScaleFactor: 1
         })
-        await page.evaluateOnNewDocument(jwt => {
+        // Process the storage items
+        await page.evaluateOnNewDocument(options => {
           localStorage.clear();
-          localStorage.setItem('kano-jwt', jwt)
+          localStorage.setItem('kano-jwt', options.jwt)
           localStorage.setItem('kano-welcome', false)
-        }, jwt)
-        await page.goto(url)
-        // Activate the desiredBaseLayer
-        await page.waitForSelector('#right-opener')
-        await page.click('#right-opener')
-        await page.waitForSelector('#KCatalogPanel\\.METEO_LAYERS')
-        await page.click('#KCatalogPanel\\.METEO_LAYERS') 
-        await page.waitForTimeout(2000)
-        //let baseLayerSelector = '#Layers\\.IMAGERY .q-radio'
-        //await page.evaluate((selector) => document.querySelector(selector).click(), baseLayerSelector)
-        let meteoSelector = '#Layers\\.GUST_TILED .q-item__label'
-        await page.waitForSelector(meteoSelector)
-        await page.evaluate((selector) => document.querySelector(selector).click(), meteoSelector)
-        // close the menu 
-        //await page.click('#right-opener')
+          if (options.bbox) {
+            const bbox = _.split(options.bbox, ',')
+            const view = { south: bbox[0], west: bbox[1], north: bbox[2], east: bbox[3] }
+            localStorage.setItme('kano-mapActivity-view', JSON.stringify(view))
+          }
+        }, options)
+        await page.goto(options.url)
+        // Proces the base layer
+        await clickRightOpener(page)
+        const baseLayerCategorySelector = '#KCatalogPanel\\.BASE_LAYERS'
+        await page.waitForSelector(baseLayerCategorySelector)
+        await page.click(baseLayerCategorySelector)
+        await page.waitForTimeout(250)
+        const baseLayerSelector = `#Layers\\.${options.baseLayer}`
+        await page.waitForSelector(baseLayerSelector)
+        await page.click(baseLayerSelector)
+        await clickRightOpener(page)
         // Wait for the tiles to be loaded
-        // https://stackoverflow.com/questions/46160929/puppeteer-wait-for-all-images-to-load-then-take-screenshot
         await page.evaluate(async () => {
           const imageSelectors = Array.from(document.querySelectorAll("img"));
           await Promise.all(imageSelectors.map(img => {
@@ -58,9 +69,7 @@ function capture (url, jwt, options) {
             })
           }))
         })
-        // Handle transparency animation when rendering 
-        await page.waitForTimeout(3000)
-        
+        await page.waitForTimeout(1000)
         // Take the screenshot
         buffer = await page.screenshot({ fullPage: true, type: 'png' })
         await browser.close()

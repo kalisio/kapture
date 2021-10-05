@@ -1,11 +1,12 @@
 #!/usr/bin/env node
+const _ = require('lodash')
 const cors = require('cors')
 const express = require('express')
 const capture = require('./capture')
 
 const port = process.env.PORT || 3000
-const url = process.env.URL  
-const jwt = process.env.JWT
+const url = process.env.KANO_URL  
+const jwt = process.env.KANO_JWT
 
 var app = express()
 app.use(cors()) // enable cors
@@ -20,12 +21,14 @@ app.get('/healthcheck', (req, res) => {
 app.get('/capture', async (req, res) => {
   let start = new Date()
   let options = {
+    url: process.env.KANO_URL,
+    jwt: process.env.KANO_JWT,
     width: req.query.width || 1024,
     height: req.query.height || 768,
-    layers: req.query.layers,
+    baseLayer: _.get(req.query, 'base-layer') || 'OSM_BRIGHT',
     bbox: req.query.bbox
   }
-  const buffer = await capture(url, jwt, options)
+  const buffer = await capture(options)
   if (buffer) {
     res.contentType('image/png')
     res.send(buffer)

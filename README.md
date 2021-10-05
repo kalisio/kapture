@@ -1,6 +1,10 @@
 # kapture
 
 
+```js
+/capture?base-layer=OSM_DARK&bbox=42.538409837545586,1.3629913330078127,43.19116019158773,2.486343383789063&width=1200&height=800
+```
+
 ## Building
 
 ### Manual build 
