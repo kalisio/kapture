@@ -4,7 +4,7 @@
 
 ** Capture Kano Snapshots as a Service **
 
-**kapture** is a lightwight service that let you take screenshots of [Kano](https://kalisio.github.io/kano/). 
+**kapture** is a lightweight service that let you take screenshots of [Kano](https://kalisio.github.io/kano/). 
 
 **kapture** relies on [Puppeteer](https://github.com/puppeteer/puppeteer) and [Express](https://expressjs.com/fr/)
 
