@@ -1,5 +1,6 @@
-const puppeteer = require('puppeteer')
 const _ = require('lodash')
+const fs = require('fs')
+const puppeteer = require('puppeteer')
 
 /** helper function to click on the right opener
  */
@@ -16,9 +17,9 @@ function capture (options) {
     (async () => {
       try {
         const browser = await puppeteer.launch({
-          headless: false,
+          //headless: false,
           args: [
-            //'--headless',
+            '--headless',
             '--hide-scrollbars',
             '--mute-audio'
           ]
@@ -44,24 +45,38 @@ function capture (options) {
           localStorage.setItem('kano-welcome', false)
           if (options.bbox) {
             const view = JSON.stringify({ 
-              south: options.bbox[0], 
-              west: options.bbox[1], 
-              north: options.bbox[2], 
-              east: options.bbox[3] })
+              west: options.bbox[0],
+              south: options.bbox[1],
+              east: options.bbox[2],
+              north: options.bbox[3]
+            })
             localStorage.setItem('kano-mapActivity-view', view)
           }
         }, options)
         await page.goto(options.url)
         // Proces the base layer
-        await clickRightOpener(page)
-        const baseLayerCategorySelector = '#KCatalogPanel\\.BASE_LAYERS'
-        await page.waitForSelector(baseLayerCategorySelector)
-        await page.click(baseLayerCategorySelector)
-        await page.waitForTimeout(250)
-        const baseLayerSelector = `#Layers\\.${options.baseLayer}`
-        await page.waitForSelector(baseLayerSelector)
-        await page.click(baseLayerSelector)
-        await clickRightOpener(page)
+        if (options.layer) {
+          await clickRightOpener(page)
+          const baseLayerCategorySelector = '#KCatalogPanel\\.BASE_LAYERS'
+          await page.waitForSelector(baseLayerCategorySelector)
+          await page.click(baseLayerCategorySelector)
+          await page.waitForTimeout(250)
+          const baseLayerSelector = `#Layers\\.${options.layer}`
+          await page.waitForSelector(baseLayerSelector)
+          await page.click(baseLayerSelector)
+          await clickRightOpener(page)
+        }
+        if (options.features) {
+          const collection = JSON.stringify({
+            type: 'FeatureCollection',
+            features: options.features
+          })
+          fs.writeFileSync('features.json', collection)
+          const loaderSelector = '.leaflet-control-filelayer input[type="file"]'
+          const loader = await page.$(loaderSelector)
+          await loader.uploadFile('features.json')
+          await page.waitForTimeout(1000)
+        }
         // Wait for the tiles to be loaded
         await page.evaluate(async () => {
           const imageSelectors = Array.from(document.querySelectorAll("img"));

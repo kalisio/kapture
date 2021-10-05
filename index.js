@@ -5,11 +5,13 @@ const express = require('express')
 const capture = require('./capture')
 
 const port = process.env.PORT || 3000
-const url = process.env.KANO_URL  
+const url = process.env.KANO_URL || 'kano'
 const jwt = process.env.KANO_JWT
 
 var app = express()
 app.use(cors()) // enable cors
+app.use(express.urlencoded({extended: true})); 
+app.use(express.json());
 
 // Healthcheck
 app.get('/healthcheck', (req, res) => {
@@ -18,15 +20,17 @@ app.get('/healthcheck', (req, res) => {
 })
 
 // Capture 
-app.get('/capture', async (req, res) => {
+app.post('/capture', async (req, res) => {
+  console.log(req.body)
   let start = new Date()
   let options = {
-    url: process.env.KANO_URL,
-    jwt: process.env.KANO_JWT,
-    width: req.query.width || 1024,
-    height: req.query.height || 768,
-    baseLayer: _.get(req.query, 'base-layer') || 'OSM_BRIGHT',
-    bbox: req.query.bbox ? _.split(req.query.bbox, ',') : null
+    url: url,
+    jwt: jwt,
+    width: _.get(req.body, 'size.width', 1024),
+    height: _.get(req.body, 'size.height', 768),
+    bbox: _.get(req.body, 'bbox'),
+    layer: _.get(req.body, 'layer'),
+    features: _.get(req.body, 'features')
   }
   const buffer = await capture(options)
   if (buffer) {

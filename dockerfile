@@ -1,4 +1,4 @@
-FROM node:12.16-buster-slim
+FROM node:16.10-bullseye-slim
 LABEL maintainer "<contact@kalisio.xyz>"
 
 # https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#running-puppeteer-in-docker
