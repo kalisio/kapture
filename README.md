@@ -1,9 +1,43 @@
 # kapture
 
+[![Build Status](https://app.travis-ci.com/kalisio/kapture.svg?branch=master)](https://app.travis-ci.com/kalisio/kapture)
+
+** Capture Kano Snapshots as a Service **
+
+**kapture** is a lightwight service that let you take screenshots of [Kano](https://kalisio.github.io/kano/). 
+
+**kapture** relies on [Puppeteer](https://github.com/puppeteer/puppeteer) and [Express](https://expressjs.com/fr/)
+
+## API
+
+### capture endpoint
+
+Request a capture with the following query parameters:
+
+| Parameter  | Description | Defaults |
+|-----------| ------------| ------------|
+| `base-layer` | The base layer to be displayed | `OSM_BRIGHT` |
+| `bbox` | The view extention | - |
+| `width` | The viewport width | `1024` |
+| `height` | The viewport height | `768` |
+
 
 ```js
 /capture?base-layer=OSM_DARK&bbox=42.538409837545586,1.3629913330078127,43.19116019158773,2.486343383789063&width=1200&height=800
 ```
+
+### healthcheck endpoint
+
+Check for the health of the service
+
+## Configuring
+
+Here are the environment variables you can use to customize the service:
+
+| Variable  | Description | Defaults |
+|-----------| ------------| ------------|
+| `KANO_URL` | The **Kano** url | - |
+| `KANO_JWT` | The **Kano** token to get connected | * |
 
 ## Building
 
