@@ -1,0 +1,42 @@
+{
+  "name": "kapture",
+  "description": "Capture Kano Snapshots as a Service",
+  "version": "0.1.0",
+  "main": "index.js",
+  "bin": "index.js",
+  "homepage": "https://github.com/kalisio/kapture",
+  "keywords": [
+    "kargo",
+    "puppeteer"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kalisio/kapture.git"
+  },
+  "author": {
+    "name": "Kalisio",
+    "url": "https://github.com/kalisio"
+  },
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/kalisio/kapture/issues"
+  },
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Warning: no test specified\"",
+    "changelog": "changelog -x build,ci,chore,docs,other,perf,refactor,revert,style,test",
+    "release:major": "npm run changelog -- -M && git add CHANGELOG.md && git commit -m \"chore: updated CHANGELOG.md\" && npm version --force major",
+    "release:minor": "npm run changelog -- -m && git add CHANGELOG.md && git commit -m \"chore: Updated CHANGELOG.md\" && npm version --force minor",
+    "release:patch": "npm run changelog -- -p && git add CHANGELOG.md && git commit -m \"chore: Updated CHANGELOG.md\" && npm version --force patch",
+    "postversion": "git push origin --tags"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "puppeteer": "^10.2.0"
+  },
+  "devDependencies": {
+    "generate-changelog": "^1.8.0"
+  }
+}
