@@ -23,16 +23,19 @@ The body of the request must conform the [GeoJSON specification](https://datatra
 
 On the other hand **kaptrue** handles additional properties:
 
-| Property | Description | JSON Schema |
+| Property | Description | 
 | `baseLayer` | specifies the base layer to render | 
+| `size` | specifies the capture size. | 
+
+The `baseLayer` property must be conformed with the following schema: 
 
 ```json
 "baseLayer": {
   "type": "string"
 }
 ```
-|
-| `size` | specifies the capture size. | 
+
+The `size` property must be conformed with the following schema: 
 
 ```json
 "size": {
@@ -48,7 +51,6 @@ On the other hand **kaptrue** handles additional properties:
     }
 }
 ```
-|
 
 Here is a complete sample:
 
