@@ -23,7 +23,8 @@ The body of the request must conform the [GeoJSON specification](https://datatra
 
 On the other hand **kaptrue** handles additional properties:
 
-| Property | Description | 
+| Property | Description |
+| --- | --- |
 | `baseLayer` | specifies the base layer to render | 
 | `size` | specifies the capture size. | 
 
