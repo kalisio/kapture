@@ -21,20 +21,24 @@ The body of the request must conform the [GeoJSON specification](https://datatra
 | `features` | specifies the array of features to be rendered over the map. |
 | `bbox` | speifies the capture spatial extension. |
 
-On the other hand **kaptrue** handles additional properties:
+On the other hand **kapture** handles additional properties:
 
 | Property | Description |
 | --- | --- |
-| `baseLayer` | specifies the base layer to render | 
+| `layer` | specifies the base layer to render | 
 | `size` | specifies the capture size. | 
 
-The `baseLayer` property must be conformed with the following schema: 
+### layer
+
+The `layer` property must be conformed with the following schema: 
 
 ```json
 "baseLayer": {
   "type": "string"
 }
 ```
+
+### size
 
 The `size` property must be conformed with the following schema: 
 
