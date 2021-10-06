@@ -72,10 +72,11 @@ function capture (options) {
             features: options.features
           })
           fs.writeFileSync('features.json', collection)
+          await page.waitForTimeout(500)
           const loaderSelector = '.leaflet-control-filelayer input[type="file"]'
           const loader = await page.$(loaderSelector)
           await loader.uploadFile('features.json')
-          await page.waitForTimeout(1000)
+          await page.waitForTimeout(500)
         }
         // Hide the layout components
         await page.evaluate(() => {

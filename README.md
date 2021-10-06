@@ -47,6 +47,58 @@ On the other hand **kaptrue** handles additional properties:
 }
 ```
 
+Example:
+
+```json
+{
+    "layer": "IMAGERY",
+    "features": [
+        { 
+            "type": "Feature",
+            "geometry": {
+                "type": "Point", 
+                "coordinates": [3, 42.5]
+            },
+            "properties": {"prop0": "value0"}
+        },
+        { 
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [3, 42], [4, 43], [5,42], [6, 43]
+                ]
+            },
+            "properties": {
+                "prop0": "value0",
+                "prop1": 0.0
+            }
+        },
+        { 
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [ [0, 42], [1, 42], [1, 43], [0, 43], [0, 42] ]
+                ]
+            },
+            "properties": {
+                "prop0": "value0",
+                "prop1": {"this": "that"}
+            }
+        }
+    ],
+    "size": {
+      "width": 800,
+      "heigh": 600
+    }
+}
+```
+
+The response looks like:
+
+![response](./assets/response.png)
+
 ### healthcheck (GET)
 
 Check for the health of the service
