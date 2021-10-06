@@ -2,7 +2,7 @@
 
 [![Build Status](https://app.travis-ci.com/kalisio/kapture.svg?branch=master)](https://app.travis-ci.com/kalisio/kapture)
 
-** Capture Kano Snapshots as a Service **
+**Capture Kano Snapshots as a Service**
 
 **kapture** is a lightweight service that let you take screenshots of [Kano](https://kalisio.github.io/kano/). 
 
@@ -28,7 +28,7 @@ On the other hand **kapture** handles additional properties:
 | `layer` | specifies the base layer to render | 
 | `size` | specifies the capture size. | 
 
-The `layer` property must be conformed with the following schema: 
+The `layer` property must confomr the following JSON schema: 
 
 ```json
 "baseLayer": {
@@ -36,7 +36,7 @@ The `layer` property must be conformed with the following schema:
 }
 ```
 
-The `size` property must be conformed with the following schema: 
+The `size` property must confor the following JSON schema: 
 
 ```json
 "size": {
