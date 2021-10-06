@@ -16,21 +16,21 @@ function capture (options) {
   return new Promise((resolve, reject) => {
     (async () => {
       try {
+        // Instanciate the browser
         const browser = await puppeteer.launch({
-          //headless: false,
           args: [
             '--headless',
             '--hide-scrollbars',
             '--mute-audio'
           ]
         })
+        // Create the page and listen to page errors
         const page = await browser.newPage()
-        // Listen to page error events
-        page.on('error', err=> {
-          console.log('error happen at the page: ', err);
-        });
-        page.on('pageerror', pageerr=> {
-          console.log('pageerror occurred: ', pageerr);
+        page.on('error', err=> { 
+          console.error('error happen at the page: ', err) 
+        })
+        page.on('pageerror', pageerr=> { 
+          console.error('pageerror occurred: ', pageerr) 
         })
         // Process the page viewport
         await page.setViewport({
@@ -38,12 +38,13 @@ function capture (options) {
           height: options.height || 700,
           deviceScaleFactor: 1
         })
-        // Process the storage items
+        // Process the local storage items
         await page.evaluateOnNewDocument(options => {
           localStorage.clear();
           localStorage.setItem('kano-jwt', options.jwt)
           localStorage.setItem('kano-welcome', false)
-          if (options.bbox) {
+          // set the bbox view if not needed to render additional features
+          if (options.bbox && !options.features) {
             const view = JSON.stringify({ 
               west: options.bbox[0],
               south: options.bbox[1],
@@ -53,18 +54,26 @@ function capture (options) {
             localStorage.setItem('kano-mapActivity-view', view)
           }
         }, options)
+        // Goto the kano url
         await page.goto(options.url)
-        // Proces the base layer
-        if (options.layer) {
+        // Process the layers
+        if (options.layers) {
           await clickRightOpener(page)
-          const baseLayerCategorySelector = '#KCatalogPanel\\.BASE_LAYERS'
-          await page.waitForSelector(baseLayerCategorySelector)
-          await page.click(baseLayerCategorySelector)
-          await page.waitForTimeout(250)
-          const baseLayerSelector = `#Layers\\.${options.layer}`
-          await page.waitForSelector(baseLayerSelector)
-          await page.click(baseLayerSelector)
-          //await clickRightOpener(page)
+          // process the base layer
+          const baseLayer = _.find(options.layers, { category: 'BaseLayer' })
+          if (baseLayer) {
+            const baseLayerCategorySelector = '#KCatalogPanel\\.BASE_LAYERS'
+            await page.waitForSelector(baseLayerCategorySelector)
+            await page.click(baseLayerCategorySelector)
+            await page.waitForTimeout(250)
+            const baseLayerSelector = `#Layers\\.${baseLayer.name}`
+            try {
+              await page.waitForSelector(baseLayerSelector, { timeout: 1000 })
+              await page.click(baseLayerSelector)
+            } catch (error) {
+              console.log(`Base layer ${baseLayer.name} does not exist.`)
+            }            
+          }
         }
         if (options.features) {
           const collection = JSON.stringify({

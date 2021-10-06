@@ -29,7 +29,7 @@ app.post('/capture', async (req, res) => {
     width: _.get(req.body, 'size.width', 1024),
     height: _.get(req.body, 'size.height', 768),
     bbox: _.get(req.body, 'bbox'),
-    layer: _.get(req.body, 'layer'),
+    layers: _.get(req.body, 'layers'),
     features: _.get(req.body, 'features')
   }
   const buffer = await capture(options)
