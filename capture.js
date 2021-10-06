@@ -23,7 +23,7 @@ function capture (parameters) {
             '--headless',
             '--hide-scrollbars',
             '--disable-gpu',
-            '--mute-audio'
+            '--disable-dev-shm-usage'
           ]
         })
         // Create the page and listen to page errors
