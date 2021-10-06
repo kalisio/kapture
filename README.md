@@ -16,21 +16,23 @@ Request a capture with the following query parameters.
 
 The body of the request must conform the [GeoJSON specification](https://datatracker.ietf.org/doc/html/rfc7946). But **kapture** supports only the following properties:
 
-* `features` that specifies the array of features to be rendered over the map
-
-* `bbox` that speifies the capture spatial extension
+| Property | Description |
+| --- | --- |
+| `features` | specifies the array of features to be rendered over the map. |
+| `bbox` | speifies the capture spatial extension. |
 
 On the other hand **kaptrue** handles additional properties:
 
-* `baseLayer` that specifies the base layer to render
+| Property | Description | JSON Schema |
+| `baseLayer` | specifies the base layer to render | 
 
 ```json
 "baseLayer": {
   "type": "string"
 }
 ```
-
-* `size` that specifies the capture size:
+|
+| `size` | specifies the capture size. | 
 
 ```json
 "size": {
@@ -46,8 +48,9 @@ On the other hand **kaptrue** handles additional properties:
     }
 }
 ```
+|
 
-Example:
+Here is a complete sample:
 
 ```json
 {
@@ -95,7 +98,7 @@ Example:
 }
 ```
 
-The response looks like:
+And the response looks like:
 
 ![response](./assets/response.png)
 
