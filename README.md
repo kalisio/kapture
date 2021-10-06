@@ -25,10 +25,10 @@ On the other hand **kapture** handles additional properties:
 
 | Property | Description |
 | --- | --- |
-| `layer` | specifies the base layer to render | 
+| `layers` | specifies the layers to display. | 
 | `size` | specifies the capture size. | 
 
-The `layer` property must confomr the following JSON schema: 
+The `layers` property must conform the following JSON schema: 
 
 ```json
 "layers": {
