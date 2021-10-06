@@ -8,31 +8,19 @@ const port = process.env.PORT || 3000
 const url = process.env.KANO_URL || 'kano'
 const jwt = process.env.KANO_JWT
 
-var app = express()
+// Initialize express app
+const app = express()
 app.use(cors()) // enable cors
-app.use(express.urlencoded({extended: true})); 
-app.use(express.json());
+app.use(express.urlencoded({extended: true}))
+app.use(express.json())
 
-// Healthcheck
-app.get('/healthcheck', (req, res) => {
-  res.set('Content-Type', 'application/json')
-  return res.status(200).json({ isRunning: true })
-})
+
+
 
 // Capture 
 app.post('/capture', async (req, res) => {
-  console.log(req.body)
   let start = new Date()
-  let options = {
-    url: url,
-    jwt: jwt,
-    width: _.get(req.body, 'size.width', 1024),
-    height: _.get(req.body, 'size.height', 768),
-    bbox: _.get(req.body, 'bbox'),
-    layers: _.get(req.body, 'layers'),
-    features: _.get(req.body, 'features')
-  }
-  const buffer = await capture(options)
+  const buffer = await capture(Object.assign(req.body, { url, jwt }))
   if (buffer) {
     res.contentType('image/png')
     res.send(buffer)
@@ -43,6 +31,13 @@ app.post('/capture', async (req, res) => {
   }
 })
 
+// Healthcheck
+app.get('/healthcheck', (req, res) => {
+  res.set('Content-Type', 'application/json')
+  return res.status(200).json({ isRunning: true })
+})
+
+// Serve the app
 app.listen(port, () => {
   console.log('kapture server listening at %d', port)
 })

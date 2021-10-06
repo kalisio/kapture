@@ -11,16 +11,18 @@ async function clickRightOpener (page) {
 
 /** Main capture function
  */
-function capture (options) {
-  console.log('capture requested with the following options: ', options)
+function capture (parameters) {
+  console.log('capture requested with the following parameters: ', parameters)
   return new Promise((resolve, reject) => {
     (async () => {
       try {
         // Instanciate the browser
         const browser = await puppeteer.launch({
+          //headless: false,
           args: [
             '--headless',
             '--hide-scrollbars',
+            '--disable-gpu',
             '--mute-audio'
           ]
         })
@@ -34,51 +36,56 @@ function capture (options) {
         })
         // Process the page viewport
         await page.setViewport({
-          width: options.width || 1024,
-          height: options.height || 700,
+          width: _.get(parameters, 'size.width', 1024),
+          height: _.get(parameters, 'size.height', 768),
           deviceScaleFactor: 1
         })
         // Process the local storage items
-        await page.evaluateOnNewDocument(options => {
+        await page.evaluateOnNewDocument(parameters => {
           localStorage.clear();
-          localStorage.setItem('kano-jwt', options.jwt)
+          localStorage.setItem('kano-jwt', parameters.jwt)
           localStorage.setItem('kano-welcome', false)
           // set the bbox view if not needed to render additional features
-          if (options.bbox && !options.features) {
+          if (parameters.bbox && !parameters.features) {
             const view = JSON.stringify({ 
-              west: options.bbox[0],
-              south: options.bbox[1],
-              east: options.bbox[2],
-              north: options.bbox[3]
+              west: parameters.bbox[0],
+              south: parameters.bbox[1],
+              east: parameters.bbox[2],
+              north: parameters.bbox[3]
             })
             localStorage.setItem('kano-mapActivity-view', view)
           }
-        }, options)
+        }, parameters)
         // Goto the kano url
-        await page.goto(options.url)
+        await page.goto(parameters.url)
         // Process the layers
-        if (options.layers) {
+        if (parameters.layers) {
           await clickRightOpener(page)
-          // process the base layer
-          const baseLayer = _.find(options.layers, { category: 'BaseLayer' })
-          if (baseLayer) {
-            const baseLayerCategorySelector = '#KCatalogPanel\\.BASE_LAYERS'
-            await page.waitForSelector(baseLayerCategorySelector)
-            await page.click(baseLayerCategorySelector)
-            await page.waitForTimeout(250)
-            const baseLayerSelector = `#Layers\\.${baseLayer.name}`
+          for (layer of parameters.layers) {
+            const catergorySelector = `#k-catalog-panel-${_.kebabCase(layer.category)}`
             try {
-              await page.waitForSelector(baseLayerSelector, { timeout: 1000 })
-              await page.click(baseLayerSelector)
+              await page.waitForSelector(catergorySelector, { timeout: 1000 })
+              await page.click(catergorySelector)
+              await page.waitForTimeout(250)
             } catch (error) {
-              console.log(`Base layer ${baseLayer.name} does not exist.`)
+              console.log(`Category ${layer.category} does not exist.`)
+            }
+            let layerSelector = `#layers-${_.kebabCase(layer.name)}`
+            if (layer.category !== 'BASE_LAYERS') layerSelector += ' .q-toggle'
+            try {
+              await page.waitForSelector(layerSelector, { timeout: 1000 })
+              await page.click(layerSelector)
+              await page.waitForTimeout(250)
+            } catch (error) {
+              console.log(`Layer ${layer.name} does not exist.`)
             }            
           }
         }
-        if (options.features) {
+        // Process the features
+        if (parameters.features) {
           const collection = JSON.stringify({
             type: 'FeatureCollection',
-            features: options.features
+            features: parameters.features
           })
           fs.writeFileSync('features.json', collection)
           await page.waitForTimeout(500)
