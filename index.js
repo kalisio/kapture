@@ -14,9 +14,6 @@ app.use(cors()) // enable cors
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
-
-
-
 // Capture 
 app.post('/capture', async (req, res) => {
   let start = new Date()

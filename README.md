@@ -66,13 +66,13 @@ The `size` property must conform the following JSON schema:
 }
 ```
 
-Here is a complete sample:
+Here is a complete example:
 
 ```json
 {
     "layers": [{
-        "category": "BaseLayer",
-        "name": "IMAGERY" 
+        "name": "IMAGERY",
+        "category": "BASE_LAYERS"
       }
     ],
     "features": [{ 
