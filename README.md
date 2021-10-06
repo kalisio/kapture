@@ -31,12 +31,25 @@ On the other hand **kapture** handles additional properties:
 The `layer` property must confomr the following JSON schema: 
 
 ```json
-"baseLayer": {
-  "type": "string"
+"layers": {
+  "type": "array",
+  "items": [
+    {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  ]
 }
 ```
 
-The `size` property must confor the following JSON schema: 
+The `size` property must conform the following JSON schema: 
 
 ```json
 "size": {
@@ -57,42 +70,41 @@ Here is a complete sample:
 
 ```json
 {
-    "layer": "IMAGERY",
-    "features": [
-        { 
-            "type": "Feature",
-            "geometry": {
-                "type": "Point", 
-                "coordinates": [3, 42.5]
-            },
-            "properties": {"prop0": "value0"}
+    "layers": [{
+        "category": "BaseLayer",
+        "name": "IMAGERY" 
+      }
+    ],
+    "features": [{ 
+        "type": "Feature",
+        "geometry": {
+          "type": "Point", 
+          "coordinates": [3, 42.5]
         },
-        { 
-            "type": "Feature",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [3, 42], [4, 43], [5,42], [6, 43]
-                ]
-            },
-            "properties": {
-                "prop0": "value0",
-                "prop1": 0.0
-            }
-        },
-        { 
-            "type": "Feature",
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [
-                    [ [0, 42], [1, 42], [1, 43], [0, 43], [0, 42] ]
-                ]
-            },
-            "properties": {
-                "prop0": "value0",
-                "prop1": {"this": "that"}
-            }
+        "properties": { 
+          "prop0": "value0" 
         }
+      }, { 
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [ [3, 42], [4, 43], [5,42], [6, 43] ]
+        },
+        "properties": {
+          "prop0": "value0",
+          "prop1": 0.0
+        }
+      }, { 
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [ [ [0, 42], [1, 42], [1, 43], [0, 43], [0, 42] ] ]
+        },
+        "properties": {
+          "prop0": "value0",
+          "prop1": {"this": "that"}
+        }
+      }
     ],
     "size": {
       "width": 800,
