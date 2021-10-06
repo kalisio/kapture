@@ -64,7 +64,7 @@ function capture (options) {
           const baseLayerSelector = `#Layers\\.${options.layer}`
           await page.waitForSelector(baseLayerSelector)
           await page.click(baseLayerSelector)
-          await clickRightOpener(page)
+          //await clickRightOpener(page)
         }
         if (options.features) {
           const collection = JSON.stringify({
@@ -77,6 +77,14 @@ function capture (options) {
           await loader.uploadFile('features.json')
           await page.waitForTimeout(1000)
         }
+        // Hide the layout components
+        await page.evaluate(() => {
+          window.$store.set('topPane.content', null)
+          window.$store.set('bottomPane.content', null)
+          window.$store.set('rightPane.content', null)
+          window.$store.set('leftPane.content', null)
+          window.$store.set('fab.actions', [])
+        })
         // Wait for the tiles to be loaded
         await page.evaluate(async () => {
           const imageSelectors = Array.from(document.querySelectorAll("img"));
@@ -88,6 +96,7 @@ function capture (options) {
             })
           }))
         })
+        // Additional wait to handle transparency animation
         await page.waitForTimeout(1000)
         // Take the screenshot
         buffer = await page.screenshot({ fullPage: true, type: 'png' })

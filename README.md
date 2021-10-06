@@ -10,23 +10,44 @@
 
 ## API
 
-### capture endpoint
+### capture (POST)
 
-Request a capture with the following query parameters:
+Request a capture with the following query parameters.
 
-| Parameter  | Description | Defaults |
-|-----------| ------------| ------------|
-| `base-layer` | The base layer to be displayed | `OSM_BRIGHT` |
-| `bbox` | The view extention | - |
-| `width` | The viewport width | `1024` |
-| `height` | The viewport height | `768` |
+The body of the request must conform the [GeoJSON specification](https://datatracker.ietf.org/doc/html/rfc7946). But **kapture** supports only the following properties:
 
+* `features` that specifies the array of features to be rendered over the map
 
-```js
-/capture?base-layer=OSM_DARK&bbox=42.538409837545586,1.3629913330078127,43.19116019158773,2.486343383789063&width=1200&height=800
+* `bbox` that speifies the capture spatial extension
+
+On the other hand **kaptrue** handles additional properties:
+
+* `baseLayer` that specifies the base layer to render
+
+```json
+"baseLayer": {
+  "type": "string"
+}
 ```
 
-### healthcheck endpoint
+* `size` that specifies the capture size:
+
+```json
+"size": {
+  "type": "object",
+  "properties": {
+    "width": {
+      "type": "integer",
+      "default": 1024
+    },
+    "height": {
+      "type": "integer",
+      "default": 768
+    }
+}
+```
+
+### healthcheck (GET)
 
 Check for the health of the service
 
