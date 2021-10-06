@@ -28,8 +28,6 @@ On the other hand **kapture** handles additional properties:
 | `layer` | specifies the base layer to render | 
 | `size` | specifies the capture size. | 
 
-### layer
-
 The `layer` property must be conformed with the following schema: 
 
 ```json
@@ -37,8 +35,6 @@ The `layer` property must be conformed with the following schema:
   "type": "string"
 }
 ```
-
-### size
 
 The `size` property must be conformed with the following schema: 
 
