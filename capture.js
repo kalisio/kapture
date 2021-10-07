@@ -20,6 +20,7 @@ function capture (parameters) {
         const browser = await puppeteer.launch({
           //headless: false,
           args: [
+            '--no-sandbox',
             '--headless',
             '--hide-scrollbars',
             '--disable-gpu',
