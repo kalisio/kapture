@@ -23,6 +23,7 @@ function capture (parameters) {
             '--no-sandbox',
             '--headless',
             '--hide-scrollbars',
+            '--enable-webgl',
             '--disable-gpu',
             '--disable-dev-shm-usage'
           ]
