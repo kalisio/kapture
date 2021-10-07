@@ -1,5 +1,6 @@
 # kapture
 
+[![Latest Release](https://img.shields.io/github/v/tag/kalisio/kapture?sort=semver&label=latest)](https://github.com/kalisio/kapture/releases)
 [![Build Status](https://app.travis-ci.com/kalisio/kapture.svg?branch=master)](https://app.travis-ci.com/kalisio/kapture)
 
 **Capture Kano Snapshots as a Service**
