@@ -22,7 +22,6 @@ async function capture(body, image) {
   }
   // Add the Authorization header if jwt is defined
   if (jwt) urlOptions.headers['Authorization'] = 'Bearer ' + jwt
-  console.log(urlOptions)
   // Perform the request
   const res = await fetch(url + '/capture', urlOptions)
   // Save the response as a PNG image

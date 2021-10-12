@@ -15,5 +15,6 @@ yarn-error.log*
 node_modules
 
 # Temporay files
+test/run
 tmp
 
