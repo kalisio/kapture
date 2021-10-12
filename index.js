@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-const _ = require('lodash')
-const cors = require('cors')
-const express = require('express')
-const capture = require('./capture')
+import cors from 'cors'
+import express from 'express'
+import { capture } from './capture.js'
 
 const port = process.env.PORT || 3000
 const url = process.env.KANO_URL || 'kano'

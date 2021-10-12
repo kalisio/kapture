@@ -1,8 +1,8 @@
-const _ = require('lodash')
-const path = require('path')
-const fs = require('fs')
-const crypto = require('crypto')
-const puppeteer = require('puppeteer')
+import _  from 'lodash'
+import path from 'path'
+import fs from 'fs'
+import crypto from 'crypto'
+import puppeteer from 'puppeteer'
 
 const tmpDir = process.env.TMP_DIR || './tmp'
 
@@ -31,7 +31,7 @@ async function clickRightOpener (page) {
 
 /** Main capture function
  */
-function capture (parameters) {
+export function capture (parameters) {
   console.log('capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
   createTmpDir()
   return new Promise((resolve, reject) => {
@@ -86,7 +86,7 @@ function capture (parameters) {
         // Process the layers
         if (parameters.layers) {
           await clickRightOpener(page)
-          for (layer of parameters.layers) {
+          for (let layer of parameters.layers) {
             const catergorySelector = `#k-catalog-panel-${_.kebabCase(layer.category)}`
             try {
               await page.waitForSelector(catergorySelector, { timeout: 1000 })
@@ -141,7 +141,7 @@ function capture (parameters) {
         // Additional wait to handle transparency animation
         await page.waitForTimeout(1000)
         // Take the screenshot
-        buffer = await page.screenshot({ fullPage: true, type: 'png' })
+        const buffer = await page.screenshot({ fullPage: true, type: 'png' })
         await browser.close()
         // Remove temporary file if nedded
         deleteTmpFile(tmpGeoJsonFile)
@@ -153,5 +153,3 @@ function capture (parameters) {
     })()
   })
 }
-
-module.exports = capture
