@@ -11,11 +11,11 @@ const runDir = './test/run'
 
 const suite = 'capture'
 
-async function capture(body, image) {
+async function capture(parameters, image) {
   // Setup the request url options
   let urlOptions = {
     method: 'POST',
-    body: JSON.stringify(body),
+    body: JSON.stringify(parameters),
     headers: { 
       'Content-Type': 'application/json'
     }
