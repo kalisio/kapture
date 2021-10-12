@@ -159,6 +159,17 @@ This image is designed to be deployed using the [Kargo](https://kalisio.github.i
 
 Check out the [compose file](https://github.com/kalisio/kargo/blob/master/deploy/kontrol.yml) to have an overview on how the container is deployed.
 
+## Testing
+
+To test the service you need to set the following environment variables:
+
+| Variable  | Description | Defaults |
+|-----------| ------------| ------------|
+| `KAPTURE_URL` | The **Kapture** url. | `http://localhost:3000` |
+| `KAPTURE_JWT` | The **Kapture** bearen token to pass a gateway if needed. It is set using `Auhtorization` header. | * |
+
+To run the tests, use the subcommand `test`.
+
 ## Contributing
 
 Please read the [Contributing file](./.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
