@@ -1,9 +1,29 @@
 const _ = require('lodash')
+const path = require('path')
 const fs = require('fs')
+const crypto = require('crypto')
 const puppeteer = require('puppeteer')
 
-/** helper function to click on the right opener
+const tmpDir = process.env.TMP_DIR || './tmp'
+
+/** helper functions
  */
+function createTmpDir () {
+  if (!fs.existsSync(tmpDir)) {
+    fs.mkdirSync(tmpDir, { recusrive: true })
+  }
+}
+
+function writeTmpFile (file, content) {
+  const filePath = path.join(tmpDir, file)
+  fs.writeFileSync(filePath, content)
+}
+
+function deleteTmpFile (file) {
+  const filePath = path.join(tmpDir, file)
+  if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+}
+
 async function clickRightOpener (page) {
   await page.waitForSelector('#right-opener')
   await page.click('#right-opener')
@@ -12,10 +32,13 @@ async function clickRightOpener (page) {
 /** Main capture function
  */
 function capture (parameters) {
-  console.log('capture requested with the following parameters: ', parameters)
+  console.log('capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
+  createTmpDir()
   return new Promise((resolve, reject) => {
     (async () => {
       try {
+        // Define a temporary feature file
+        const tmpGeoJsonFile = 'features-' + crypto.randomBytes(4).readUInt32LE(0) + '.json'
         // Instanciate the browser
         const browser = await puppeteer.launch({
           //headless: false,
@@ -89,11 +112,11 @@ function capture (parameters) {
             type: 'FeatureCollection',
             features: parameters.features
           })
-          fs.writeFileSync('features.json', collection)
+          writeTmpFile(tmpGeoJsonFile, collection)
           await page.waitForTimeout(500)
           const loaderSelector = '.leaflet-control-filelayer input[type="file"]'
           const loader = await page.$(loaderSelector)
-          await loader.uploadFile('features.json')
+          await loader.uploadFile(path.join(tmpDir, tmpGeoJsonFile))
           await page.waitForTimeout(500)
         }
         // Hide the layout components
@@ -120,6 +143,9 @@ function capture (parameters) {
         // Take the screenshot
         buffer = await page.screenshot({ fullPage: true, type: 'png' })
         await browser.close()
+        // Remove temporary file if nedded
+        deleteTmpFile(tmpGeoJsonFile)
+        // Return the image as a buffer
         resolve(buffer)
       } catch (err) {
         reject(err)
