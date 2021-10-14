@@ -24,9 +24,18 @@ function deleteTmpFile (file) {
   if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
 }
 
+async function clickSelector (page, selector, wait = 250) {
+  try {
+    await page.waitForSelector(selector, { timeout: 1000 })
+    await page.click(selector)
+    await page.waitForTimeout(wait)
+  } catch (error) {
+    console.log(`${selector} does not exist.`)
+  }
+}
+
 async function clickRightOpener (page) {
-  await page.waitForSelector('#right-opener')
-  await page.click('#right-opener')
+  await clickSelector(page, '#right-opener')
 }
 
 /** Main capture function
@@ -87,23 +96,12 @@ export function capture (parameters) {
         if (parameters.layers) {
           await clickRightOpener(page)
           for (let layer of parameters.layers) {
-            const catergorySelector = `#k-catalog-panel-${_.kebabCase(layer.category)}`
-            try {
-              await page.waitForSelector(catergorySelector, { timeout: 1000 })
-              await page.click(catergorySelector)
-              await page.waitForTimeout(250)
-            } catch (error) {
-              console.log(`Category ${layer.category} does not exist.`)
-            }
+            // Click the category
+            clickSelector(page,  `#k-catalog-panel-${_.kebabCase(layer.category)}`)
+            // Click the layer
             let layerSelector = `#layers-${_.kebabCase(layer.name)}`
             if (layer.category !== 'BASE_LAYERS') layerSelector += ' .q-toggle'
-            try {
-              await page.waitForSelector(layerSelector, { timeout: 1000 })
-              await page.click(layerSelector)
-              await page.waitForTimeout(250)
-            } catch (error) {
-              console.log(`Layer ${layer.name} does not exist.`)
-            }            
+            clickSelector(page, layerSelector)        
           }
         }
         // Process the features
@@ -139,7 +137,7 @@ export function capture (parameters) {
           }))
         })
         // Additional wait to handle transparency animation
-        await page.waitForTimeout(1000)
+        await page.waitForTimeout(2000)
         // Take the screenshot
         const buffer = await page.screenshot({ fullPage: true, type: 'png' })
         await browser.close()
