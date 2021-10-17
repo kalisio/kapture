@@ -71,11 +71,9 @@ Here is a complete example:
 
 ```json
 {
-    "layers": [{
-        "name": "IMAGERY",
-        "category": "BASE_LAYERS"
-      }
-    ],
+    "layers": {
+      "BASE_LAYERS": [ "IMAGERY" ]
+    },
     "features": [{ 
         "type": "Feature",
         "geometry": {

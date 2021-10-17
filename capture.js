@@ -26,16 +26,12 @@ function deleteTmpFile (file) {
 
 async function clickSelector (page, selector, wait = 250) {
   try {
-    await page.waitForSelector(selector, { timeout: 1000 })
+    await page.waitForSelector(selector, { timeout: 2000 })
     await page.click(selector)
     await page.waitForTimeout(wait)
   } catch (error) {
     console.log(`${selector} does not exist.`)
   }
-}
-
-async function clickRightOpener (page) {
-  await clickSelector(page, '#right-opener')
 }
 
 /** Main capture function
@@ -50,10 +46,10 @@ export function capture (parameters) {
         const tmpGeoJsonFile = 'features-' + crypto.randomBytes(4).readUInt32LE(0) + '.json'
         // Instanciate the browser
         const browser = await puppeteer.launch({
-          //headless: false,
+          headless: false,
           args: [
             '--no-sandbox',
-            '--headless',
+            //'--headless',
             '--hide-scrollbars',
             '--enable-webgl',
             '--disable-gpu',
@@ -94,14 +90,20 @@ export function capture (parameters) {
         await page.goto(parameters.url)
         // Process the layers
         if (parameters.layers) {
-          await clickRightOpener(page)
-          for (let layer of parameters.layers) {
+          // Open the catalog
+          await clickSelector(page, '#right-opener')
+          await page.waitForTimeout(250)
+          for (const [category, layers] of Object.entries(parameters.layers)) {
+            console.log(category)
             // Click the category
-            clickSelector(page,  `#k-catalog-panel-${_.kebabCase(layer.category)}`)
-            // Click the layer
-            let layerSelector = `#layers-${_.kebabCase(layer.name)}`
-            if (layer.category !== 'BASE_LAYERS') layerSelector += ' .q-toggle'
-            clickSelector(page, layerSelector)        
+            await clickSelector(page,  `#k-catalog-panel-${_.kebabCase(category)}`)
+            // Click the layers
+            for (let layer of layers) {
+              console.log(layer)
+              let layerSelector = `#layers-${_.kebabCase(layer)}`
+              if (category !== 'BASE_LAYERS') layerSelector += ' .q-toggle'
+              await clickSelector(page, layerSelector)
+            }        
           }
         }
         // Process the features
