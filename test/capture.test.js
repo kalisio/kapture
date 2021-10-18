@@ -41,6 +41,17 @@ describe(`suite:${suite}`, () => {
     }
   })
 
+  it('handle invalid json file', async () => {
+    const body = {
+      features: JSON.parse(fs.readFileSync(path.join(dataDir, 'invalid.geojson'))).features,
+    }
+    const res = await capture(body, 'invalid')
+    expect(res.status).to.equal(422)
+    const resMessage = await res.json()
+    expect(resMessage.message === 'Invdalid \"features\" format')
+    expect(resMessage.errors.length).to.equal(1)
+  })
+
   it('capture default kano view', async () => {
     const body = {}
     const res = await capture(body, 'default')
@@ -63,9 +74,9 @@ describe(`suite:${suite}`, () => {
   it('capture geojson file', async () => {
     const body = {
       features: [
-        { type: 'Feature', geometry: { type: 'Point', coordinates: [3, 42.5] } },
-        { type: 'Feature', geometry: { type: 'LineString', coordinates: [ [3, 42], [4, 43], [5,42], [6, 43]]  } },
-        { type: 'Feature', geometry: { type: 'Polygon', coordinates: [ [ [0, 42], [1, 42], [1, 43], [0, 43], [0, 42] ] ] } }
+        { type: 'Feature', geometry: { type: 'Point', coordinates: [3, 42.5] }, properties: { "fill-color": "#AAAAAA" } },
+        { type: 'Feature', geometry: { type: 'LineString', coordinates: [ [3, 42], [4, 43], [5,42], [6, 43]] }, properties: { "fill-color": "#AAAAAA" } },
+        { type: 'Feature', geometry: { type: 'Polygon', coordinates: [ [ [0, 42], [1, 42], [1, 43], [0, 43], [0, 42] ] ] }, properties: { "fill-color": "#AAAAAA" } }
       ]
     }
     const res = await capture(body, 'geojson')
@@ -87,7 +98,7 @@ describe(`suite:${suite}`, () => {
   it('capture mask geoson file', async () => {
     const body = {
       layers: {
-        'BASE_LAYERS': ['HYBDID']
+        'BASE_LAYERS': ['HYBRID']
       },
       features: [ JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson'))) ],
       size: { width: 1200, height: 900 }
