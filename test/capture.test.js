@@ -28,10 +28,9 @@ async function capture(parameters, image) {
   const res = await fetch(url + '/capture', urlOptions)
   // Save the response as a PNG image
   if (res.status === 200) {
-    const runKey = path.join(runDir, image + '.png')
     const arrayBuffer = await res.arrayBuffer()
     const buffer = new Uint8Array(arrayBuffer)
-    fs.writeFileSync(runKey, buffer)
+    fs.writeFileSync(path.join(runDir, image + '.png'), buffer)
   }
   return res
 }
@@ -95,20 +94,7 @@ describe(`suite:${suite}`, () => {
 
   it('capture geojson file', async () => {
     const body = {
-      features: [
-        { 
-          type: 'Feature', 
-          geometry: { type: 'Point', coordinates: [3, 42.5] }, properties: { "fill-color": "#AAAAAA" } 
-        },
-        { 
-          type: 'Feature', 
-          geometry: { type: 'LineString', coordinates: [ [3, 42], [4, 43], [5,42], [6, 43]] }, properties: { "fill-color": "#AAAAAA" } 
-        },
-        { 
-          type: 'Feature', 
-          geometry: { type: 'Polygon', coordinates: [ [ [0, 42], [1, 42], [1, 43], [0, 43], [0, 42] ] ] }, properties: { "fill-color": "#AAAAAA" } 
-        }
-      ]
+      features: JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes.geojson')))
     }
     const res = await capture(body, 'geojson')
     expect(res.status).to.equal(200)
