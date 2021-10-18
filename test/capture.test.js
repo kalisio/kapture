@@ -2,6 +2,8 @@ import { expect } from 'chai'
 import fs from 'fs'
 import path from 'path'
 import fetch from 'node-fetch'
+import pixelmatch from 'pixelmatch'
+import png from 'pngjs'
 
 const url = process.env.KAPTURE_URL || 'http://localhost:3000'
 const jwt = process.env.KAPTURE_JWT
@@ -26,11 +28,30 @@ async function capture(parameters, image) {
   const res = await fetch(url + '/capture', urlOptions)
   // Save the response as a PNG image
   if (res.status === 200) {
+    const runKey = path.join(runDir, image + '.png')
     const arrayBuffer = await res.arrayBuffer()
     const buffer = new Uint8Array(arrayBuffer)
-    fs.writeFileSync(path.join(runDir, image + '.png'), buffer)
+    fs.writeFileSync(runKey, buffer)
   }
   return res
+}
+
+function match (image) {
+  const runKey = path.join(runDir, image + '.png')
+  const refKey = path.join('./test/data', suite , 'screenrefs', image + '.png')
+  const runImg = png.PNG.sync.read(fs.readFileSync(runKey))
+  const refImg = png.PNG.sync.read(fs.readFileSync(refKey))
+  const { width, height } = runImg
+  const diff = new png.PNG({ width, height })
+  const options = {
+    alpha: 0.3,
+    diffColor: [255, 0, 0],
+    diffColorAlt: [0, 255, 0],
+    threshold: 0.1
+  }
+  const numDiffs = pixelmatch(runImg.data, refImg.data, diff.data, width, height, options)
+  const diffRatio = 100.0 * (numDiffs / (width * height))
+  return diffRatio < 1.0
 }
 
 describe(`suite:${suite}`, () => {
@@ -56,6 +77,7 @@ describe(`suite:${suite}`, () => {
     const body = {}
     const res = await capture(body, 'default')
     expect(res.status).to.equal(200)
+    expect(match('default')).to.be.true
   })
 
   it('capture multiple zoomed layers', async () => {
@@ -74,13 +96,23 @@ describe(`suite:${suite}`, () => {
   it('capture geojson file', async () => {
     const body = {
       features: [
-        { type: 'Feature', geometry: { type: 'Point', coordinates: [3, 42.5] }, properties: { "fill-color": "#AAAAAA" } },
-        { type: 'Feature', geometry: { type: 'LineString', coordinates: [ [3, 42], [4, 43], [5,42], [6, 43]] }, properties: { "fill-color": "#AAAAAA" } },
-        { type: 'Feature', geometry: { type: 'Polygon', coordinates: [ [ [0, 42], [1, 42], [1, 43], [0, 43], [0, 42] ] ] }, properties: { "fill-color": "#AAAAAA" } }
+        { 
+          type: 'Feature', 
+          geometry: { type: 'Point', coordinates: [3, 42.5] }, properties: { "fill-color": "#AAAAAA" } 
+        },
+        { 
+          type: 'Feature', 
+          geometry: { type: 'LineString', coordinates: [ [3, 42], [4, 43], [5,42], [6, 43]] }, properties: { "fill-color": "#AAAAAA" } 
+        },
+        { 
+          type: 'Feature', 
+          geometry: { type: 'Polygon', coordinates: [ [ [0, 42], [1, 42], [1, 43], [0, 43], [0, 42] ] ] }, properties: { "fill-color": "#AAAAAA" } 
+        }
       ]
     }
     const res = await capture(body, 'geojson')
     expect(res.status).to.equal(200)
+    expect(match('geojson')).to.be.true
   })
 
   it('capture gradient geoson file', async () => {
@@ -93,6 +125,7 @@ describe(`suite:${suite}`, () => {
     }
     const res = await capture(body, 'gradient')
     expect(res.status).to.equal(200)
+    expect(match('gradient')).to.be.true
   })
 
   it('capture mask geoson file', async () => {
@@ -105,5 +138,6 @@ describe(`suite:${suite}`, () => {
     }
     const res = await capture(body, 'mask')
     expect(res.status).to.equal(200)
+    expect(match('mask')).to.be.true
   })
 })
