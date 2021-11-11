@@ -1,4 +1,4 @@
-FROM node:16.10-bullseye-slim
+FROM node:16.13-bullseye-slim
 LABEL maintainer "<contact@kalisio.xyz>"
 
 # To be able to use Puppeteer in Docker
