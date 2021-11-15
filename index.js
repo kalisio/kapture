@@ -16,7 +16,10 @@ const featuresValidator = function (req, res, next) {
       type: 'FeatureCollection',
       features: req.body.features
     }
-    const errors = geojsonhint.hint(collection)
+    // lint the geojson file
+    const messages = geojsonhint.hint(collection)
+    // filter the messages to find the errors
+    const errors = _.filter(messages, message => { return _.get(message, 'level') !== 'message' })
     if (errors.length > 0) res.status(422).json({ message: 'Invdalid \"features\" format', errors })
     else next()
   } else {
