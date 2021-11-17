@@ -35,6 +35,13 @@ async function clickSelector (page, selector, wait = 250) {
   }
 }
 
+export async function getLayerCategoryId (page, layerId) {
+  const xpath = `//div[contains(@class, "q-expansion-item q-item-type") and .//div[@id="${layerId}"]]`
+  const elements = await page.$x(xpath)
+  if (elements.length > 0) return (await elements[0].getProperty('id')).jsonValue()
+  return undefined
+}
+
 /** Main capture function
  */
  export async function capture (parameters) {
@@ -92,16 +99,18 @@ async function clickSelector (page, selector, wait = 250) {
   if (parameters.layers) {
     // Open the catalog
     await clickSelector(page, '#right-opener')
+    let openedCategories = []
     await page.waitForTimeout(250)
-    for (const [category, layers] of Object.entries(parameters.layers)) {
-      // Click the category
-      await clickSelector(page,  `#k-catalog-panel-${_.kebabCase(category)}`)
-      // Click the layers
-      for (let layer of layers) {
-        let layerSelector = `#layers-${_.kebabCase(layer)}`
-        if (category !== 'BASE_LAYERS') layerSelector += ' .q-toggle'
-        await clickSelector(page, layerSelector)
-      }        
+    for (let i = 0; i < parameters.layers.length; ++i) {
+      const layerId = parameters.layers[i]
+      const categoryId = getLayerCategoryId(layerId)
+      if (!openedCategories.includes(categoryId)) {
+        await clickSelector(page, categoryId)
+        openedCategories.push(categoryId)
+      }
+      let layerSelector = `#${layerId}`
+      if (categoryId !== 'k-catalog-panel-base-layers') layerSelector += ' .q-toggle'
+      await clickSelector(page, layerSelector)
     }
   }
   // Process the features
@@ -111,7 +120,7 @@ async function clickSelector (page, selector, wait = 250) {
       features: parameters.features
     })
     writeTmpFile(tmpGeoJsonFile, collection)
-    const loaderSelector = '.leaflet-control-filelayer input[type="file"]'
+    const loaderSelector = '#dropFileInput'
     try {
       const loader = await page.$(loaderSelector)
       await loader.uploadFile(path.join(tmpDir, tmpGeoJsonFile))
