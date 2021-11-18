@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import _ from 'lodash'
 import cors from 'cors'
 import express from 'express'
 import { Buffer } from 'buffer'
