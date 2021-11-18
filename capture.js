@@ -35,7 +35,7 @@ async function clickSelector (page, selector, wait = 250) {
   }
 }
 
-export async function getLayerCategoryId (page, layerId) {
+async function getLayerCategoryId (page, layerId) {
   const xpath = `//div[contains(@class, "q-expansion-item q-item-type") and .//div[@id="${layerId}"]]`
   const elements = await page.$x(xpath)
   if (elements.length > 0) return (await elements[0].getProperty('id')).jsonValue()
@@ -103,7 +103,7 @@ export async function getLayerCategoryId (page, layerId) {
     await page.waitForTimeout(250)
     for (let i = 0; i < parameters.layers.length; ++i) {
       const layerId = parameters.layers[i]
-      const categoryId = getLayerCategoryId(layerId)
+      const categoryId = getLayerCategoryId(page, layerId)
       if (!openedCategories.includes(categoryId)) {
         await clickSelector(page, categoryId)
         openedCategories.push(categoryId)

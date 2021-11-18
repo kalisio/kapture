@@ -81,11 +81,7 @@ describe(`suite:${suite}`, () => {
 
   it('capture multiple zoomed layers', async () => {
     const body = {
-      layers: {
-        'BASE_LAYERS': ['IMAGERY'],
-        'CAPTURED_LAYERS': ['MAPILLARY'],
-        'METEO_LAYERS': ['WIND_TILED']
-      },
+      layers: ['layers-imagery', 'layers-mapillary', 'layers-wind-tiled'],
       bbox: [ 1.62, 43.11, 1.63, 43.12 ]
     }
     const res = await capture(body, 'layers')
@@ -104,9 +100,7 @@ describe(`suite:${suite}`, () => {
 
   it('capture gradient geoson file', async () => {
     const body = {
-      layers: {
-        'BASE_LAYERS': ['OSM_DARK']
-      },
+      layers: ['layers-osm-dark'],
       features: JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson'))).features,
       size: { width: 800, height: 600 }
     }
@@ -117,9 +111,7 @@ describe(`suite:${suite}`, () => {
 
   it('capture geojson with defined bbox', async () => {
     const body = {
-      layers: {
-        'BASE_LAYERS': ['OSM_DARK']
-      },
+      layers: ['layers-osm-dark'],
       features: JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson'))).features,
       bbox: [ 4, 51.5, 5, 52.5 ],
       size: { width: 800, height: 600 }
@@ -131,9 +123,7 @@ describe(`suite:${suite}`, () => {
 
   it('capture mask geoson file', async () => {
     const body = {
-      layers: {
-        'BASE_LAYERS': ['HYBRID']
-      },
+      layers: ['layers-hybrid'],
       features: [ JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson'))) ],
       size: { width: 1200, height: 900 }
     }
