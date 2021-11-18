@@ -8,8 +8,8 @@ import png from 'pngjs'
 const url = process.env.KAPTURE_URL || 'http://localhost:3000'
 const jwt = process.env.KAPTURE_JWT
 
-const dataDir = './test/data'
-const runDir = './test/run'
+const dataDir = './test/data/capture'
+const runDir = './test/run/capture'
 
 const suite = 'capture'
 
@@ -113,7 +113,7 @@ describe(`suite:${suite}`, () => {
     const body = {
       layers: ['layers-osm-dark'],
       features: JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson'))).features,
-      bbox: [ 4, 51.5, 5, 52.5 ],
+      bbox: [ 3.5, 51, 5.5, 53 ],
       size: { width: 800, height: 600 }
     }
     const res = await capture(body, 'landing')
