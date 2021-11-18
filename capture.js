@@ -99,13 +99,13 @@ async function getLayerCategoryId (page, layerId) {
   if (parameters.layers) {
     // Open the catalog
     await clickSelector(page, '#right-opener')
-    let openedCategories = []
     await page.waitForTimeout(250)
+    let openedCategories = []
     for (let i = 0; i < parameters.layers.length; ++i) {
       const layerId = parameters.layers[i]
       const categoryId = await getLayerCategoryId(page, layerId)
       if (!openedCategories.includes(categoryId)) {
-        await clickSelector(page, categoryId)
+        await clickSelector(page, `#${categoryId}`)
         openedCategories.push(categoryId)
       }
       let layerSelector = `#${layerId}`
