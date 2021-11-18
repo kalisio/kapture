@@ -115,14 +115,14 @@ async function getLayerCategoryId (page, layerId) {
   }
   // Process the features
   if (parameters.features) {
-    const collection = JSON.stringify({
+    let geoJson = {
       type: 'FeatureCollection',
       features: parameters.features
-    })
-    writeTmpFile(tmpGeoJsonFile, collection)
-    const loaderSelector = '#dropFileInput'
+    }
+    if (parameters.bbox) geoJson.bbox = parameters.bbox
+    writeTmpFile(tmpGeoJsonFile,  JSON.stringify(geoJson))
     try {
-      const loader = await page.$(loaderSelector)
+      const loader = await page.$('#dropFileInput')
       await loader.uploadFile(path.join(tmpDir, tmpGeoJsonFile))
     } catch (error) {
       console.error(`Upload features file failed: ${error}`)
