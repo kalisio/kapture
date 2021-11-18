@@ -103,7 +103,7 @@ async function getLayerCategoryId (page, layerId) {
     await page.waitForTimeout(250)
     for (let i = 0; i < parameters.layers.length; ++i) {
       const layerId = parameters.layers[i]
-      const categoryId = getLayerCategoryId(page, layerId)
+      const categoryId = await getLayerCategoryId(page, layerId)
       if (!openedCategories.includes(categoryId)) {
         await clickSelector(page, categoryId)
         openedCategories.push(categoryId)
