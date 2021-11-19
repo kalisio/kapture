@@ -5,7 +5,6 @@ import crypto from 'crypto'
 import puppeteer from 'puppeteer'
 
 const tmpDir = process.env.TMP_DIR || './tmp'
-const slowMo = process
 
 /** helper functions
  */
@@ -105,9 +104,11 @@ async function getLayerCategoryId (page, layerId) {
     for (let i = 0; i < parameters.layers.length; ++i) {
       const layerId = parameters.layers[i]
       const categoryId = await getLayerCategoryId(page, layerId)
-      if (!openedCategories.includes(categoryId)) {
-        await clickSelector(page, `#${categoryId}`)
-        openedCategories.push(categoryId)
+      if (categoryId) {
+        if (!openedCategories.includes(categoryId)) {
+          await clickSelector(page, `#${categoryId}`)
+          openedCategories.push(categoryId)
+        }
       }
       let layerSelector = `#${layerId}`
       if (categoryId !== 'k-catalog-panel-base-layers') layerSelector += ' .q-toggle'
