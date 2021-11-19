@@ -46,13 +46,9 @@ async function getLayerCategoryId (page, layerId) {
  */
  export async function capture (parameters) {
   console.log('capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
-  // Create tmp directory if needed
-  createTmpDir()
-  // Define a temporary feature file
-  const tmpGeoJsonFile = 'features-' + crypto.randomBytes(4).readUInt32LE(0) + '.json'
   // Instanciate the browser
   const browser = await puppeteer.launch({
-    //headless: false,
+    headless: false,
     args: [
       '--no-sandbox',
       '--headless',
@@ -64,11 +60,11 @@ async function getLayerCategoryId (page, layerId) {
   })
   // Create the page and listen to page errors
   const page = await browser.newPage()
-  page.on('error', err=> { 
-    console.error('error happen at the page: ', err) 
+  page.on('error', error => { 
+    console.error('error happen at the page: ', error) 
   })
-  page.on('pageerror', pageerr=> { 
-    console.error('pageerror occurred: ', pageerr) 
+  page.on('pageerror', error => { 
+    console.error('pageerror occurred: ', error) 
   })
   // Process the page viewport
   await page.setViewport({
@@ -93,8 +89,13 @@ async function getLayerCategoryId (page, layerId) {
     }
   }, parameters)
   // Goto the kano url
-  await page.goto(parameters.url)
-  await page.waitForTimeout(500)
+  try {
+    await page.goto(parameters.url)
+    await page.waitForTimeout(500)
+  } catch (error) {
+    console.error(`Goto to ${parameters.url} failed: ${error}`)
+    return null
+  }
   // Process the layers
   if (parameters.layers) {
     // Open the catalog
@@ -115,19 +116,26 @@ async function getLayerCategoryId (page, layerId) {
   }
   // Process the features
   if (parameters.features) {
+    // Create tmp directory if needed
+    createTmpDir()
+    // Define a temporary feature file name
+    const tmpGeoJsonFile = 'features-' + crypto.randomBytes(4).readUInt32LE(0) + '.json'
+    // Build the GeoJson content
     let geoJson = {
       type: 'FeatureCollection',
       features: parameters.features
     }
     if (parameters.bbox) geoJson.bbox = parameters.bbox
+    // Write the file for droping it
     writeTmpFile(tmpGeoJsonFile,  JSON.stringify(geoJson))
     try {
       const loader = await page.$('#dropFileInput')
       await loader.uploadFile(path.join(tmpDir, tmpGeoJsonFile))
+      await page.waitForTimeout(250)
     } catch (error) {
       console.error(`Upload features file failed: ${error}`)
     }
-    await page.waitForTimeout(500)
+    // Delete the file
     deleteTmpFile(tmpGeoJsonFile)
   }
   // Hide the layout components

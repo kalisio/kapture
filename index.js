@@ -7,7 +7,7 @@ import { capture } from './capture.js'
 import geojsonhint from '@mapbox/geojsonhint'
 
 const port = process.env.PORT || 3000
-const url = process.env.KANO_URL || 'kano'
+const url = process.env.KANO_URL
 const jwt = process.env.KANO_JWT
 
 // features validator middleware
