@@ -99,10 +99,11 @@ async function getLayerCategoryId (page, layerId) {
   if (parameters.layers) {
     // Open the catalog
     await clickSelector(page, '#right-opener')
-    await page.waitForTimeout(250)
+    await page.waitForTimeout(1000)
     let openedCategories = []
     for (let i = 0; i < parameters.layers.length; ++i) {
-      const layerId = parameters.layers[i]
+      let layerId = parameters.layers[i]
+      if (!_.startsWith(layerId, 'layers-')) layerId = 'layers-' + _.kebabCase(layerId)
       const categoryId = await getLayerCategoryId(page, layerId)
       if (categoryId) {
         if (!openedCategories.includes(categoryId)) {
