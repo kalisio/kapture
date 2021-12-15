@@ -6,7 +6,8 @@ import puppeteer from 'puppeteer'
 
 const tmpDir = process.env.TMP_DIR || './tmp'
 
-/** helper functions
+/** 
+ * helper functions
  */
 function createTmpDir () {
   if (!fs.existsSync(tmpDir)) {
@@ -30,7 +31,7 @@ async function clickSelector (page, selector, wait = 250) {
     await page.click(selector)
     await page.waitForTimeout(wait)
   } catch (error) {
-    console.log(`${selector} does not exist.`)
+    console.error(`${selector} does not exist.`)
   }
 }
 
@@ -41,7 +42,8 @@ async function getLayerCategoryId (page, layerId) {
   return undefined
 }
 
-/** Main capture function
+/** 
+ *  Main capture function
  */
  export async function capture (parameters) {
   console.log('capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
@@ -66,11 +68,16 @@ async function getLayerCategoryId (page, layerId) {
     console.error('pageerror occurred: ', error) 
   })
   // Process the page viewport
-  await page.setViewport({
-    width: _.get(parameters, 'size.width', 1024),
-    height: _.get(parameters, 'size.height', 768),
-    deviceScaleFactor: 1
-  })
+  try {
+    await page.setViewport({
+      width: _.get(parameters, 'size.width', 1024),
+      height: _.get(parameters, 'size.height', 768),
+      deviceScaleFactor: 1
+    })
+  } catch (error) {
+    console.error(`Setting viewport failed: ${error}`)
+    return null
+  }
   // Process the local storage items
   await page.evaluateOnNewDocument(parameters => {
     localStorage.clear();
@@ -92,7 +99,7 @@ async function getLayerCategoryId (page, layerId) {
     await page.goto(parameters.url)
     await page.waitForTimeout(500)
   } catch (error) {
-    console.error(`Goto to ${parameters.url} failed: ${error}`)
+    console.error(`Going to ${parameters.url} failed: ${error}`)
     return null
   }
   // Process the layers
@@ -117,20 +124,15 @@ async function getLayerCategoryId (page, layerId) {
     }
   }
   // Process the features
-  if (parameters.features) {
+  if (parameters.type === 'FeatureCollection' || parameters.type === 'Feature') {
     // Create tmp directory if needed
     createTmpDir()
     // Define a temporary feature file name
     const tmpGeoJsonFile = 'features-' + crypto.randomBytes(4).readUInt32LE(0) + '.json'
-    // Build the GeoJson content
-    let geoJson = {
-      type: 'FeatureCollection',
-      features: parameters.features
-    }
-    if (parameters.bbox) geoJson.bbox = parameters.bbox
     // Write the file for droping it
-    writeTmpFile(tmpGeoJsonFile,  JSON.stringify(geoJson))
+    writeTmpFile(tmpGeoJsonFile,  JSON.stringify(parameters))
     try {
+      await page.waitForTimeout(250)
       const loader = await page.$('#dropFileInput')
       await loader.uploadFile(path.join(tmpDir, tmpGeoJsonFile))
       await page.waitForTimeout(250)
@@ -158,6 +160,6 @@ async function getLayerCategoryId (page, layerId) {
   // Take the screenshot
   const buffer = await page.screenshot({ fullPage: true, type: 'png' })
   await browser.close()  
-  // Return the image as a buffer
+  // Return the screenshot as a buffer
   return buffer
 }

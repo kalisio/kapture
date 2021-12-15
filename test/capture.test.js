@@ -62,14 +62,12 @@ describe(`suite:${suite}`, () => {
   })
 
   it('handle invalid json file', async () => {
-    const body = {
-      features: JSON.parse(fs.readFileSync(path.join(dataDir, 'invalid.geojson'))).features,
-    }
+    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'invalid.geojson')))
     const res = await capture(body, 'invalid')
     expect(res.status).to.equal(422)
     const resMessage = await res.json()
-    expect(resMessage.message === 'Invdalid \"features\" format')
-    expect(resMessage.errors.length).to.equal(1)
+    expect(resMessage.message === 'Invdalid \"GeoJSON\" format')
+    expect(resMessage.errors.length).to.equal(2)
   })
 
   it('capture default kano view', async () => {
@@ -81,7 +79,7 @@ describe(`suite:${suite}`, () => {
 
   it('capture multiple zoomed layers', async () => {
     const body = {
-      layers: ['layers-imagery', 'layers-mapillary', 'layers-wind-tiled'],
+      layers: ['layers-imagery', 'layers-mapillary'],
       bbox: [ 1.62, 43.11, 1.63, 43.12 ]
     }
     const res = await capture(body, 'layers')
@@ -90,43 +88,35 @@ describe(`suite:${suite}`, () => {
   })
 
   it('capture geojson file', async () => {
-    const body = {
-      features: JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes.geojson')))
-    }
-    const res = await capture(body, 'geojson')
+    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes.geojson')))
+    const res = await capture(body, 'shapes')
     expect(res.status).to.equal(200)
-    expect(match('geojson')).to.be.true
+    expect(match('shapes')).to.be.true
   })
 
   it('capture gradient geoson file', async () => {
-    const body = {
-      layers: ['layers-osm-dark'],
-      features: JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson'))).features,
-      size: { width: 800, height: 600 }
-    }
+    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
+    body.layers = ['layers-osm-dark']
+    body.size = { width: 800, height: 600 }
     const res = await capture(body, 'flight')
     expect(res.status).to.equal(200)
     expect(match('flight')).to.be.true
   })
 
   it('capture geojson with defined bbox', async () => {
-    const body = {
-      layers: ['layers-osm-dark'],
-      features: JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson'))).features,
-      bbox: [ 3.5, 51, 5.5, 53 ],
-      size: { width: 800, height: 600 }
-    }
+    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
+    body.layers = ['layers-osm-dark']
+    body.size = { width: 800, height: 600 }
+    body.bbox = [ 3.5, 51, 5.5, 53 ]
     const res = await capture(body, 'landing')
     expect(res.status).to.equal(200)
     expect(match('landing')).to.be.true
   })
 
   it('capture mask geoson file', async () => {
-    const body = {
-      layers: ['layers-hybrid'],
-      features: [ JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson'))) ],
-      size: { width: 1200, height: 900 }
-    }
+    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson')))
+    body.layers = ['layers-hybrid']
+    body.size = { width: 1200, height: 900 }
     const res = await capture(body, 'mask')
     expect(res.status).to.equal(200)
     expect(match('mask')).to.be.true

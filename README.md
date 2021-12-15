@@ -33,7 +33,7 @@ The `layers` property must conform the following JSON schema:
 
 ```json
 "layers": {
-  "type" : "object",
+  "type" : "arrary",
   "additionalProperties" : {
     "type" : "array",
     "items": {

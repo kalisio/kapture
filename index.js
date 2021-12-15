@@ -11,17 +11,13 @@ const url = process.env.KANO_URL
 const jwt = process.env.KANO_JWT
 
 // features validator middleware
-const featuresValidator = function (req, res, next) {
-  if (req.body.features) {
-    const collection = {
-      type: 'FeatureCollection',
-      features: req.body.features
-    }
+const geoJsonValidator = function (req, res, next) {
+  if (req.body.type === 'FeatureCollection' || req.body.type === 'Feature') {
     // lint the geojson file
-    const messages = geojsonhint.hint(collection)
+    const messages = geojsonhint.hint(req.body)
     // filter the messages to find the errors
     const errors = _.filter(messages, message => { return _.get(message, 'level') !== 'message' })
-    if (errors.length > 0) res.status(422).json({ message: 'Invdalid \"features\" format', errors })
+    if (errors.length > 0) res.status(422).json({ message: 'Invdalid \"GeoJSON\" format', errors })
     else next()
   } else {
     next()
@@ -33,7 +29,7 @@ const app = express()
 app.use(cors()) // enable cors
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
-app.use(featuresValidator)
+app.use(geoJsonValidator)
 
 // Capture 
 app.post('/capture', async (req, res) => {
