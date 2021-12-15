@@ -7,8 +7,9 @@ import { capture } from './capture.js'
 import geojsonhint from '@mapbox/geojsonhint'
 
 const port = process.env.PORT || 3000
-const url = process.env.KANO_URL
-const jwt = process.env.KANO_JWT
+const kanoUrl = process.env.KANO_URL
+const kanoJwt = process.env.KANO_JWT
+const bodyLimit = process.env.BODY_LIMIT || '100kb'
 
 // features validator middleware
 const geoJsonValidator = function (req, res, next) {
@@ -27,14 +28,14 @@ const geoJsonValidator = function (req, res, next) {
 // Initialize express app
 const app = express()
 app.use(cors()) // enable cors
-app.use(express.urlencoded({extended: true}))
-app.use(express.json())
+app.use(express.urlencoded({limit: bodyLimit, extended: true}))
+app.use(express.json({limit: bodyLimit}))
 app.use(geoJsonValidator)
 
 // Capture 
 app.post('/capture', async (req, res) => {
   let start = new Date()
-  const buffer = await capture(Object.assign(req.body, { url, jwt }))
+  const buffer = await capture(Object.assign(req.body, { url : kanoUrl, jwt: kanoJwt }))
   if (Buffer.isBuffer(buffer)) {
     res.contentType('image/png')
     res.send(buffer)

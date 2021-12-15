@@ -87,11 +87,17 @@ describe(`suite:${suite}`, () => {
     expect(match('layers')).to.be.true
   })
 
-  it('capture geojson file', async () => {
+  it('capture heterogenous geojson file', async () => {
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes.geojson')))
     const res = await capture(body, 'shapes')
     expect(res.status).to.equal(200)
     expect(match('shapes')).to.be.true
+  })
+
+  it('handle too large geojson file', async () => {
+    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'adsb.geojson')))
+    const res = await capture(body, 'adsb')
+    expect(res.status).to.equal(413)
   })
 
   it('capture gradient geoson file', async () => {
