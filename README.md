@@ -15,31 +15,23 @@
 
 Request a capture with the following query parameters.
 
-The body of the request must conform the [GeoJSON specification](https://datatracker.ietf.org/doc/html/rfc7946). But **kapture** supports only the following properties:
+The body of the request must conform a **JSON** object with the following properties: 
 
 | Property | Description |
 | --- | --- |
-| `features` | specifies the array of features to be rendered over the map. |
-| `bbox` | speifies the capture spatial extension. |
-
-On the other hand **kapture** handles additional properties:
-
-| Property | Description |
-| --- | --- |
-| `layers` | specifies the layers to display. | 
-| `size` | specifies the capture size. | 
+| `layers` | specifies the layers to display | Optional | 
+| `size` | specifies the capture size | Otptional |
 
 The `layers` property must conform the following JSON schema: 
 
 ```json
 "layers": {
-  "type" : "arrary",
-  "additionalProperties" : {
-    "type" : "array",
-    "items": {
-      "type": "string"
-    }
+  "type" : "array",
+  "items": {
+    "type": "string"
   }
+}
+
 }
 ```
 
@@ -60,48 +52,40 @@ The `size` property must conform the following JSON schema:
 }
 ```
 
+In addition the body can conform a [GeoJSON](https://datatracker.ietf.org/doc/html/rfc7946 object. The describe features will be rendered as an overlay.
+
 Here is a complete example:
 
 ```json
 {
-    "layers": {
-      "BASE_LAYERS": [ "IMAGERY" ]
+  "layers": ["layers-imagery"],
+  "type": "FeatureCollection",
+  "features": [
+    { 
+      "type": "Feature", 
+      "geometry": { 
+        "type": "Point", 
+        "coordinates": [3, 42.5]
+      },
+      "properties": { "fill-color": "#AAAAAA" } 
     },
-    "features": [{ 
-        "type": "Feature",
-        "geometry": {
-          "type": "Point", 
-          "coordinates": [3, 42.5]
-        },
-        "properties": { 
-          "prop0": "value0" 
-        }
-      }, { 
-        "type": "Feature",
-        "geometry": {
-          "type": "LineString",
-          "coordinates": [ [3, 42], [4, 43], [5,42], [6, 43] ]
-        },
-        "properties": {
-          "prop0": "value0",
-          "prop1": 0.0
-        }
-      }, { 
-        "type": "Feature",
-        "geometry": {
-          "type": "Polygon",
-          "coordinates": [ [ [0, 42], [1, 42], [1, 43], [0, 43], [0, 42] ] ]
-        },
-        "properties": {
-          "prop0": "value0",
-          "prop1": {"this": "that"}
-        }
-      }
-    ],
-    "size": {
-      "width": 800,
-      "heigh": 600
+    { 
+      "type": "Feature", 
+      "geometry": { 
+        "type": "LineString", 
+        "coordinates": [ [3, 42], [4, 43], [5,42], [6, 43]] 
+      },
+      "properties": { "fill-color": "#AAAAAA" } 
+    },
+    { 
+      "type": "Feature", 
+      "geometry": { 
+        "type": "Polygon", 
+        "coordinates": [ [ [0, 42], [1, 42], [1, 43], [0, 43], [0, 42] ] ] 
+      }, 
+      "properties": { "fill-color": "#AAAAAA" } 
     }
+  ]
 }
 ```
 
@@ -121,6 +105,7 @@ Here are the environment variables you can use to customize the service:
 |-----------| ------------| ------------|
 | `KANO_URL` | The **Kano** url | - |
 | `KANO_JWT` | The **Kano** token to get connected | * |
+| `BODY_LIMIT` | The size limit of the request body | `100kb` |
 
 ## Building
 
