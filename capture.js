@@ -122,6 +122,7 @@ async function getLayerCategoryId (page, layerId) {
       if (categoryId !== 'k-catalog-panel-base-layers') layerSelector += ' .q-toggle'
       await clickSelector(page, layerSelector)
     }
+    await page.waitForTimeout(250)
   }
   // Process the features
   if (parameters.type === 'FeatureCollection' || parameters.type === 'Feature') {
