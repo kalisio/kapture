@@ -40,7 +40,7 @@ app.post('/capture', async (req, res) => {
     res.contentType('image/png')
     res.send(buffer)
     let duration = new Date() - start
-    console.log('capture processed in %dms', duration)
+    console.log('<> capture processed in %dms', duration)
   } else {
     res.status(404).json({ message: 'Bad request' })
   }
@@ -54,6 +54,6 @@ app.get('/healthcheck', (req, res) => {
 
 // Serve the app
 app.listen(port, () => {
-  console.log('kapture server listening at %d', port)
+  console.log('<> kapture server listening at %d (body limit %s)', port, bodyLimit)
 })
 

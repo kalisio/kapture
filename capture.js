@@ -46,10 +46,9 @@ async function getLayerCategoryId (page, layerId) {
  *  Main capture function
  */
  export async function capture (parameters) {
-  console.log('capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
+  console.log('<> capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
   // Instanciate the browser
   const browser = await puppeteer.launch({
-    headless: false,
     args: [
       '--no-sandbox',
       '--headless',
@@ -62,10 +61,10 @@ async function getLayerCategoryId (page, layerId) {
   // Create the page and listen to page errors
   const page = await browser.newPage()
   page.on('error', error => { 
-    console.error('error happen at the page: ', error) 
+    console.error('<!> error happen at the page: ', error) 
   })
   page.on('pageerror', error => { 
-    console.error('pageerror occurred: ', error) 
+    console.error('<!> pageerror occurred: ', error) 
   })
   // Process the page viewport
   try {
@@ -75,7 +74,7 @@ async function getLayerCategoryId (page, layerId) {
       deviceScaleFactor: 1
     })
   } catch (error) {
-    console.error(`Setting viewport failed: ${error}`)
+    console.error(`<!> setting viewport failed: ${error}`)
     return null
   }
   // Process the local storage items
@@ -99,7 +98,7 @@ async function getLayerCategoryId (page, layerId) {
     await page.goto(parameters.url)
     await page.waitForTimeout(500)
   } catch (error) {
-    console.error(`Going to ${parameters.url} failed: ${error}`)
+    console.error(`<!> navigate to ${parameters.url} failed: ${error}`)
     return null
   }
   // Process the layers
@@ -122,7 +121,6 @@ async function getLayerCategoryId (page, layerId) {
       if (categoryId !== 'k-catalog-panel-base-layers') layerSelector += ' .q-toggle'
       await clickSelector(page, layerSelector)
     }
-    await page.waitForTimeout(250)
   }
   // Process the features
   if (parameters.type === 'FeatureCollection' || parameters.type === 'Feature') {
@@ -138,7 +136,7 @@ async function getLayerCategoryId (page, layerId) {
       await loader.uploadFile(path.join(tmpDir, tmpGeoJsonFile))
       await page.waitForTimeout(250)
     } catch (error) {
-      console.error(`Upload features file failed: ${error}`)
+      console.error(`<!> upload features file failed: ${error}`)
     }
     // Delete the file
     deleteTmpFile(tmpGeoJsonFile)
@@ -156,7 +154,7 @@ async function getLayerCategoryId (page, layerId) {
     await page.waitForNetworkIdle({ timeout: 15000 })
     await page.waitForTimeout(1000)
   } catch(error) {
-    console.error(`Wait for networkd idle failed: ${error}`)
+    console.error(`<!> wait for networkd idle failed: ${error}`)
   }
   // Take the screenshot
   const buffer = await page.screenshot({ fullPage: true, type: 'png' })
