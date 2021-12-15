@@ -31,8 +31,6 @@ The `layers` property must conform the following JSON schema:
     "type": "string"
   }
 }
-
-}
 ```
 
 The `size` property must conform the following JSON schema: 
