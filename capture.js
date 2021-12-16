@@ -25,24 +25,6 @@ function deleteTmpFile (file) {
   if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
 }
 
-/*async function clickSelector (page, selector, wait = 250) {
-  try {
-    await page.waitForSelector(selector, { timeout: 2000 })
-    await page.click(selector)
-    await page.waitForTimeout(wait)
-  } catch (error) {
-    console.error(`${selector} does not exist.`)
-  }
-}
-
-async function getLayerCategoryId (page, layerId) {
-  const xpath = `//div[contains(@class, "q-expansion-item q-item-type") and .//div[@id="${layerId}"]]`
-  const elements = await page.$x(xpath)
-  if (elements.length > 0) return (await elements[0].getProperty('id')).jsonValue()
-  return undefined
-}
-*/
-
 /** 
  *  Main capture function
  */
@@ -99,34 +81,12 @@ async function getLayerCategoryId (page, layerId) {
       queryParams.push(`layers=${layerId}`)
     })
     if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
-    console.log(url)
     await page.goto(url)
     await page.waitForTimeout(500)
   } catch (error) {
     console.error(`<!> navigate to ${url} failed: ${error}`)
     return null
   }
-  // Process the layers
-/* if (parameters.layers) {
-    // Open the catalog
-    await clickSelector(page, '#right-opener')
-    await page.waitForTimeout(1000)
-    let openedCategories = []
-    for (let i = 0; i < parameters.layers.length; ++i) {
-      let layerId = parameters.layers[i]
-      if (!_.startsWith(layerId, 'layers-')) layerId = 'layers-' + _.kebabCase(layerId)
-      const categoryId = await getLayerCategoryId(page, layerId)
-      if (categoryId) {
-        if (!openedCategories.includes(categoryId)) {
-          await clickSelector(page, `#${categoryId}`)
-          openedCategories.push(categoryId)
-        }
-      }
-      let layerSelector = `#${layerId}`
-      if (categoryId !== 'k-catalog-panel-base-layers') layerSelector += ' .q-toggle'
-      await clickSelector(page, layerSelector)
-    }
-  }*/
   // Process the features
   if (parameters.type === 'FeatureCollection' || parameters.type === 'Feature') {
     // Create tmp directory if needed

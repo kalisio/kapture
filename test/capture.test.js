@@ -77,17 +77,6 @@ describe(`suite:${suite}`, () => {
     expect(match('default')).to.be.true
   })
 
-  it('captue time dependent kano view', async () => {
-    const body = {
-      bbox: [ -16.875000000000004, 37.84015683604136, 26.081542968750004, 54.20101023973888 ],
-      size: { width: 1280, height: 720 },
-      time: '2021-12-09T15:15:01.112Z'
-    }
-    const res = await capture(body, 'time')
-    expect(res.status).to.equal(200)
-    expect(match('time')).to.be.true
-  })
-
   it('capture multiple zoomed layers', async () => {
     const body = {
       layers: ['layers-imagery', 'layers-mapillary', 'layers-adminexpress'],
