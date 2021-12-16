@@ -79,7 +79,7 @@ describe(`suite:${suite}`, () => {
 
   it('capture multiple zoomed layers', async () => {
     const body = {
-      layers: ['layers-imagery', 'layers-mapillary', 'layers-adminexpress'],
+      layers: ['Layers.IMAGERY', 'Layers.MAPILLARY', 'Layers.ADMINEXPRESS'],
       bbox: [ 1.6, 43.10, 1.65, 43.14 ]
     }
     const res = await capture(body, 'layers')
@@ -102,7 +102,7 @@ describe(`suite:${suite}`, () => {
 
   it('capture gradient geoson file', async () => {
     let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
-    body.layers = ['layers-osm-dark']
+    body.layers = ['Layers.OSM_DARK']
     body.size = { width: 800, height: 600 }
     const res = await capture(body, 'flight')
     expect(res.status).to.equal(200)
@@ -111,7 +111,7 @@ describe(`suite:${suite}`, () => {
 
   it('capture geojson with defined bbox', async () => {
     let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
-    body.layers = ['layers-osm-dark']
+    body.layers = ['Layers.OSM_DARK']
     body.size = { width: 800, height: 600 }
     body.bbox = [ 3.5, 51, 5.5, 53 ]
     const res = await capture(body, 'landing')
@@ -121,7 +121,7 @@ describe(`suite:${suite}`, () => {
 
   it('capture mask geoson file', async () => {
     let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson')))
-    body.layers = ['layers-hybrid']
+    body.layers = ['Layers.HYBRID']
     body.size = { width: 1200, height: 900 }
     const res = await capture(body, 'mask')
     expect(res.status).to.equal(200)

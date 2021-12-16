@@ -77,7 +77,8 @@ function deleteTmpFile (file) {
       queryParams.push(`time=${parameters.time}`)
     }
     _.forEach(parameters.layers, layer => {
-      const layerId = _.replace(_.replace(_.upperCase(layer), / /g, '_'), 'LAYERS_', 'Layers.')
+      let layerId = layer
+      if (_.startsWith(layer, 'layers-')) layerId = _.replace(_.replace(_.upperCase(layer), / /g, '_'), 'LAYERS_', 'Layers.')
       queryParams.push(`layers=${layerId}`)
     })
     if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
