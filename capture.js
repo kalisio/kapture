@@ -82,20 +82,17 @@ async function getLayerCategoryId (page, layerId) {
     localStorage.clear();
     localStorage.setItem('kano-jwt', parameters.jwt)
     localStorage.setItem('kano-welcome', false)
-    // set the bbox view if not needed to render additional features
-    if (parameters.bbox && !parameters.features) {
-      const view = JSON.stringify({ 
-        west: parameters.bbox[0],
-        south: parameters.bbox[1],
-        east: parameters.bbox[2],
-        north: parameters.bbox[3]
-      })
-      localStorage.setItem('kano-mapActivity-view', view)
-    }
   }, parameters)
   // Goto the kano url
+  let url = parameters.url + '/#/home/map'
   try {
-    await page.goto(parameters.url)
+    if (parameters.bbox && !parameters.type) {
+      url += `${parameters.bbox[1]}/${parameters.bbox[0]}/${parameters.bbox[3]}/${parameters.bbox[2]}`
+    }
+    if (parameters.time) {
+      url += `?time=${parameters.time}`
+    }
+    await page.goto(url)
     await page.waitForTimeout(500)
   } catch (error) {
     console.error(`<!> navigate to ${parameters.url} failed: ${error}`)
