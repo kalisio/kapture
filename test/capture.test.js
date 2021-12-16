@@ -61,7 +61,7 @@ describe(`suite:${suite}`, () => {
     }
   })
 
-  it('handle invalid json file', async () => {
+  it('handle invalid JSON body', async () => {
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'invalid.geojson')))
     const res = await capture(body, 'invalid')
     expect(res.status).to.equal(422)
@@ -77,7 +77,7 @@ describe(`suite:${suite}`, () => {
     expect(match('default')).to.be.true
   })
 
-  it('time dependant kano view', async () => {
+  it('captue time dependent kano view', async () => {
     const body = {
       bbox: [ -16.875000000000004, 37.84015683604136, 26.081542968750004, 54.20101023973888 ],
       size: { width: 1280, height: 720 },
