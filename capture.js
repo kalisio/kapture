@@ -25,7 +25,7 @@ function deleteTmpFile (file) {
   if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
 }
 
-async function clickSelector (page, selector, wait = 250) {
+/*async function clickSelector (page, selector, wait = 250) {
   try {
     await page.waitForSelector(selector, { timeout: 2000 })
     await page.click(selector)
@@ -41,6 +41,7 @@ async function getLayerCategoryId (page, layerId) {
   if (elements.length > 0) return (await elements[0].getProperty('id')).jsonValue()
   return undefined
 }
+*/
 
 /** 
  *  Main capture function
@@ -89,9 +90,16 @@ async function getLayerCategoryId (page, layerId) {
     if (parameters.bbox && !parameters.type) {
       url += `/${parameters.bbox[1]}/${parameters.bbox[0]}/${parameters.bbox[3]}/${parameters.bbox[2]}`
     }
+    let queryParams = []
     if (parameters.time) {
-      url += `?time=${parameters.time}`
+      queryParams.push(`time=${parameters.time}`)
     }
+    _.forEach(parameters.layers, layer => {
+      const layerId = _.replace(_.replace(_.upperCase(layer), / /g, '_'), 'LAYERS_', 'Layers.')
+      queryParams.push(`layers=${layerId}`)
+    })
+    if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
+    console.log(url)
     await page.goto(url)
     await page.waitForTimeout(500)
   } catch (error) {
@@ -99,7 +107,7 @@ async function getLayerCategoryId (page, layerId) {
     return null
   }
   // Process the layers
-  if (parameters.layers) {
+/* if (parameters.layers) {
     // Open the catalog
     await clickSelector(page, '#right-opener')
     await page.waitForTimeout(1000)
@@ -118,7 +126,7 @@ async function getLayerCategoryId (page, layerId) {
       if (categoryId !== 'k-catalog-panel-base-layers') layerSelector += ' .q-toggle'
       await clickSelector(page, layerSelector)
     }
-  }
+  }*/
   // Process the features
   if (parameters.type === 'FeatureCollection' || parameters.type === 'Feature') {
     // Create tmp directory if needed
