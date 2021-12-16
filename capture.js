@@ -87,7 +87,7 @@ async function getLayerCategoryId (page, layerId) {
   let url = parameters.url + '/#/home/map'
   try {
     if (parameters.bbox && !parameters.type) {
-      url += `${parameters.bbox[1]}/${parameters.bbox[0]}/${parameters.bbox[3]}/${parameters.bbox[2]}`
+      url += `/${parameters.bbox[1]}/${parameters.bbox[0]}/${parameters.bbox[3]}/${parameters.bbox[2]}`
     }
     if (parameters.time) {
       url += `?time=${parameters.time}`
@@ -95,7 +95,7 @@ async function getLayerCategoryId (page, layerId) {
     await page.goto(url)
     await page.waitForTimeout(500)
   } catch (error) {
-    console.error(`<!> navigate to ${parameters.url} failed: ${error}`)
+    console.error(`<!> navigate to ${url} failed: ${error}`)
     return null
   }
   // Process the layers
