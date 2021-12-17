@@ -11,6 +11,40 @@ const kanoUrl = process.env.KANO_URL
 const kanoJwt = process.env.KANO_JWT
 const bodyLimit = process.env.BODY_LIMIT || '100kb'
 
+// activity validator middleware
+const activityValidator = function (req, res, next) {
+  const activity = _.get(req.body, 'activity')
+  if (activity) {
+    if (!_.includes(['map', 'globe'], activity)) res.status(404).json({ message: 'Invdalid \"activity\" property' })
+    else next()
+  } else {
+    next()
+  }
+}
+
+// layers validator middleware
+const layersValidator = function (req, res, next) {
+  const layers = _.get(req.body, 'layers') 
+  if (layers) {
+    if (!_.isArray(layers)) res.status(404).json({ message: 'Invdalid \"layers\" property' })
+    else next()
+  } else {
+    next()
+  }
+}
+
+// size validator
+const sizeValidator = function (req, res, next) {
+  const width = _.get(req.body, 'size.width')
+  const height = _.get(req.body, 'size.height')
+  if (width || height) {
+    if (width < 256 || width > 4000 || height < 256 || height > 4000) res.status(404).json({ message: 'Invdalid \"size\" property' })
+    else next()
+  } else {
+    next()
+  }
+}
+
 // features validator middleware
 const geoJsonValidator = function (req, res, next) {
   if (req.body.type === 'FeatureCollection' || req.body.type === 'Feature') {
@@ -30,6 +64,9 @@ const app = express()
 app.use(cors()) // enable cors
 app.use(express.urlencoded({limit: bodyLimit, extended: true}))
 app.use(express.json({limit: bodyLimit}))
+app.use(activityValidator)
+app.use(layersValidator)
+app.use(sizeValidator)
 app.use(geoJsonValidator)
 
 // Capture 
@@ -42,7 +79,7 @@ app.post('/capture', async (req, res) => {
     let duration = new Date() - start
     console.log('<> capture processed in %dms', duration)
   } else {
-    res.status(404).json({ message: 'Bad request' })
+    res.status(500).json({ message: 'Internal service error' })
   }
 })
 

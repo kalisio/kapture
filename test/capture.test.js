@@ -70,6 +70,18 @@ describe(`suite:${suite}`, () => {
     expect(resMessage.errors.length).to.equal(2)
   })
 
+  it('handle invalid width body', async () => {
+    const body = {
+      size: {
+        width: 5000
+      }
+    }
+    const res = await capture(body, 'invalid')
+    expect(res.status).to.equal(404)
+    const resMessage = await res.json()
+    expect(resMessage.message === 'Invdalid \"width\" property')
+  })
+
   it('capture default map view', async () => {
     const body = {}
     const res = await capture(body, 'map')
