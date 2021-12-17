@@ -17,10 +17,11 @@ Request a capture with the following query parameters.
 
 The body of the request must conform a **JSON** object with the following properties: 
 
-| Property | Description |
-| --- | --- |
-| `layers` | specifies the layers to display | Optional | 
-| `size` | specifies the capture size | Otptional |
+| Property | Description | Default value `|
+| --- | --- | -- |
+| `layers` | specifies the layers to display | `[]` | 
+| `activity` | specifies the `map` or `globe` view | `map` |
+| `size` | specifies the capture size | `{ "width": 1024, "height": 768 }` |
 
 The `layers` property must conform the following JSON schema: 
 
@@ -30,6 +31,15 @@ The `layers` property must conform the following JSON schema:
   "items": {
     "type": "string"
   }
+}
+```
+
+The `activity` property must conform the following JSON schema: 
+
+```json
+"activity": {
+  "type": "string",
+  "pattern": "map|globe"
 }
 ```
 

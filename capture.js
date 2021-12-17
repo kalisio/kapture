@@ -67,8 +67,9 @@ function deleteTmpFile (file) {
     localStorage.setItem('kano-welcome', false)
   }, parameters)
   // Goto the kano url
-  let url = parameters.url + '/#/home/map'
+  let url = parameters.url + '/#/home/'
   try {
+    url += (parameters.activity === 'globe' ? 'globe' : 'map')
     if (parameters.bbox && !parameters.type) {
       url += `/${parameters.bbox[1]}/${parameters.bbox[0]}/${parameters.bbox[3]}/${parameters.bbox[2]}`
     }
@@ -118,7 +119,7 @@ function deleteTmpFile (file) {
   // Wait for the network to be idle
   try {
     await page.waitForNetworkIdle({ timeout: 15000 })
-    await page.waitForTimeout(1000)
+    await page.waitForTimeout(parameters.activity === 'globe' ? 3000 : 1000)
   } catch(error) {
     console.error(`<!> wait for networkd idle failed: ${error}`)
   }

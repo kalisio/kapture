@@ -70,28 +70,49 @@ describe(`suite:${suite}`, () => {
     expect(resMessage.errors.length).to.equal(2)
   })
 
-  it('capture default kano view', async () => {
+  it('capture default map view', async () => {
     const body = {}
-    const res = await capture(body, 'default')
+    const res = await capture(body, 'map')
     expect(res.status).to.equal(200)
-    expect(match('default')).to.be.true
+    expect(match('map')).to.be.true
+  })
+
+  it('capture zoomed globe view', async () => {
+    const body = {
+      activity: 'globe',
+      bbox: [ -30, 20, 30, 60 ]
+    }
+    const res = await capture(body, 'globe')
+    expect(res.status).to.equal(200)
+    expect(match('globe')).to.be.true
   })
 
   it('capture multiple zoomed layers', async () => {
-    const body = {
-      layers: ['Layers.IMAGERY', 'Layers.MAPILLARY', 'Layers.ADMINEXPRESS'],
+    // Map view
+    let body = {
+      layers: ['Layers.IMAGERY', 'Layers.ADMINEXPRESS'],
       bbox: [ 1.6, 43.10, 1.65, 43.14 ]
     }
-    const res = await capture(body, 'layers')
+    let res = await capture(body, 'map-layers')
     expect(res.status).to.equal(200)
-    expect(match('layers')).to.be.true
+    expect(match('map-layers')).to.be.true
+    // Globe view
+    body.activity = 'globe'
+    res = await capture(body, 'globe-layers')
+    expect(res.status).to.equal(200)
   })
 
   it('capture heterogenous geojson file', async () => {
-    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes.geojson')))
-    const res = await capture(body, 'shapes')
+    // Map view
+    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes.geojson')))
+    let  res = await capture(body, 'map-shapes')
     expect(res.status).to.equal(200)
-    expect(match('shapes')).to.be.true
+    expect(match('map-shapes')).to.be.true
+    // Globe view
+    body.activity = 'globe'
+    res = await capture(body, 'globe-shapes')
+    expect(res.status).to.equal(200)
+    expect(match('globe-shapes')).to.be.true
   })
 
   it('handle too large geojson file', async () => {
