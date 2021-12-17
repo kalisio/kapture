@@ -9,7 +9,7 @@ notifications:
 stages:
   - name: DOCKER
   - name: HELM
-    if: commit_message =~ /(helm)/
+    if: commit_message =~ /\[helm\]/
 
 jobs:
   include:

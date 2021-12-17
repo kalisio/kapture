@@ -1,6 +1,6 @@
 #!/bin/bash
 
-helm lint chart
+#helm lint chart
 helm dep update chart
 helm package chart
 
