@@ -3,7 +3,6 @@
 NAME=`yq e '.name' chart/Chart.yaml`
 VERSION=`yq e '.version' chart/Chart.yaml`
 
-mkdir -p $NAME
 cp -R chart $NAME
 
 helm lint $NAME
