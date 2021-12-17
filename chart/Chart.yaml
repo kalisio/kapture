@@ -1,4 +1,4 @@
-apiVersion: v2
+apiVersion: v1
 name: kapture
 description: A Helm chart for Kapture service
 type: application

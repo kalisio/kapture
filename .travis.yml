@@ -1,11 +1,3 @@
-language: node_js
-node_js:
-  - '12'
-sudo: required
-services:
-  - docker
-
-
 notifications:
   email: false
   slack:
@@ -18,9 +10,6 @@ stages:
   - name: DOCKER
   - name: HELM
     if: commit_message =~ /(helm)/
-
-script:
-  - bash .travis.build.sh
 
 jobs:
   include:
