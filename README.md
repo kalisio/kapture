@@ -17,7 +17,7 @@ Request a capture with the following query parameters.
 
 The body of the request must conform a **JSON** object with the following properties: 
 
-| Property | Description | Default value `|
+| Property | Description | Defaults`|
 | --- | --- | -- |
 | `layers` | specifies the layers to display | `[]` | 
 | `activity` | specifies the `map` or `globe` view | `map` |
@@ -66,7 +66,7 @@ Here is a complete example:
 
 ```json
 {
-  "layers": ["layers-imagery"],
+  "layers": ["Layers.IMAGERY"],
   "type": "FeatureCollection",
   "features": [
     { 
