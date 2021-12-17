@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kapture
+  labels:
+    service: kapture
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      service: kapture
+  template:
+    metadata:
+      labels:
+        service: kapture
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PORT
+              value: {{ .Values.service.port }}
+            - name: BODY_LIMIT
+              value: {{ .Values.service.bodyLimit }}
+            - name: KANO_URL
+              value: {{ .Values.service.kanoUrl }}
+            - name: KANO_JWT
+              value: {{ .Values.service.kanoJwt }}
+          livenessProbe:
+            exec:
+              command:
+                - wget
+                - -q
+                - --tries=1 
+                - --spider
+                - http://localhost:3000/healthcheck"
+            failureThreshold: 3
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            timeoutSeconds: 15
+          ports:
+            - containerPort: 3000
+          resources: {}

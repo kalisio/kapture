@@ -7,9 +7,9 @@ import { capture } from './capture.js'
 import geojsonhint from '@mapbox/geojsonhint'
 
 const port = process.env.PORT || 3000
+const bodyLimit = process.env.BODY_LIMIT || '100kb'
 const kanoUrl = process.env.KANO_URL
 const kanoJwt = process.env.KANO_JWT
-const bodyLimit = process.env.BODY_LIMIT || '100kb'
 
 // activity validator middleware
 const activityValidator = function (req, res, next) {
