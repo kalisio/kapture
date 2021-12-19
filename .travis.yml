@@ -24,8 +24,7 @@ jobs:
       
     - stage: HELM
       before_install:
-      - curl -L https://git.io/get_helm.sh | bash
-      - helm init --client-only
+      - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
       - curl -k -O https://downloads.rclone.org/rclone-current-linux-amd64.zip
       - unzip rclone-current-linux-amd64.zip
       - cd rclone-*-linux-amd64 && sudo cp rclone /usr/bin/ && cd ..
