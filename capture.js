@@ -119,7 +119,7 @@ function deleteTmpFile (file) {
   // Wait for the network to be idle
   try {
     await page.waitForNetworkIdle({ timeout: 15000 })
-    await page.waitForTimeout(parameters.activity === 'globe' ? 5000 : 1000)
+    await page.waitForTimeout(parameters.activity === 'globe' ? 5000 : 2000)
   } catch(error) {
     console.error(`<!> wait for networkd idle failed: ${error}`)
   }
