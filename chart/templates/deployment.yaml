@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         service: kapture
+    spec:
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
