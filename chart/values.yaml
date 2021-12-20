@@ -6,8 +6,8 @@ image:
   
 service:
   port: 3000
-  bodyLimit: '100kb'
-  kanoUrl: 'http://kano:8081'
+  bodyLimit: "100kb"
+  kanoUrl: "http://kano:8081"
   kanoJwt: nil
 
 replicaCount: 1

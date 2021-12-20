@@ -19,14 +19,14 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
-          - name: PORT
-            value: {{ .Values.service.port }}
-          - name: BODY_LIMIT
-            value: {{ .Values.service.bodyLimit }}
-          - name: KANO_URL
-            value: {{ .Values.service.kanoUrl }}
-          - name: KANO_JWT
-            value: {{ .Values.service.kanoJwt }}
+        - name: PORT
+          value: "{{ .Values.service.port }}"
+        - name: BODY_LIMIT
+          value: {{ .Values.service.bodyLimit }}
+        - name: KANO_URL
+          value: {{ .Values.service.kanoUrl }}
+        - name: KANO_JWT
+          value: {{ .Values.service.kanoJwt }}
         livenessProbe:
           exec:
             command:
