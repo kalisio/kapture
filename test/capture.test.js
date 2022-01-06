@@ -102,7 +102,7 @@ describe(`suite:${suite}`, () => {
   it('capture multiple zoomed layers', async () => {
     // Map view
     let body = {
-      layers: ['Layers.IMAGERY', 'Layers.ADMINEXPRESS'],
+      layers: ['imagery', 'Layers.ADMINEXPRESS'],
       bbox: [ 1.6, 43.10, 1.65, 43.14 ]
     }
     let res = await capture(body, 'map-layers')
