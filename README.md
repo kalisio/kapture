@@ -34,6 +34,8 @@ The `layers` property must conform the following JSON schema:
 }
 ```
 
+The items must conform the [kano](https://kalisio.github.io/kano/) formalism, i.e. `Layers.MY_LAYER`. In addition and for backward compatibility, you can specify the layer name using kebab case: `layers-my-layer`, with or without the `layers-` prefix. 
+
 The `activity` property must conform the following JSON schema: 
 
 ```json

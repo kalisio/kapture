@@ -83,6 +83,7 @@ function deleteTmpFile (file) {
         if (!_.startsWith(layer, 'layers-')) layer = 'layers-' + layer
         layerId = _.replace(_.replace(_.upperCase(layer), / /g, '_'), 'LAYERS_', 'Layers.')
       }
+      console.log(layerId)
       queryParams.push(`layers=${layerId}`)
     })
     if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
