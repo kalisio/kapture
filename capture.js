@@ -29,7 +29,7 @@ function deleteTmpFile (file) {
  *  Main capture function
  */
  export async function capture (parameters) {
-  console.log('<> capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
+  console.log('[KAPTURE]> capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
   // Instanciate the browser
   const browser = await puppeteer.launch({
     args: [
@@ -83,7 +83,6 @@ function deleteTmpFile (file) {
         if (!_.startsWith(layer, 'layers-')) layer = 'layers-' + layer
         layerId = _.replace(_.replace(_.upperCase(layer), / /g, '_'), 'LAYERS_', 'Layers.')
       }
-      console.log(layerId)
       queryParams.push(`layers=${layerId}`)
     })
     if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
