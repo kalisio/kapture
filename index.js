@@ -91,6 +91,6 @@ app.get('/healthcheck', (req, res) => {
 
 // Serve the app
 app.listen(port, () => {
-  console.log('<> kapture server listening at %d (body limit %s)', port, bodyLimit)
+  console.log('[KAPTURE] server listening at %d (body limit %s)', port, bodyLimit)
 })
 

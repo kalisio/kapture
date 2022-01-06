@@ -29,7 +29,7 @@ function deleteTmpFile (file) {
  *  Main capture function
  */
  export async function capture (parameters) {
-  console.log('[KAPTURE]> capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
+  console.log('[KAPTURE] capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
   // Instanciate the browser
   const browser = await puppeteer.launch({
     args: [
