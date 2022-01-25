@@ -91,7 +91,7 @@ const debug = makeDebug('kapture:capture')
     writeTmpFile(tmpGeoJsonFile,  JSON.stringify(parameters))
     try {
       debug('uploading temporary geosjon file')
-      await page.waitForTimeout(500)
+      await page.waitForTimeout(250)
       const loader = await page.$('#dropFileInput')
       await loader.uploadFile(path.join(getTmpDirName(), tmpGeoJsonFile))
       await page.waitForTimeout(250)

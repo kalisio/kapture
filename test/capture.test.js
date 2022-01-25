@@ -116,9 +116,19 @@ describe(`suite:${suite}`, () => {
     expect(res.status).to.equal(200)
   })
 
+  it('handle invalid geojson crs', async () => {
+    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes-L93.geojson')))
+    let  res = await capture(body, 'map-shapes')
+    expect(res.status).to.equal(422)
+    const resMessage = await res.json()
+    expect(resMessage.message === 'Invdalid \"GeoJSON\"')
+    expect(resMessage.errors.length).to.equal(1)  
+    expect(resMessage.errors.message === 'Invalid CRS: urn:ogc:def:crs:epsg::2154')
+  })
+
   it('capture heterogenous geojson file', async () => {
     // Map view
-    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes.geojson')))
+    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes-WGS84.geojson')))
     let  res = await capture(body, 'map-shapes')
     expect(res.status).to.equal(200)
     expect(match('map-shapes')).to.be.true
