@@ -70,6 +70,7 @@ The `delay` property must conform the following JSON schema:
   "type": "number",
   "default": "2000"
 }
+```
 
 In addition the body can conform a [GeoJSON](https://datatracker.ietf.org/doc/html/rfc7946) object. The described features will be rendered as an overlay.
 
