@@ -22,6 +22,7 @@ The body of the request must conform a **JSON** object with the following proper
 | `layers` | specifies the layers to display | `[]` | 
 | `activity` | specifies the `map` or `globe` view | `map` |
 | `size` | specifies the capture size | `{ "width": 1024, "height": 768 }` |
+| `delay` | specified the waiting delay before capturing the screenshot (in milliseconds) | `1000` |
 
 The `layers` property must conform the following JSON schema: 
 
@@ -61,6 +62,14 @@ The `size` property must conform the following JSON schema:
     }
 }
 ```
+
+The `delay` property must conform the following JSON schema: 
+
+```json
+"activity": {
+  "type": "number",
+  "default": "2000"
+}
 
 In addition the body can conform a [GeoJSON](https://datatracker.ietf.org/doc/html/rfc7946) object. The described features will be rendered as an overlay.
 
@@ -116,6 +125,8 @@ Here are the environment variables you can use to customize the service:
 | `KANO_URL` | The **Kano** url | - |
 | `KANO_JWT` | The **Kano** token to get connected | * |
 | `BODY_LIMIT` | The size limit of the request body | `100kb` |
+| `DELAY` | The waiting delay before capturing the screen (in milliseconds) | '1000' |
+| `DEBUG` | The namespaces to enable debug output. Set it to `kapture:*` to enable full debug output. | 
 
 ## Building
 

@@ -1,29 +1,11 @@
+import makeDebug from 'debug'
 import _  from 'lodash'
 import path from 'path'
-import fs from 'fs'
 import crypto from 'crypto'
 import puppeteer from 'puppeteer'
+import { getTmpDirName, createTmpDir, writeTmpFile, deleteTmpFile } from './utils.fs.js'
 
-const tmpDir = process.env.TMP_DIR || './tmp'
-
-/** 
- * helper functions
- */
-function createTmpDir () {
-  if (!fs.existsSync(tmpDir)) {
-    fs.mkdirSync(tmpDir, { recusrive: true })
-  }
-}
-
-function writeTmpFile (file, content) {
-  const filePath = path.join(tmpDir, file)
-  fs.writeFileSync(filePath, content)
-}
-
-function deleteTmpFile (file) {
-  const filePath = path.join(tmpDir, file)
-  if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
-}
+const debug = makeDebug('kapture:capture')
 
 /** 
  *  Main capture function
@@ -42,6 +24,7 @@ function deleteTmpFile (file) {
     ]
   })
   // Create the page and listen to page errors
+  debug('create the page')
   const page = await browser.newPage()
   page.on('error', error => { 
     console.error('<!> error happen at the page: ', error) 
@@ -50,6 +33,7 @@ function deleteTmpFile (file) {
     console.error('<!> pageerror occurred: ', error) 
   })
   // Process the page viewport
+  debug('configure the page viewport')
   try {
     await page.setViewport({
       width: _.get(parameters, 'size.width', 1024),
@@ -61,12 +45,14 @@ function deleteTmpFile (file) {
     return null
   }
   // Process the local storage items
+  debug('configure the local storage')
   await page.evaluateOnNewDocument(parameters => {
     localStorage.clear();
     localStorage.setItem('kano-jwt', parameters.jwt)
     localStorage.setItem('kano-welcome', false)
   }, parameters)
   // Goto the kano url
+  debug('navigate to kano')
   let url = parameters.url + '/#/home/'
   try {
     url += (parameters.activity === 'globe' ? 'globe' : 'map')
@@ -86,6 +72,7 @@ function deleteTmpFile (file) {
       queryParams.push(`layers=${layerId}`)
     })
     if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
+    debug('computed kano url:', url)
     await page.goto(url)
     await page.waitForTimeout(500)
   } catch (error) {
@@ -94,24 +81,29 @@ function deleteTmpFile (file) {
   }
   // Process the features
   if (parameters.type === 'FeatureCollection' || parameters.type === 'Feature') {
+    debug('process the features')
     // Create tmp directory if needed
     createTmpDir()
     // Define a temporary feature file name
     const tmpGeoJsonFile = 'features-' + crypto.randomBytes(4).readUInt32LE(0) + '.json'
     // Write the file for droping it
+    debug('writing temporary geojson file:', tmpGeoJsonFile)
     writeTmpFile(tmpGeoJsonFile,  JSON.stringify(parameters))
     try {
-      await page.waitForTimeout(250)
+      debug('uploading temporary geosjon file')
+      await page.waitForTimeout(500)
       const loader = await page.$('#dropFileInput')
-      await loader.uploadFile(path.join(tmpDir, tmpGeoJsonFile))
+      await loader.uploadFile(path.join(getTmpDirName(), tmpGeoJsonFile))
       await page.waitForTimeout(250)
     } catch (error) {
       console.error(`<!> upload features file failed: ${error}`)
     }
     // Delete the file
+    debug('deleting temporary geojson file')
     deleteTmpFile(tmpGeoJsonFile)
   }
   // Hide the layout components
+  debug('hide the layout components')
   await page.evaluate(() => {
     window.$store.set('topPane.content', null)
     window.$store.set('bottomPane.content', null)
@@ -120,13 +112,17 @@ function deleteTmpFile (file) {
     window.$store.set('fab.actions', [])
   })
   // Wait for the network to be idle
+  debug('wait for network to be idle')
   try {
-    await page.waitForNetworkIdle({ timeout: 15000 })
-    await page.waitForTimeout(parameters.activity === 'globe' ? 5000 : 2000)
+    await page.waitForNetworkIdle({ timeout: 60000 })
   } catch(error) {
     console.error(`<!> wait for networkd idle failed: ${error}`)
   }
+  // Wait for the page to be rendered
+  debug('wait for extra delay')
+  await page.waitForTimeout(parameters.delay)
   // Take the screenshot
+  debug('take the screenshot')
   const buffer = await page.screenshot({ fullPage: true, type: 'png' })
   await browser.close()  
   // Return the screenshot as a buffer

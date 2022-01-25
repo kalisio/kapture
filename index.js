@@ -3,11 +3,12 @@ import _ from 'lodash'
 import cors from 'cors'
 import express from 'express'
 import { Buffer } from 'buffer'
-import { capture } from './capture.js'
-import geojsonhint from '@mapbox/geojsonhint'
+import { capture } from './src/capture.js'
+import { validateGeoJson } from './src/utils.geojson.js'
 
 const port = process.env.PORT || 3000
 const bodyLimit = process.env.BODY_LIMIT || '100kb'
+const delay = process.env.DELAY || 1000
 const kanoUrl = process.env.KANO_URL
 const kanoJwt = process.env.KANO_JWT
 
@@ -48,11 +49,8 @@ const sizeValidator = function (req, res, next) {
 // features validator middleware
 const geoJsonValidator = function (req, res, next) {
   if (req.body.type === 'FeatureCollection' || req.body.type === 'Feature') {
-    // lint the geojson file
-    const messages = geojsonhint.hint(req.body)
-    // filter the messages to find the errors
-    const errors = _.filter(messages, message => { return _.get(message, 'level') !== 'message' })
-    if (errors.length > 0) res.status(422).json({ message: 'Invdalid \"GeoJSON\" format', errors })
+    const errors = validateGeoJson(req.body)
+    if (errors.length > 0) res.status(422).json({ message: 'Invdalid \"GeoJSON\"', errors })
     else next()
   } else {
     next()
@@ -62,17 +60,13 @@ const geoJsonValidator = function (req, res, next) {
 // Initialize express app
 const app = express()
 app.use(cors()) // enable cors
-app.use(express.urlencoded({limit: bodyLimit, extended: true}))
-app.use(express.json({limit: bodyLimit}))
-app.use(activityValidator)
-app.use(layersValidator)
-app.use(sizeValidator)
-app.use(geoJsonValidator)
+app.use(express.urlencoded({ limit: bodyLimit, extended: true }))
+app.use(express.json({ limit: bodyLimit }))
 
 // Capture 
-app.post('/capture', async (req, res) => {
+app.post('/capture', [activityValidator, layersValidator, sizeValidator, geoJsonValidator], async (req, res) => {
   let start = new Date()
-  const buffer = await capture(Object.assign(req.body, { url : kanoUrl, jwt: kanoJwt }))
+  const buffer = await capture(_.defaults(req.body, { url : kanoUrl, jwt: kanoJwt, delay }))
   if (Buffer.isBuffer(buffer)) {
     res.contentType('image/png')
     res.send(buffer)
@@ -91,6 +85,6 @@ app.get('/healthcheck', (req, res) => {
 
 // Serve the app
 app.listen(port, () => {
-  console.log('[KAPTURE] server listening at %d (body limit %s)', port, bodyLimit)
+  console.log('[KAPTURE] server listening at %d (body limit %s, delay %s)', port, bodyLimit, delay)
 })
 
