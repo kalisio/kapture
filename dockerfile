@@ -1,10 +1,16 @@
-FROM node:16.13-bullseye-slim
-LABEL maintainer "<contact@kalisio.xyz>"
-
 # To be able to use Puppeteer in Docker
 # https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#running-puppeteer-in-docker
 # To enable WebGL support in Docker
 # https://github.com/flolu/docker-puppeteer-webgl/blob/master/Dockerfile
+
+FROM node:16.13-bullseye-slim as builder
+ENV HOME /kapture
+COPY . ${HOME}
+WORKDIR ${HOME}
+RUN yarn
+
+FROM node:16.13-bullseye-slim
+LABEL maintainer "<contact@kalisio.xyz>"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
   && apt-get update \
@@ -29,15 +35,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 3000
-
 ENV HOME /kapture
-RUN mkdir ${HOME}
-
-COPY . ${HOME}
-
+COPY --from=builder --chown=node:node ${HOME} ${HOME}
 WORKDIR ${HOME}
-
-RUN yarn
-
 CMD npm run start
-
