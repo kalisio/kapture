@@ -37,5 +37,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 EXPOSE 3000
 ENV HOME /kapture
 COPY --from=builder --chown=node:node ${HOME} ${HOME}
+USER node
 WORKDIR ${HOME}
 CMD npm run start
