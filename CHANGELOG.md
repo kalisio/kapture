@@ -1,3 +1,5 @@
+Please refer to GitHub issues for changelog starting from v1.1.0: https://github.com/kalisio/kapture/issues
+
 ## 1.0.0 (2022-01-06)
 
 ##### New Features
