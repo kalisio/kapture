@@ -118,7 +118,7 @@ const debug = makeDebug('kapture:capture')
   // Wait for the network to be idle
   debug('wait for network to be idle')
   try {
-    await page.waitForNetworkIdle({ timeout: 60000 })
+    await page.waitForNetworkIdle({ timeout: parameters.networkdIdleTimeout })
   } catch(error) {
     console.error(`<!> wait for networkd idle failed: ${error}`)
   }

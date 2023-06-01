@@ -9,6 +9,7 @@ import { validateGeoJson } from './src/utils.geojson.js'
 const port = process.env.PORT || 3000
 const bodyLimit = process.env.BODY_LIMIT || '100kb'
 const delay = process.env.DELAY || 1000
+const networkdIdleTimeout = process.env.NETWORK_IDLE_TIMEOUT || 90000
 const kanoUrl = process.env.KANO_URL
 const kanoJwt = process.env.KANO_JWT
 
@@ -66,7 +67,7 @@ app.use(express.json({ limit: bodyLimit }))
 // Capture 
 app.post('/capture', [activityValidator, layersValidator, sizeValidator, geoJsonValidator], async (req, res) => {
   let start = new Date()
-  const buffer = await capture(_.defaults(req.body, { url : kanoUrl, jwt: kanoJwt, delay }))
+  const buffer = await capture(_.defaults(req.body, { url : kanoUrl, jwt: kanoJwt, delay, networkdIdleTimeout }))
   if (Buffer.isBuffer(buffer)) {
     res.contentType('image/png')
     res.send(buffer)
@@ -85,6 +86,6 @@ app.get('/healthcheck', (req, res) => {
 
 // Serve the app
 app.listen(port, () => {
-  console.log('[KAPTURE] server listening at %d (body limit %s, delay %s)', port, bodyLimit, delay)
+  console.log('[KAPTURE] server listening at %d (body limit %s, delay %s, network idle timeout %s)', port, bodyLimit, delay, networkdIdleTimeout)
 })
 

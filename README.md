@@ -127,6 +127,7 @@ Here are the environment variables you can use to customize the service:
 | `KANO_JWT` | The **Kano** token to get connected | * |
 | `BODY_LIMIT` | The size limit of the request body | `100kb` |
 | `DELAY` | The waiting delay before capturing the screen (in milliseconds) | '1000' |
+| `NETWORK_IDLE_TIMEOUT` | Maximum time to wait for the network idle (in milliseconds) | '90000' |
 | `DEBUG` | The namespaces to enable debug output. Set it to `kapture:*` to enable full debug output. | 
 
 ## Building
