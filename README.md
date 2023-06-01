@@ -178,12 +178,14 @@ yarn test
 
 Please read the [Contributing file](./.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
+## License
+
+Copyright (c) 2017-20xx Kalisio
+
+Licensed under the [MIT license](LICENSE).
+
 ## Authors
 
 This project is sponsored by 
 
-![Kalisio](https://s3.eu-central-1.amazonaws.com/kalisioscope/kalisio/kalisio-logo-black-256x84.png)
-
-## License
-
-This project is licensed under the MIT License - see the [license file](./LICENSE.md) for details
+[![Kalisio](https://s3.eu-central-1.amazonaws.com/kalisioscope/kalisio/kalisio-logo-black-256x84.png)](https://kalisio.com)
