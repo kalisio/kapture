@@ -57,7 +57,7 @@ describe(`suite:${suite}`, () => {
 
   before(() => {
     if (!fs.existsSync(runDir)) {
-      fs.mkdirSync(runDir, { recusrive: true })
+      fs.mkdirSync(runDir, { recursive: true })
     }
   })
 
