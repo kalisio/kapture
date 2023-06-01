@@ -25,7 +25,7 @@
   },
   "scripts": {
     "start": "node .",
-    "test": "mocha test/*.test.js --timeout 60000 --require esm",
+    "test": "mocha test/*.test.js --timeout 90000 --require esm",
     "release:major": "npm version --force major",
     "release:minor": "npm version --force minor",
     "release:patch": "npm version --force patch",
@@ -37,7 +37,7 @@
     "debug": "^4.3.3",
     "express": "^4.17.1",
     "lodash": "^4.17.21",
-    "puppeteer": "^10.2.0"
+    "puppeteer": "^20.5.0"
   },
   "devDependencies": {
     "chai": "^4.3.4",
