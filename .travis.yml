@@ -17,9 +17,7 @@ stages:
 jobs:
   include:
   - stage: BUILD
-    language: node_js
-    node_js:
-    - '16'
+    language: minimal
     services:
     - docker
     script:
