@@ -1,5 +1,5 @@
 import makeDebug from 'debug'
-import _  from 'lodash'
+import _ from 'lodash'
 import path from 'path'
 import crypto from 'crypto'
 import puppeteer from 'puppeteer'
@@ -7,10 +7,10 @@ import { getTmpDirName, createTmpDir, writeTmpFile, deleteTmpFile } from './util
 
 const debug = makeDebug('kapture:capture')
 
-/** 
+/**
  *  Main capture function
  */
- export async function capture (parameters) {
+export async function capture (parameters) {
   console.log('[KAPTURE] capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
   // Instanciate the browser
   const browser = await puppeteer.launch({
@@ -26,11 +26,11 @@ const debug = makeDebug('kapture:capture')
   // Create the page and listen to page errors
   debug('create the page')
   const page = await browser.newPage()
-  page.on('error', error => { 
-    console.error('<!> error happen at the page: ', error) 
+  page.on('error', error => {
+    console.error('<!> error happen at the page: ', error)
   })
-  page.on('pageerror', error => { 
-    console.error('<!> pageerror occurred: ', error) 
+  page.on('pageerror', error => {
+    console.error('<!> pageerror occurred: ', error)
   })
   // Process the page viewport
   debug('configure the page viewport')
@@ -47,9 +47,9 @@ const debug = makeDebug('kapture:capture')
   // Process the local storage items
   debug('configure the local storage')
   await page.evaluateOnNewDocument(parameters => {
-    localStorage.clear();
-    localStorage.setItem('kano-jwt', parameters.jwt)
-    localStorage.setItem('kano-welcome', false)
+    window.localStorage.clear()
+    window.localStorage.setItem('kano-jwt', parameters.jwt)
+    window.localStorage.setItem('kano-welcome', false)
   }, parameters)
   // Goto the kano url
   debug('navigate to kano')
@@ -59,17 +59,12 @@ const debug = makeDebug('kapture:capture')
     if (parameters.bbox && !parameters.type) {
       url += `/${parameters.bbox[1]}/${parameters.bbox[0]}/${parameters.bbox[3]}/${parameters.bbox[2]}`
     }
-    let queryParams = []
+    const queryParams = []
     if (parameters.time) {
       queryParams.push(`time=${parameters.time}`)
     }
     _.forEach(parameters.layers, layer => {
-      let layerId = layer
-      if (!_.startsWith(layer, 'Layers.')) {
-        if (!_.startsWith(layer, 'layers-')) layer = 'layers-' + layer
-        layerId = _.replace(_.replace(_.upperCase(layer), / /g, '_'), 'LAYERS_', 'Layers.')
-      }
-      queryParams.push(`layers=${layerId}`)
+      queryParams.push(`layers=${layer}`)
     })
     if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
     debug('computed kano url:', url)
@@ -88,7 +83,7 @@ const debug = makeDebug('kapture:capture')
     const tmpGeoJsonFile = 'features-' + crypto.randomBytes(4).readUInt32LE(0) + '.json'
     // Write the file for droping it
     debug('writing temporary geojson file:', tmpGeoJsonFile)
-    writeTmpFile(tmpGeoJsonFile,  JSON.stringify(parameters))
+    writeTmpFile(tmpGeoJsonFile, JSON.stringify(parameters))
     try {
       debug('uploading temporary geosjon file')
       await page.waitForTimeout(250)
@@ -110,7 +105,7 @@ const debug = makeDebug('kapture:capture')
     window.$store.set('layout.panes.right.visible', false)
     window.$store.set('layout.panes.right.opener', false)
     window.$store.set('layout.panes.bottom.visible', false)
-    window.$store.set('layout.panes.bottom.opener', false)    
+    window.$store.set('layout.panes.bottom.opener', false)
     window.$store.set('layout.panes.left.visible', false)
     window.$store.set('layout.panes.left.opener', false)
     window.$store.set('layout.fab.visible', false)
@@ -119,7 +114,7 @@ const debug = makeDebug('kapture:capture')
   debug('wait for network to be idle')
   try {
     await page.waitForNetworkIdle({ timeout: parameters.networkdIdleTimeout })
-  } catch(error) {
+  } catch (error) {
     console.error(`<!> wait for networkd idle failed: ${error}`)
   }
   // Wait for the page to be rendered
@@ -128,7 +123,7 @@ const debug = makeDebug('kapture:capture')
   // Take the screenshot
   debug('take the screenshot')
   const buffer = await page.screenshot({ fullPage: true, type: 'png' })
-  await browser.close()  
+  await browser.close()
   // Return the screenshot as a buffer
   return buffer
 }

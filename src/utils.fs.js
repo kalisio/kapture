@@ -30,4 +30,3 @@ export function deleteTmpFile (file) {
     fs.unlinkSync(filePath)
   }
 }
-

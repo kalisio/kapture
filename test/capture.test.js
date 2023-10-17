@@ -1,11 +1,15 @@
-import { expect } from 'chai'
+import chai, { util, expect } from 'chai'
+import chailint from 'chai-lint'
 import fs from 'fs'
 import path from 'path'
 import fetch from 'node-fetch'
 import pixelmatch from 'pixelmatch'
 import png from 'pngjs'
+import { createServer } from '../src/main.js'
 
-const url = process.env.KAPTURE_URL || 'http://localhost:3000'
+const url = (process.env.KAPTURE_URL
+  ? process.env.KAPTURE_URL
+  : (process.env.PORT ? `http://localhost:${process.env.PORT}` : 'http://localhost:3000'))
 const jwt = process.env.KAPTURE_JWT
 
 const dataDir = './test/data/capture'
@@ -13,19 +17,19 @@ const runDir = './test/run/capture'
 
 const suite = 'capture'
 
-async function capture(parameters, image) {
+async function capture (parameters, image) {
   // Setup the request url options
-  let urlOptions = {
+  const urlOptions = {
     method: 'POST',
     body: JSON.stringify(parameters),
-    headers: { 
+    headers: {
       'Content-Type': 'application/json'
     }
   }
   // Add the Authorization header if jwt is defined
-  if (jwt) urlOptions.headers['Authorization'] = 'Bearer ' + jwt
+  if (jwt) urlOptions.headers.Authorization = 'Bearer ' + jwt
   // Perform the request
-  const res = await fetch(url + '/capture', urlOptions)
+  const res = await fetch(`${url}/capture`, urlOptions)
   // Save the response as a PNG image
   if (res.status === 200) {
     const arrayBuffer = await res.arrayBuffer()
@@ -37,7 +41,7 @@ async function capture(parameters, image) {
 
 function match (image) {
   const runKey = path.join(runDir, image + '.png')
-  const refKey = path.join('./test/data', suite , 'screenrefs', image + '.png')
+  const refKey = path.join('./test/data', suite, 'screenrefs', image + '.png')
   const runImg = png.PNG.sync.read(fs.readFileSync(runKey))
   const refImg = png.PNG.sync.read(fs.readFileSync(refKey))
   const { width, height } = runImg
@@ -54,19 +58,28 @@ function match (image) {
 }
 
 describe(`suite:${suite}`, () => {
+  let server
 
   before(() => {
+    chailint(chai, util)
     if (!fs.existsSync(runDir)) {
       fs.mkdirSync(runDir, { recursive: true })
     }
   })
+
+  it('initialize the kapture service', async () => {
+    server = await createServer()
+    expect(server).toExist()
+  })
+  // Let enough time to process
+    .timeout(15000)
 
   it('handle invalid JSON body', async () => {
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'invalid.geojson')))
     const res = await capture(body, 'invalid')
     expect(res.status).to.equal(422)
     const resMessage = await res.json()
-    expect(resMessage.message === 'Invdalid \"GeoJSON\" format')
+    expect(resMessage.message === 'Invdalid "GeoJSON" format')
     expect(resMessage.errors.length).to.equal(2)
   })
 
@@ -79,37 +92,37 @@ describe(`suite:${suite}`, () => {
     const res = await capture(body, 'invalid')
     expect(res.status).to.equal(404)
     const resMessage = await res.json()
-    expect(resMessage.message === 'Invdalid \"width\" property')
+    expect(resMessage.message === 'Invdalid "width" property')
   })
 
   it('capture default map view', async () => {
     const body = {}
     const res = await capture(body, 'map')
     expect(res.status).to.equal(200)
-    expect(match('map')).to.be.true
+    expect(match('map')).beTrue()
   })
 
   it('capture zoomed globe view', async () => {
     const body = {
       activity: 'globe',
-      bbox: [ -30, 20, 30, 60 ],
+      bbox: [-30, 20, 30, 60],
       delay: 2000
     }
     const res = await capture(body, 'globe-zoom')
     expect(res.status).to.equal(200)
-    expect(match('globe-zoom')).to.be.true
+    expect(match('globe-zoom')).beTrue()
   })
 
   it('capture multiple zoomed layers', async () => {
     // Map view
-    let body = {
+    const body = {
       layers: ['imagery', 'Layers.ADMINEXPRESS'],
-      bbox: [ 1.6, 43.10, 1.65, 43.14 ],
+      bbox: [1.6, 43.10, 1.65, 43.14],
       delay: 2000
     }
     let res = await capture(body, 'map-layers')
     expect(res.status).to.equal(200)
-    expect(match('map-layers')).to.be.true
+    expect(match('map-layers')).beTrue()
     // Globe view
     body.activity = 'globe'
     res = await capture(body, 'globe-layers')
@@ -117,28 +130,28 @@ describe(`suite:${suite}`, () => {
   })
 
   it('handle invalid geojson crs', async () => {
-    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes-L93.geojson')))
-    let  res = await capture(body, 'map-shapes')
+    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes-L93.geojson')))
+    const res = await capture(body, 'map-shapes')
     expect(res.status).to.equal(422)
     const resMessage = await res.json()
-    expect(resMessage.message === 'Invdalid \"GeoJSON\"')
-    expect(resMessage.errors.length).to.equal(1)  
+    expect(resMessage.message === 'Invdalid "GeoJSON"')
+    expect(resMessage.errors.length).to.equal(1)
     expect(resMessage.errors.message === 'Invalid CRS: urn:ogc:def:crs:epsg::2154')
   })
 
   it('capture heterogenous geojson file', async () => {
     // Map view
-    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes-WGS84.geojson')))
-    let  res = await capture(body, 'map-shapes')
+    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes-WGS84.geojson')))
+    const res = await capture(body, 'map-shapes')
     expect(res.status).to.equal(200)
-    expect(match('map-shapes')).to.be.true
-    // Globe view 
-    // Cannot work for now 
-   /* body.activity = 'globe'
+    expect(match('map-shapes')).beTrue()
+    // Globe view
+    // Cannot work for now
+    /* body.activity = 'globe'
     body.delay = 2000
     res = await capture(body, 'globe-shapes')
     expect(res.status).to.equal(200)
-    expect(match('globe-shapes')).to.be.true */
+    expect(match('globe-shapes')).beTrue() */
   })
 
   it('handle too large geojson file', async () => {
@@ -148,30 +161,35 @@ describe(`suite:${suite}`, () => {
   })
 
   it('capture gradient geoson file', async () => {
-    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
+    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
     body.layers = ['Layers.OSM_DARK']
     body.size = { width: 800, height: 600 }
     const res = await capture(body, 'flight')
     expect(res.status).to.equal(200)
-    expect(match('flight')).to.be.true
+    expect(match('flight')).beTrue()
   })
 
   it('capture geojson with defined bbox', async () => {
-    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
+    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
     body.layers = ['Layers.OSM_DARK']
     body.size = { width: 800, height: 600 }
-    body.bbox = [ 3.5, 51, 5.5, 53 ]
+    body.bbox = [3.5, 51, 5.5, 53]
     const res = await capture(body, 'landing')
     expect(res.status).to.equal(200)
-    expect(match('landing')).to.be.true
+    expect(match('landing')).beTrue()
   })
 
   it('capture mask geoson file', async () => {
-    let body = JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson')))
+    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson')))
     body.layers = ['Layers.HYBRID']
     body.size = { width: 1200, height: 900 }
     const res = await capture(body, 'mask')
     expect(res.status).to.equal(200)
-    expect(match('mask')).to.be.true
+    expect(match('mask')).beTrue()
+  })
+
+  // Cleanup
+  after(async () => {
+    if (server) await server.close()
   })
 })

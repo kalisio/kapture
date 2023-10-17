@@ -3,8 +3,8 @@
   "description": "Capture Kano Snapshots as a Service",
   "version": "1.2.0",
   "type": "module",
-  "main": "index.js",
-  "bin": "index.js",
+  "main": "src/main.js",
+  "bin": "src/bin.js",
   "homepage": "https://github.com/kalisio/kapture",
   "keywords": [
     "kargo",
@@ -24,12 +24,23 @@
     "url": "https://github.com/kalisio/kapture/issues"
   },
   "scripts": {
-    "start": "node .",
-    "test": "mocha test/*.test.js --timeout 90000 --require esm",
+    "start": "node src/bin.js",
+    "dev": "nodemon --watch src --exec npm run debug",
+    "debug": "cross-env NODE_ENV=development node --inspect=:9236 src/bin.js",
+    "lint": "standard src/**/*.js test/**/*.js --fix",
+    "mocha": "mocha test/*.test.js --timeout 90000 --require esm",
+    "coverage": "c8 npm run mocha",
+    "test": "npm run lint && npm run coverage",
     "release:major": "npm version --force major",
     "release:minor": "npm version --force minor",
     "release:patch": "npm version --force patch",
     "postversion": "git push origin HEAD --tags"
+  },
+  "standard": {
+    "sourceType": "module",
+    "env": [
+      "mocha"
+    ]
   },
   "dependencies": {
     "@mapbox/geojsonhint": "^3.0.1",
@@ -40,11 +51,16 @@
     "puppeteer": "^20.5.0"
   },
   "devDependencies": {
+    "c8": "^7.11.0",
     "chai": "^4.3.4",
+    "chai-lint": "^0.1.1",
+    "cross-env": "^7.0.3",
     "esm": "^3.2.25",
     "mocha": "^9.1.2",
     "node-fetch": "^3.0.0",
+    "nodemon": "^2.0.15",
     "pixelmatch": "^5.2.1",
-    "pngjs": "^6.0.0"
+    "pngjs": "^6.0.0",
+    "standard": "^16.0.4"
   }
 }

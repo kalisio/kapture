@@ -12,7 +12,7 @@ export function validateGeoJson (content) {
     const name = _.get(content.crs, 'properties.name')
     if (name) {
       const crs = name.toLowerCase()
-      const allowedCrs = [ 'epsg:4326', 'urn:ogc:def:crs:OGC:1.3:CRS84', 'urn:ogc:def:crs:EPSG::4326']
+      const allowedCrs = ['epsg:4326', 'urn:ogc:def:crs:OGC:1.3:CRS84', 'urn:ogc:def:crs:EPSG::4326']
       const isCrsValid = _.some(allowedCrs, (allowrdCrs) => { return allowrdCrs.toLowerCase() === crs })
       if (!isCrsValid) {
         return [{ message: `Invalid CRS: ${crs}` }]
