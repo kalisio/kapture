@@ -3,6 +3,7 @@ import _ from 'lodash'
 import path from 'path'
 import crypto from 'crypto'
 import puppeteer from 'puppeteer'
+import { getLayoutPathsState, defaultLayout } from './utils.layout.js'
 import { getTmpDirName, createTmpDir, writeTmpFile, deleteTmpFile } from './utils.fs.js'
 
 const debug = makeDebug('kapture:capture')
@@ -97,19 +98,14 @@ export async function capture (parameters) {
     debug('deleting temporary geojson file')
     deleteTmpFile(tmpGeoJsonFile)
   }
-  // Hide the layout components
-  debug('hide the layout components')
-  await page.evaluate(() => {
-    window.$store.set('layout.panes.top.visible', false)
-    window.$store.set('layout.panes.top.opener', false)
-    window.$store.set('layout.panes.right.visible', false)
-    window.$store.set('layout.panes.right.opener', false)
-    window.$store.set('layout.panes.bottom.visible', false)
-    window.$store.set('layout.panes.bottom.opener', false)
-    window.$store.set('layout.panes.left.visible', false)
-    window.$store.set('layout.panes.left.opener', false)
-    window.$store.set('layout.fab.visible', false)
-  })
+  // Process the layout components
+  debug('process the layout components')
+  const layoutPathsState = getLayoutPathsState({ layout: _.has(parameters, 'layout') ? parameters.layout : defaultLayout })
+  await page.evaluate((layoutPathsState) => {
+    layoutPathsState.forEach((element) => {
+      window.$store.set(element.path, element.state)
+    })
+  }, layoutPathsState)
   // Wait for the network to be idle
   debug('wait for network to be idle')
   try {
