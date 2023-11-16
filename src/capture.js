@@ -3,7 +3,7 @@ import _ from 'lodash'
 import path from 'path'
 import crypto from 'crypto'
 import puppeteer from 'puppeteer'
-import { getLayoutPathsState, defaultLayout } from './utils.layout.js'
+import { defaultLayout } from './utils.layout.js'
 import { getTmpDirName, createTmpDir, writeTmpFile, deleteTmpFile } from './utils.fs.js'
 
 const debug = makeDebug('kapture:capture')
@@ -100,12 +100,10 @@ export async function capture (parameters) {
   }
   // Process the layout components
   debug('process the layout components')
-  const layoutPathsState = getLayoutPathsState({ layout: _.has(parameters, 'layout') ? parameters.layout : defaultLayout })
-  await page.evaluate((layoutPathsState) => {
-    layoutPathsState.forEach((element) => {
-      window.$store.set(element.path, element.state)
-    })
-  }, layoutPathsState)
+  const layout = _.get(parameters, 'layout', defaultLayout)
+  await page.evaluate((layout) => {
+    window.$layout.set(layout)
+  }, layout)
   // Wait for the network to be idle
   debug('wait for network to be idle')
   try {
