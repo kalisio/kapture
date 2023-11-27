@@ -101,6 +101,7 @@ export async function capture (parameters) {
   // Process the layout components
   debug('process the layout components')
   const layout = _.get(parameters, 'layout', defaultLayout)
+  await page.waitForTimeout(1000)
   await page.evaluate((layout) => {
     window.$layout.set(layout)
   }, layout)
