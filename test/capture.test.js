@@ -116,8 +116,8 @@ describe(`suite:${suite}`, () => {
   it('capture multiple zoomed layers', async () => {
     // Map view
     const body = {
-      layers: ['imagery', 'Layers.ADMINEXPRESS'],
-      bbox: [1.6, 43.10, 1.65, 43.14],
+      layers: ['Layers.IMAGERY', 'Layers.ADMINEXPRESS'],
+      bbox: [-0.30, 45.51, 8.93, 47.88],
       delay: 2000
     }
     let res = await capture(body, 'map-layers')
@@ -127,6 +127,7 @@ describe(`suite:${suite}`, () => {
     body.activity = 'globe'
     res = await capture(body, 'globe-layers')
     expect(res.status).to.equal(200)
+    expect(match('globe-layers')).beTrue()
   })
 
   it('handle invalid geojson crs', async () => {
@@ -186,6 +187,17 @@ describe(`suite:${suite}`, () => {
     const res = await capture(body, 'mask')
     expect(res.status).to.equal(200)
     expect(match('mask')).beTrue()
+  })
+
+  it('capture with layout', async () => {
+    const body = {}
+    body.layout = JSON.parse(fs.readFileSync(path.join(dataDir, 'layout.json')))
+    body.layers = ['Layers.OSM_BRIGHT', 'Layers.TELERAY']
+    body.bbox = [0.2636, 46.32, 4.8834, 47.9844]
+    body.size = { width: 2048, height: 1080 }
+    const res = await capture(body, 'layout')
+    expect(res.status).to.equal(200)
+    expect(match('layout')).beTrue()
   })
 
   // Cleanup

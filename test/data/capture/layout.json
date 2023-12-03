@@ -1,0 +1,722 @@
+{
+  "panes": {
+    "left": {
+      "opener": false,
+      "visible": false
+    },
+    "top": {
+      "opener": false,
+      "visible": false
+    },
+    "right": {
+      "opener": false,
+      "visible": false
+    },
+    "bottom": {
+      "opener": false,
+      "visible": false
+    }
+  },
+  "fab": {
+    "visible": false
+  },
+  "header": {
+    "content": [
+      {
+        "component": "KTextArea",
+        "text": "<div style=\"text-align: center;\"><b>Title</b></div>",
+        "minHeight": 32
+      }
+    ],
+    "visible": true
+  },
+  "footer": {
+    "content": [
+      {
+        "component": "KTextArea",
+        "text": "<div style=\"text-align: right;\"><i>Footer</i></div>",
+        "minHeight": 32
+      }
+    ],
+    "visible": true
+  },
+  "page": {
+    "content": [
+      {
+        "id": "color-legend",
+        "component": "layout/KPageSticky",
+        "position": "left",
+        "offset": [
+          18,
+          0
+        ],
+        "content": [
+          {
+            "component": "KColorLegend",
+            "name": "KColorLegend",
+            "uid": "55a23559-56c0-4d84-98f2-00769bb694a2",
+            "isHidden": false,
+            "isVisible": true,
+            "instance": {
+              "name": "AsyncComponentWrapper",
+              "__asyncResolved": {
+                "name": "k-color-legend",
+                "inject": [
+                  "kActivity"
+                ],
+                "props": {
+                  "unitHeight": {
+                    "0": false,
+                    "1": true,
+                    "default": 42
+                  }
+                },
+                "computed": {},
+                "methods": {},
+                "__file": "kdk/map/client/components/KColorLegend.vue",
+                "components": {
+                  "QTooltip": {
+                    "name": "QTooltip",
+                    "inheritAttrs": false,
+                    "props": {
+                      "target": {
+                        "0": false,
+                        "1": true,
+                        "default": true
+                      },
+                      "modelValue": {
+                        "0": true,
+                        "1": true,
+                        "default": null
+                      },
+                      "onUpdate:modelValue": [
+                        null,
+                        null
+                      ],
+                      "transitionShow": {
+                        "0": false,
+                        "1": true,
+                        "default": "jump-down"
+                      },
+                      "transitionHide": {
+                        "0": false,
+                        "1": true,
+                        "default": "jump-up"
+                      },
+                      "transitionDuration": {
+                        "0": false,
+                        "1": true,
+                        "type": [
+                          null,
+                          null
+                        ],
+                        "default": 300
+                      },
+                      "maxHeight": {
+                        "0": false,
+                        "1": true,
+                        "default": null
+                      },
+                      "maxWidth": {
+                        "0": false,
+                        "1": true,
+                        "default": null
+                      },
+                      "anchor": {
+                        "0": false,
+                        "1": true,
+                        "default": "bottom middle"
+                      },
+                      "self": {
+                        "0": false,
+                        "1": true,
+                        "default": "top middle"
+                      },
+                      "offset": {
+                        "0": false,
+                        "1": true
+                      },
+                      "scrollTarget": {
+                        "0": false,
+                        "1": true
+                      },
+                      "delay": {
+                        "0": false,
+                        "1": true,
+                        "default": 0
+                      },
+                      "hideDelay": {
+                        "0": false,
+                        "1": true,
+                        "default": 0
+                      }
+                    },
+                    "emits": [
+                      "beforeShow",
+                      "show",
+                      "beforeHide",
+                      "hide"
+                    ]
+                  }
+                },
+                "__hmrId": "2a3f1638"
+              }
+            }
+          }
+        ],
+        "name": "layout/KPageSticky",
+        "uid": "a5be23f4-c999-4b0f-91ac-4450cf226cd4",
+        "isHidden": false,
+        "isVisible": true,
+        "instance": {
+          "name": "AsyncComponentWrapper",
+          "__asyncResolved": {
+            "__name": "KPageSticky",
+            "props": {
+              "position": {
+                "0": false,
+                "1": true,
+                "required": true
+              },
+              "offset": {
+                "0": false,
+                "1": true
+              },
+              "content": {
+                "0": false,
+                "1": true,
+                "type": [
+                  null,
+                  null
+                ]
+              },
+              "mode": {
+                "0": false,
+                "1": true
+              },
+              "context": {
+                "0": false,
+                "1": true
+              }
+            },
+            "__scopeId": "data-v-0a9d5c28",
+            "__file": "kdk/core/client/components/layout/KPageSticky.vue",
+            "components": {
+              "QPageSticky": {
+                "name": "QPageSticky",
+                "props": {
+                  "position": {
+                    "0": false,
+                    "1": true,
+                    "default": "bottom-right"
+                  },
+                  "offset": {
+                    "0": false,
+                    "1": true
+                  }
+                }
+              }
+            },
+            "__hmrId": "0a9d5c28"
+          }
+        }
+      },
+      {
+        "id": "url-legend",
+        "component": "layout/KPageSticky",
+        "position": "top-left",
+        "offset": [
+          18,
+          18
+        ],
+        "content": [
+          {
+            "component": "KUrlLegend",
+            "name": "KUrlLegend",
+            "uid": "4e476649-9d37-4312-b91e-5620bb49d52a",
+            "isHidden": false,
+            "isVisible": true,
+            "instance": {
+              "name": "AsyncComponentWrapper",
+              "__asyncResolved": {
+                "name": "k-url-legend",
+                "inject": [
+                  "kActivity"
+                ],
+                "methods": {},
+                "__file": "kdk/map/client/components/KUrlLegend.vue",
+                "__hmrId": "1d0a3d78"
+              }
+            }
+          }
+        ],
+        "name": "layout/KPageSticky",
+        "uid": "463e9462-3e71-45c0-93d6-95a6001f8b4e",
+        "isHidden": false,
+        "isVisible": true,
+        "instance": {
+          "name": "AsyncComponentWrapper",
+          "__asyncResolved": {
+            "__name": "KPageSticky",
+            "props": {
+              "position": {
+                "0": false,
+                "1": true,
+                "required": true
+              },
+              "offset": {
+                "0": false,
+                "1": true
+              },
+              "content": {
+                "0": false,
+                "1": true,
+                "type": [
+                  null,
+                  null
+                ]
+              },
+              "mode": {
+                "0": false,
+                "1": true
+              },
+              "context": {
+                "0": false,
+                "1": true
+              }
+            },
+            "__scopeId": "data-v-0a9d5c28",
+            "__file": "kdk/core/client/components/layout/KPageSticky.vue",
+            "components": {
+              "QPageSticky": {
+                "name": "QPageSticky",
+                "props": {
+                  "position": {
+                    "0": false,
+                    "1": true,
+                    "default": "bottom-right"
+                  },
+                  "offset": {
+                    "0": false,
+                    "1": true
+                  }
+                }
+              }
+            },
+            "__hmrId": "0a9d5c28"
+          }
+        }
+      },
+      {
+        "id": "level-slider",
+        "component": "layout/KPageSticky",
+        "position": "right",
+        "offset": [
+          40,
+          0
+        ],
+        "content": [
+          {
+            "component": "KLevelSlider",
+            "name": "KLevelSlider",
+            "uid": "e8ad9f33-7f1e-4f84-a8b8-a30567b4ee79",
+            "isHidden": false,
+            "isVisible": true,
+            "instance": {
+              "name": "AsyncComponentWrapper",
+              "__asyncResolved": {
+                "name": "k-level-slider",
+                "inject": [
+                  "kActivity"
+                ],
+                "components": {
+                  "VueSlider": {
+                    "name": "VueSlider",
+                    "components": {
+                      "VueSliderDot": {
+                        "name": "VueSliderDot",
+                        "emits": [
+                          "DragStart"
+                        ],
+                        "props": {
+                          "value": {
+                            "type": [
+                              null,
+                              null
+                            ],
+                            "default": 0
+                          },
+                          "tooltip": {
+                            "required": true
+                          },
+                          "tooltipPlacement": {
+                            "required": true
+                          },
+                          "tooltipFormatter": {
+                            "type": [
+                              null,
+                              null
+                            ]
+                          },
+                          "focus": {
+                            "default": false
+                          },
+                          "disabled": {
+                            "default": false
+                          },
+                          "dotStyle": {},
+                          "tooltipStyle": {}
+                        },
+                        "computed": {},
+                        "methods": {}
+                      },
+                      "VueSliderMark": {
+                        "name": "VueSliderMark",
+                        "emits": [
+                          "PressLabel"
+                        ],
+                        "props": {
+                          "mark": {
+                            "required": true
+                          },
+                          "hideLabel": {},
+                          "stepStyle": {},
+                          "stepActiveStyle": {},
+                          "labelStyle": {},
+                          "labelActiveStyle": {}
+                        },
+                        "computed": {},
+                        "methods": {}
+                      }
+                    },
+                    "emits": [
+                      "change",
+                      "drag-start",
+                      "dragging",
+                      "drag-end",
+                      "error",
+                      "update:modelValue"
+                    ],
+                    "props": {
+                      "modelValue": {
+                        "type": [
+                          null,
+                          null,
+                          null
+                        ],
+                        "default": 0
+                      },
+                      "silent": {
+                        "default": false
+                      },
+                      "direction": {
+                        "default": "ltr"
+                      },
+                      "width": {
+                        "type": [
+                          null,
+                          null
+                        ]
+                      },
+                      "height": {
+                        "type": [
+                          null,
+                          null
+                        ]
+                      },
+                      "dotSize": {
+                        "type": [
+                          null,
+                          null
+                        ],
+                        "default": 14
+                      },
+                      "contained": {
+                        "default": false
+                      },
+                      "min": {
+                        "default": 0
+                      },
+                      "max": {
+                        "default": 100
+                      },
+                      "interval": {
+                        "default": 1
+                      },
+                      "disabled": {
+                        "default": false
+                      },
+                      "clickable": {
+                        "default": true
+                      },
+                      "dragOnClick": {
+                        "default": false
+                      },
+                      "duration": {
+                        "default": 0.5
+                      },
+                      "data": {
+                        "type": [
+                          null,
+                          null
+                        ]
+                      },
+                      "dataValue": {
+                        "default": "value"
+                      },
+                      "dataLabel": {
+                        "default": "label"
+                      },
+                      "lazy": {
+                        "default": false
+                      },
+                      "tooltip": {
+                        "default": "active"
+                      },
+                      "tooltipPlacement": {
+                        "type": [
+                          null,
+                          null
+                        ]
+                      },
+                      "tooltipFormatter": {
+                        "type": [
+                          null,
+                          null,
+                          null
+                        ]
+                      },
+                      "useKeyboard": {
+                        "default": true
+                      },
+                      "keydownHook": {},
+                      "enableCross": {
+                        "default": true
+                      },
+                      "fixed": {
+                        "default": false
+                      },
+                      "order": {
+                        "default": true
+                      },
+                      "minRange": {},
+                      "maxRange": {},
+                      "marks": {
+                        "type": [
+                          null,
+                          null,
+                          null,
+                          null
+                        ],
+                        "default": false
+                      },
+                      "process": {
+                        "type": [
+                          null,
+                          null
+                        ],
+                        "default": true
+                      },
+                      "zoom": {},
+                      "included": {},
+                      "adsorb": {},
+                      "hideLabel": {},
+                      "dotOptions": {
+                        "type": [
+                          null,
+                          null
+                        ]
+                      },
+                      "dotAttrs": {},
+                      "railStyle": {},
+                      "processStyle": {},
+                      "dotStyle": {},
+                      "tooltipStyle": {},
+                      "stepStyle": {},
+                      "stepActiveStyle": {},
+                      "labelStyle": {},
+                      "labelActiveStyle": {}
+                    },
+                    "computed": {},
+                    "watch": {},
+                    "methods": {},
+                    "VueSliderMark": {
+                      "name": "VueSliderMark",
+                      "emits": [
+                        "PressLabel"
+                      ],
+                      "props": {
+                        "mark": {
+                          "required": true
+                        },
+                        "hideLabel": {},
+                        "stepStyle": {},
+                        "stepActiveStyle": {},
+                        "labelStyle": {},
+                        "labelActiveStyle": {}
+                      },
+                      "computed": {},
+                      "methods": {}
+                    },
+                    "VueSliderDot": {
+                      "name": "VueSliderDot",
+                      "emits": [
+                        "DragStart"
+                      ],
+                      "props": {
+                        "value": {
+                          "type": [
+                            null,
+                            null
+                          ],
+                          "default": 0
+                        },
+                        "tooltip": {
+                          "required": true
+                        },
+                        "tooltipPlacement": {
+                          "required": true
+                        },
+                        "tooltipFormatter": {
+                          "type": [
+                            null,
+                            null
+                          ]
+                        },
+                        "focus": {
+                          "default": false
+                        },
+                        "disabled": {
+                          "default": false
+                        },
+                        "dotStyle": {},
+                        "tooltipStyle": {}
+                      },
+                      "computed": {},
+                      "methods": {}
+                    }
+                  }
+                },
+                "computed": {},
+                "methods": {},
+                "__file": "kdk/map/client/components/KLevelSlider.vue",
+                "__hmrId": "4f4477ed"
+              }
+            }
+          }
+        ],
+        "name": "layout/KPageSticky",
+        "uid": "947318c3-dae7-464b-ae44-196a19365bbc",
+        "isHidden": false,
+        "isVisible": true,
+        "instance": {
+          "name": "AsyncComponentWrapper",
+          "__asyncResolved": {
+            "__name": "KPageSticky",
+            "props": {
+              "position": {
+                "0": false,
+                "1": true,
+                "required": true
+              },
+              "offset": {
+                "0": false,
+                "1": true
+              },
+              "content": {
+                "0": false,
+                "1": true,
+                "type": [
+                  null,
+                  null
+                ]
+              },
+              "mode": {
+                "0": false,
+                "1": true
+              },
+              "context": {
+                "0": false,
+                "1": true
+              }
+            },
+            "__scopeId": "data-v-0a9d5c28",
+            "__file": "kdk/core/client/components/layout/KPageSticky.vue",
+            "components": {
+              "QPageSticky": {
+                "name": "QPageSticky",
+                "props": {
+                  "position": {
+                    "0": false,
+                    "1": true,
+                    "default": "bottom-right"
+                  },
+                  "offset": {
+                    "0": false,
+                    "1": true
+                  }
+                }
+              }
+            },
+            "__hmrId": "0a9d5c28"
+          }
+        }
+      },
+      {
+        "component": "layout/KPageSticky",
+        "position": "top-right",
+        "offset": [
+          0,
+          5
+        ],
+        "content": [
+          {
+            "component": "KNorth"
+          }
+        ]
+      }
+    ]
+  },
+  "windows": {
+    "left": {
+      "content": [
+        {
+          "id": "legend-widget",
+          "label": "KLegend.LABEL",
+          "icon": "las la-list",
+          "scrollable": true,
+          "content": {
+            "component": "legend/KLegend"
+          }
+        }
+      ],
+      "current": "legend-widget",
+      "state": "pinned",
+      "sizePolicy": {
+        "pinned": {
+          "xs": [
+            35,
+            100
+          ],
+          "sm": [
+            30,
+            100
+          ],
+          "md": [
+            25,
+            100
+          ],
+          "lg": [
+            20,
+            100
+          ],
+          "xl": [
+            15,
+            100
+          ]
+        }
+      },
+      "visible": true
+    }
+  }
+}
