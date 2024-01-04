@@ -33,6 +33,14 @@ export async function capture (parameters) {
   page.on('pageerror', error => {
     console.error('<!> pageerror occurred: ', error)
   })
+  // Process the page language
+  await page.evaluateOnNewDocument((parameters) => {
+    Object.defineProperty(navigator, 'language', {
+      get: function() {
+        return _.get(parameters, 'lang', 'en-US')
+      }
+    })
+  }, parameters)
   // Process the page viewport
   debug('configure the page viewport')
   try {
