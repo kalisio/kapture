@@ -34,9 +34,10 @@ export async function capture (parameters) {
     console.error('<!> pageerror occurred: ', error)
   })
   // Process the page language
+  debug('configure the page language')
   await page.evaluateOnNewDocument((parameters) => {
     Object.defineProperty(navigator, 'language', {
-      get: function() {
+      get: function () {
         return _.get(parameters, 'lang', 'en-US')
       }
     })
