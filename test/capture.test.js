@@ -200,6 +200,14 @@ describe(`suite:${suite}`, () => {
     expect(match('layout')).beTrue()
   })
 
+  it('capture with lang', async () => {
+    const body = { lang: 'fr-FR' }
+    body.layout = { windows: JSON.parse(fs.readFileSync(path.join(dataDir, 'layout.json'))).windows }
+    const res = await capture(body, 'lang')
+    expect(res.status).to.equal(200)
+    expect(match('lang')).beTrue()
+  })
+
   // Cleanup
   after(async () => {
     if (server) await server.close()
