@@ -1,7 +1,11 @@
 # kapture
 
 [![Latest Release](https://img.shields.io/github/v/tag/kalisio/kapture?sort=semver&label=latest)](https://github.com/kalisio/kapture/releases)
-[![Build Status](https://app.travis-ci.com/kalisio/kapture.svg?branch=master)](https://app.travis-ci.com/kalisio/kapture)
+[![CI](https://github.com/kalisio/kapture/actions/workflows/main.yaml/badge.svg)](https://github.com/kalisio/kapture/actions/workflows/main.yaml)
+[![Code Climate](https://codeclimate.com/github/kalisio/kapture/badges/gpa.svg)](https://codeclimate.com/github/kalisio/kapture)
+[![Test Coverage](https://codeclimate.com/github/kalisio/kapture/badges/coverage.svg)](https://codeclimate.com/github/kalisio/kapture/coverage)
+[![Dependency Status](https://img.shields.io/david/kalisio/kapture.svg?style=flat-square)](https://david-dm.org/kalisio/kapture)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Capture Kano Snapshots as a Service**
 
