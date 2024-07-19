@@ -3,13 +3,16 @@
 # To enable WebGL support in Docker
 # https://github.com/flolu/docker-puppeteer-webgl/blob/master/Dockerfile
 
-FROM node:16.13-bullseye-slim as builder
+ARG DEBIAN_VERSION=bookworm
+ARG NODE_VERSION=20
+
+FROM node:${NODE_VERSION}-${DEBIAN_VERSION}-slim as builder
 ENV HOME /kapture
 COPY . ${HOME}
 WORKDIR ${HOME}
 RUN yarn
 
-FROM node:16.13-bullseye-slim
+FROM node:${NODE_VERSION}-${DEBIAN_VERSION}-slim
 LABEL maintainer "<contact@kalisio.xyz>"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
