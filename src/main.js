@@ -68,9 +68,9 @@ export async function createServer () {
   app.post('/capture', [activityValidator, layersValidator, sizeValidator, geoJsonValidator], async (req, res) => {
     const start = new Date()
     const buffer = await capture(_.defaults(req.body, { url: kanoUrl, jwt: kanoJwt, delay, networkdIdleTimeout }))
-    if (Buffer.isBuffer(buffer)) {
+    if (Buffer.isBuffer(Buffer.from(buffer))) {
       res.contentType('image/png')
-      res.send(buffer)
+      res.send(Buffer.from(buffer))
       const duration = new Date() - start
       console.log('<> capture processed in %dms', duration)
     } else {

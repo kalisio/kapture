@@ -15,9 +15,9 @@ export async function capture (parameters) {
   console.log('[KAPTURE] capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
   // Instanciate the browser
   const browser = await puppeteer.launch({
+    headless: 'new',
     args: [
       '--no-sandbox',
-      '--headless',
       '--hide-scrollbars',
       '--enable-webgl',
       '--disable-gpu',
@@ -79,7 +79,7 @@ export async function capture (parameters) {
     if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
     debug('computed kano url:', url)
     await page.goto(url)
-    await page.waitForTimeout(500)
+    await new Promise(resolve => setTimeout(resolve, 500))
   } catch (error) {
     console.error(`<!> navigate to ${url} failed: ${error}`)
     return null
@@ -96,10 +96,10 @@ export async function capture (parameters) {
     writeTmpFile(tmpGeoJsonFile, JSON.stringify(parameters))
     try {
       debug('uploading temporary geosjon file')
-      await page.waitForTimeout(250)
-      const loader = await page.$('#dropFileInput')
+      await new Promise(resolve => setTimeout(resolve, 250))
+      const loader = await page.locator('#dropFileInput')
       await loader.uploadFile(path.join(getTmpDirName(), tmpGeoJsonFile))
-      await page.waitForTimeout(250)
+      await new Promise(resolve => setTimeout(resolve, 250))
     } catch (error) {
       console.error(`<!> upload features file failed: ${error}`)
     }
@@ -110,7 +110,7 @@ export async function capture (parameters) {
   // Process the layout components
   debug('process the layout components')
   const layout = _.get(parameters, 'layout', defaultLayout)
-  await page.waitForTimeout(1000)
+  await new Promise(resolve => setTimeout(resolve, 1000))
   await page.evaluate((layout) => {
     window.$layout.set(layout)
   }, layout)
@@ -123,7 +123,7 @@ export async function capture (parameters) {
   }
   // Wait for the page to be rendered
   debug('wait for extra delay')
-  await page.waitForTimeout(parameters.delay)
+  await new Promise(resolve => setTimeout(resolve, parameters.delay))
   // Take the screenshot
   debug('take the screenshot')
   const buffer = await page.screenshot({ fullPage: true, type: 'png' })
