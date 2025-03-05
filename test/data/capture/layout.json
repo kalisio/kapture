@@ -25,6 +25,8 @@
       {
         "component": "KTextArea",
         "text": "<div style=\"text-align: center;\"><b>Title</b></div>",
+        "isExpanded": true,
+        "class": "full-width",
         "minHeight": 32
       }
     ],
@@ -35,6 +37,8 @@
       {
         "component": "KTextArea",
         "text": "<div style=\"text-align: right;\"><i>Footer</i></div>",
+        "isExpanded": true,
+        "class": "full-width",
         "minHeight": 32
       }
     ],

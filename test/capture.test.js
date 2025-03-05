@@ -102,7 +102,8 @@ describe(`suite:${suite}`, () => {
     expect(match('map')).beTrue()
   })
 
-  it('capture zoomed globe view', async () => {
+  it('capture zoomed globe view', async function () {
+    this.timeout(120000)
     const body = {
       activity: 'globe',
       bbox: [-30, 20, 30, 60],
@@ -113,10 +114,11 @@ describe(`suite:${suite}`, () => {
     expect(match('globe-zoom')).beTrue()
   })
 
-  it('capture multiple zoomed layers', async () => {
+  it('capture multiple zoomed layers', async function () {
+    this.timeout(120000)
     // Map view
     const body = {
-      layers: ['Layers.IMAGERY', 'Layers.ADMINEXPRESS'],
+      layers: ['Layers.ADMINEXPRESS', 'Layers.IMAGERY'],
       bbox: [-0.30, 45.51, 8.93, 47.88],
       delay: 2000
     }

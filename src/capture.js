@@ -60,6 +60,7 @@ export async function capture (parameters) {
     window.localStorage.clear()
     window.localStorage.setItem('kano-jwt', parameters.jwt)
     window.localStorage.setItem('kano-welcome', false)
+    window.localStorage.setItem('kano-install', false)
   }, parameters)
   // Goto the kano url
   debug('navigate to kano')
@@ -96,8 +97,8 @@ export async function capture (parameters) {
     writeTmpFile(tmpGeoJsonFile, JSON.stringify(parameters))
     try {
       debug('uploading temporary geosjon file')
-      await new Promise(resolve => setTimeout(resolve, 250))
-      const loader = await page.locator('#dropFileInput')
+      await new Promise(resolve => setTimeout(resolve, 500))
+      const loader = await page.$('#dropFileInput')
       await loader.uploadFile(path.join(getTmpDirName(), tmpGeoJsonFile))
       await new Promise(resolve => setTimeout(resolve, 250))
     } catch (error) {

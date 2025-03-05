@@ -11,6 +11,9 @@ yarn-error.log*
 # Node modules
 node_modules
 
+# Coverage
+coverage
+
 # Temporary files
 test/run
 tmp
