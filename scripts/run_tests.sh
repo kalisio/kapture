@@ -40,8 +40,9 @@ done
 . "$WORKSPACE_DIR/development/workspaces/services/services.sh" kapture
 
 # Need to switch from default Kano config which is local dev env
-export KANO_URL=$KANO_DEV_URL
-export KANO_JWT=$KANO_DEV_JWT
+export APP_URL=$APP_DEV_URL
+export APP_JWT=$APP_DEV_JWT
+export APP_NAME=$APP_NAME
 
 ## Run tests
 ##

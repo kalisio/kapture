@@ -8,9 +8,10 @@ import { validateGeoJson } from './utils.geojson.js'
 const port = process.env.PORT || 3000
 const bodyLimit = process.env.BODY_LIMIT || '100kb'
 const delay = process.env.DELAY || 1000
-const networkdIdleTimeout = process.env.NETWORK_IDLE_TIMEOUT || 90000
-const kanoUrl = process.env.KANO_URL
-const kanoJwt = process.env.KANO_JWT
+const networkdIdleTimeout = process.env.NETWORK_IDLE_TIMEOUT || 100000
+const appUrl = process.env.APP_URL
+const appJwt = process.env.APP_JWT
+const appName = process.env.APP_NAME
 
 // activity validator middleware
 const activityValidator = function (req, res, next) {
@@ -67,7 +68,7 @@ export async function createServer () {
   // Capture
   app.post('/capture', [activityValidator, layersValidator, sizeValidator, geoJsonValidator], async (req, res) => {
     const start = new Date()
-    const buffer = await capture(_.defaults(req.body, { url: kanoUrl, jwt: kanoJwt, delay, networkdIdleTimeout }))
+    const buffer = await capture(_.defaults(req.body, { url: appUrl, jwt: appJwt, delay, networkdIdleTimeout, appName }))
     if (Buffer.isBuffer(Buffer.from(buffer))) {
       res.contentType('image/png')
       res.send(Buffer.from(buffer))

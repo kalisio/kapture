@@ -58,12 +58,12 @@ export async function capture (parameters) {
   debug('configure the local storage')
   await page.evaluateOnNewDocument(parameters => {
     window.localStorage.clear()
-    window.localStorage.setItem('kano-jwt', parameters.jwt)
-    window.localStorage.setItem('kano-welcome', false)
-    window.localStorage.setItem('kano-install', false)
+    window.localStorage.setItem(`${parameters.appName}-jwt`, parameters.jwt)
+    window.localStorage.setItem(`${parameters.appName}-welcome`, false)
+    window.localStorage.setItem(`${parameters.appName}-install`, false)
   }, parameters)
-  // Goto the kano url
-  debug('navigate to kano')
+  // Goto the app url
+  debug(`navigate to ${parameters.appName}`)
   let url = parameters.url + '/#/home/'
   try {
     url += (parameters.activity === 'globe' ? 'globe' : 'map')
@@ -78,7 +78,7 @@ export async function capture (parameters) {
       queryParams.push(`layers=${layer}`)
     })
     if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
-    debug('computed kano url:', url)
+    debug(`computed ${parameters.appName} url:`, url)
     await page.goto(url)
     await new Promise(resolve => setTimeout(resolve, 500))
   } catch (error) {

@@ -6,9 +6,9 @@
 [![Test Coverage](https://codeclimate.com/github/kalisio/kapture/badges/coverage.svg)](https://codeclimate.com/github/kalisio/kapture/coverage)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Capture Kano Snapshots as a Service**
+**Capture App Snapshots as a Service**
 
-**kapture** is a lightweight service that let you take screenshots of [Kano](https://kalisio.github.io/kano/). 
+**kapture** is a lightweight service that let you take screenshots.
 
 **kapture** relies on [Puppeteer](https://github.com/puppeteer/puppeteer) and [Express](https://expressjs.com/fr/)
 
@@ -127,8 +127,9 @@ Here are the environment variables you can use to customize the service:
 
 | Variable  | Description | Defaults |
 |-----------| ------------| ------------|
-| `KANO_URL` | The **Kano** url | - |
-| `KANO_JWT` | The **Kano** token to get connected | * |
+| `APP_NAME`| The app name | - |
+| `APP_URL` | The app url | - |
+| `APP_JWT` | The app token to get connected | * |
 | `BODY_LIMIT` | The size limit of the request body | `100kb` |
 | `DELAY` | The waiting delay before capturing the screen (in milliseconds) | '1000' |
 | `NETWORK_IDLE_TIMEOUT` | Maximum time to wait for the network idle (in milliseconds) | '90000' |
