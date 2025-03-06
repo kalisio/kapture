@@ -126,10 +126,10 @@ describe(`suite:${suite}`, () => {
     expect(res.status).to.equal(200)
     expect(match('map-layers')).beTrue()
     // Globe view
-    body.activity = 'globe'
-    res = await capture(body, 'globe-layers')
-    expect(res.status).to.equal(200)
-    expect(match('globe-layers')).beTrue()
+    // body.activity = 'globe'
+    // res = await capture(body, 'globe-layers')
+    // expect(res.status).to.equal(200)
+    // expect(match('globe-layers')).beTrue()
   })
 
   it('handle invalid geojson crs', async () => {

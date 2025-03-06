@@ -100,7 +100,7 @@ export async function capture (parameters) {
       await new Promise(resolve => setTimeout(resolve, 500))
       const loader = await page.$('#dropFileInput')
       await loader.uploadFile(path.join(getTmpDirName(), tmpGeoJsonFile))
-      await new Promise(resolve => setTimeout(resolve, 250))
+      await new Promise(resolve => setTimeout(resolve, 500))
     } catch (error) {
       console.error(`<!> upload features file failed: ${error}`)
     }
