@@ -82,8 +82,6 @@ describe(`suite:${suite}`, () => {
     expect(resMessage.message === 'Invdalid "GeoJSON" format')
     expect(resMessage.errors.length).to.equal(2)
   })
-  // Let enough time to process
-    .timeout(15000)
 
   it('handle invalid width body', async () => {
     const body = {
@@ -96,8 +94,6 @@ describe(`suite:${suite}`, () => {
     const resMessage = await res.json()
     expect(resMessage.message === 'Invdalid "width" property')
   })
-  // Let enough time to process
-    .timeout(15000)
 
   it('capture default map view', async () => {
     const body = {}
@@ -105,8 +101,6 @@ describe(`suite:${suite}`, () => {
     expect(res.status).to.equal(200)
     expect(match('map')).beTrue()
   })
-  // Let enough time to process
-    .timeout(15000)
 
   it('capture zoomed globe view', async function () {
     this.timeout(120000)
@@ -119,8 +113,6 @@ describe(`suite:${suite}`, () => {
     expect(res.status).to.equal(200)
     expect(match('globe-zoom')).beTrue()
   })
-  // Let enough time to process
-    .timeout(15000)
 
   it('capture multiple zoomed layers', async function () {
     this.timeout(120000)
@@ -133,15 +125,12 @@ describe(`suite:${suite}`, () => {
     let res = await capture(body, 'map-layers')
     expect(res.status).to.equal(200)
     expect(match('map-layers')).beTrue()
-    this.timeout(120000)
     // Globe view
     body.activity = 'globe'
     res = await capture(body, 'globe-layers')
     expect(res.status).to.equal(200)
     expect(match('globe-layers')).beTrue()
   })
-  // Let enough time to process
-    .timeout(15000)
 
   it('handle invalid geojson crs', async () => {
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes-L93.geojson')))
@@ -152,8 +141,6 @@ describe(`suite:${suite}`, () => {
     expect(resMessage.errors.length).to.equal(1)
     expect(resMessage.errors.message === 'Invalid CRS: urn:ogc:def:crs:epsg::2154')
   })
-  // Let enough time to process
-    .timeout(15000)
 
   it('capture heterogenous geojson file', async function () {
     this.timeout(120000)
@@ -170,16 +157,12 @@ describe(`suite:${suite}`, () => {
     expect(res.status).to.equal(200)
     expect(match('globe-shapes')).beTrue() */
   })
-  // Let enough time to process
-    .timeout(15000)
 
   it('handle too large geojson file', async () => {
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'adsb.geojson')))
     const res = await capture(body, 'adsb')
     expect(res.status).to.equal(413)
   })
-  // Let enough time to process
-    .timeout(15000)
 
   it('capture gradient geoson file', async () => {
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
@@ -189,8 +172,6 @@ describe(`suite:${suite}`, () => {
     expect(res.status).to.equal(200)
     expect(match('flight')).beTrue()
   })
-  // Let enough time to process
-    .timeout(15000)
 
   it('capture geojson with defined bbox', async () => {
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
@@ -201,11 +182,9 @@ describe(`suite:${suite}`, () => {
     expect(res.status).to.equal(200)
     expect(match('landing')).beTrue()
   })
-  // Let enough time to process
-    .timeout(15000)
 
-  it('capture mask geoson file',async function () {
-    this.timeout(120000) 
+  it('capture mask geoson file', async function () {
+    this.timeout(120000)
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson')))
     body.layers = ['Layers.HYBRID']
     body.size = { width: 1200, height: 900 }
@@ -213,8 +192,6 @@ describe(`suite:${suite}`, () => {
     expect(res.status).to.equal(200)
     expect(match('mask')).beTrue()
   })
-  // Let enough time to process
-    .timeout(15000)
 
   it('capture with layout', async () => {
     const body = {}
@@ -226,8 +203,6 @@ describe(`suite:${suite}`, () => {
     expect(res.status).to.equal(200)
     expect(match('layout')).beTrue()
   })
-  // Let enough time to process
-    .timeout(15000)
 
   it('capture with lang', async () => {
     const body = { lang: 'fr-FR' }
@@ -236,8 +211,6 @@ describe(`suite:${suite}`, () => {
     expect(res.status).to.equal(200)
     expect(match('lang')).beTrue()
   })
-  // Let enough time to process
-    .timeout(15000)
 
   // Cleanup
   after(async () => {
