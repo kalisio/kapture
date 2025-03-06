@@ -20,6 +20,8 @@ rclone --version
 
 TIMESTAMP=$(date +%Y%m%d-%H%M)
 load_env_files "$WORKSPACE_DIR/development/rclone.enc.conf"
+ls "$WORKSPACE_DIR"
+cat "$WORKSPACE_DIR/development/rclone.dec.conf"
 ls "$WORKSPACE_DIR/development"
 echo "Copy to S3..."
 rclone --config="$WORKSPACE_DIR/development/rclone.dec.conf" copy "./test/run" "ovh:/kapture/$TIMESTAMP" --no-check-certificate
