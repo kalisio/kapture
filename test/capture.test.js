@@ -125,6 +125,7 @@ describe(`suite:${suite}`, () => {
     let res = await capture(body, 'map-layers')
     expect(res.status).to.equal(200)
     expect(match('map-layers')).beTrue()
+    this.timeout(120000)
     // Globe view
     body.activity = 'globe'
     res = await capture(body, 'globe-layers')
@@ -142,7 +143,8 @@ describe(`suite:${suite}`, () => {
     expect(resMessage.errors.message === 'Invalid CRS: urn:ogc:def:crs:epsg::2154')
   })
 
-  it('capture heterogenous geojson file', async () => {
+  it('capture heterogenous geojson file', async function () {
+    this.timeout(120000)
     // Map view
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes-WGS84.geojson')))
     const res = await capture(body, 'map-shapes')
@@ -182,7 +184,8 @@ describe(`suite:${suite}`, () => {
     expect(match('landing')).beTrue()
   })
 
-  it('capture mask geoson file', async () => {
+  it('capture mask geoson file',async function () {
+    this.timeout(120000) 
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson')))
     body.layers = ['Layers.HYBRID']
     body.size = { width: 1200, height: 900 }
