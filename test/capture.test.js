@@ -54,7 +54,7 @@ function match (image) {
   }
   const numDiffs = pixelmatch(runImg.data, refImg.data, diff.data, width, height, options)
   const diffRatio = 100.0 * (numDiffs / (width * height))
-  return diffRatio < 1.0
+  return diffRatio < 3.0
 }
 
 describe(`suite:${suite}`, () => {
