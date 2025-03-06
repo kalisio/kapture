@@ -48,3 +48,15 @@ export APP_NAME=$APP_NAME
 ##
 
 run_lib_tests "$ROOT_DIR" "$CODE_COVERAGE" "$NODE_VER" "$MONGO_VER"
+
+## Copy to S3
+##
+
+sudo apt-get update -y
+sudo apt-get install -y rclone
+rclone --version
+
+TIMESTAMP=$(date +%Y%m%d-%H%M)
+load_env_files "$WORKSPACE_DIR/development/rclone.enc.conf"
+
+rclone --config="$WORKSPACE_DIR/development/rclone.dec.conf" copy "./test/run" "ovh:/kapture/$TIMESTAMP" --no-check-certificate
