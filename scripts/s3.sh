@@ -19,8 +19,9 @@ echo "rclone version :"
 rclone --version
 
 TIMESTAMP=$(date +%Y%m%d-%H%M)
-load_env_files "$WORKSPACE_DIR/development/rclone.enc.conf"
 ls "$WORKSPACE_DIR"
+load_env_files "$WORKSPACE_DIR/development/rclone.enc.conf"
+
 cat "$WORKSPACE_DIR/development/rclone.dec.conf"
 ls "$WORKSPACE_DIR/development"
 echo "Copy to S3..."
