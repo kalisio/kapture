@@ -34,5 +34,5 @@ if [ "$CI" != true ]; then
 fi
 
 setup_workspace "$WORKSPACE_DIR" "$KALISIO_GITHUB_URL/kalisio/development.git"
-
+load_env_files "$WORKSPACE_DIR/development/rclone.enc.conf"
 end_group "Setting up workspace ..."
