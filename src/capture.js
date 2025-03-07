@@ -64,7 +64,8 @@ export async function capture (parameters) {
   }, parameters)
   // Goto the app url
   debug(`navigate to ${parameters.appName}`)
-  let url = parameters.url + '/#/home/'
+  const basePath = parameters.basePath || '/#/home/'
+  let url = parameters.url + basePath
   try {
     url += (parameters.activity === 'globe' ? 'globe' : 'map')
     if (parameters.bbox && !parameters.type) {
