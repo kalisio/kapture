@@ -54,7 +54,7 @@ function match (image) {
   }
   const numDiffs = pixelmatch(runImg.data, refImg.data, diff.data, width, height, options)
   const diffRatio = 100.0 * (numDiffs / (width * height))
-  return diffRatio < 5.0
+  return diffRatio < 3.0
 }
 
 describe(`suite:${suite}`, () => {
@@ -120,7 +120,7 @@ describe(`suite:${suite}`, () => {
     const body = {
       layers: ['Layers.ADMINEXPRESS', 'Layers.IMAGERY'],
       bbox: [-0.30, 45.51, 8.93, 47.88],
-      delay: 2000
+      delay: 3000
     }
     let res = await capture(body, 'map-layers')
     expect(res.status).to.equal(200)
@@ -134,6 +134,7 @@ describe(`suite:${suite}`, () => {
 
   it('handle invalid geojson crs', async () => {
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes-L93.geojson')))
+    body.delay = 3000
     const res = await capture(body, 'map-shapes')
     expect(res.status).to.equal(422)
     const resMessage = await res.json()
@@ -146,6 +147,7 @@ describe(`suite:${suite}`, () => {
     this.timeout(120000)
     // Map view
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'shapes-WGS84.geojson')))
+    body.delay = 3000
     const res = await capture(body, 'map-shapes')
     expect(res.status).to.equal(200)
     expect(match('map-shapes')).beTrue()
@@ -168,6 +170,7 @@ describe(`suite:${suite}`, () => {
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
     body.layers = ['Layers.OSM_DARK']
     body.size = { width: 800, height: 600 }
+    body.delay = 3000
     const res = await capture(body, 'flight')
     expect(res.status).to.equal(200)
     expect(match('flight')).beTrue()
@@ -178,6 +181,7 @@ describe(`suite:${suite}`, () => {
     body.layers = ['Layers.OSM_DARK']
     body.size = { width: 800, height: 600 }
     body.bbox = [3.5, 51, 5.5, 53]
+    body.delay = 3000
     const res = await capture(body, 'landing')
     expect(res.status).to.equal(200)
     expect(match('landing')).beTrue()
@@ -188,6 +192,7 @@ describe(`suite:${suite}`, () => {
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson')))
     body.layers = ['Layers.HYBRID']
     body.size = { width: 1200, height: 900 }
+    body.delay = 3000
     const res = await capture(body, 'mask')
     expect(res.status).to.equal(200)
     expect(match('mask')).beTrue()
