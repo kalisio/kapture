@@ -7,7 +7,7 @@ import { validateGeoJson } from './utils.geojson.js'
 
 const port = process.env.PORT || 3000
 const bodyLimit = process.env.BODY_LIMIT || '100kb'
-const delay = process.env.DELAY || 1000
+const delay = process.env.DELAY || 2000
 const networkdIdleTimeout = process.env.NETWORK_IDLE_TIMEOUT || 100000
 const appUrl = process.env.APP_URL
 const appJwt = process.env.APP_JWT
