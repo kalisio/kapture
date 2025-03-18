@@ -67,7 +67,7 @@ export async function capture (parameters) {
   const basePath = parameters.basePath || '/#/home/'
   let url = parameters.url + basePath
   try {
-    url += (parameters.activity === 'globe' ? 'globe' : 'map')
+    if (!_.has(parameters, 'basePath')) url += (parameters.activity === 'globe' ? 'globe' : 'map')
     if (parameters.bbox && !parameters.type) {
       url += `/${parameters.bbox[1]}/${parameters.bbox[0]}/${parameters.bbox[3]}/${parameters.bbox[2]}`
     }
