@@ -18,6 +18,8 @@ const runDir = './test/run/capture'
 const suite = 'capture'
 
 async function capture (parameters, image) {
+  // Make sure we have an activity set
+  if (!parameters.activity) parameters.activity = 'map'
   // Setup the request url options
   const urlOptions = {
     method: 'POST',
@@ -118,9 +120,9 @@ describe(`suite:${suite}`, () => {
     // Map view
     const body = {
       layers: ['Layers.ADMINEXPRESS', 'Layers.IMAGERY'],
-      bbox: [-0.30, 45.51, 8.93, 47.88],
+      bbox: [-0.30, 45.51, 8.93, 47.88]
     }
-    let res = await capture(body, 'map-layers')
+    const res = await capture(body, 'map-layers')
     expect(res.status).to.equal(200)
     expect(match('map-layers')).beTrue()
     // Globe view

@@ -65,7 +65,7 @@ export async function capture (parameters) {
   // Goto the app url
   debug(`navigate to ${parameters.appName}`)
   const basePath = parameters.basePath || '/#/home'
-  let url = parameters.url + (basePath.endsWith('/') ? basePath.substring(0, basePath.length-1) : basePath)
+  let url = parameters.url + (basePath.endsWith('/') ? basePath.substring(0, basePath.length - 1) : basePath)
   try {
     if (_.has(parameters, 'activity')) url += `/${parameters.activity}`
     if (parameters.bbox && !parameters.type) {
