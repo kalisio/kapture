@@ -64,10 +64,10 @@ export async function capture (parameters) {
   }, parameters)
   // Goto the app url
   debug(`navigate to ${parameters.appName}`)
-  const basePath = parameters.basePath || '/#/home/'
-  let url = parameters.url + basePath
+  const basePath = parameters.basePath || '/#/home'
+  let url = parameters.url + basePath.endsWith('/') ? basePath.substring(0, basePath.length-1) : basePath
   try {
-    if (!_.has(parameters, 'basePath')) url += (parameters.activity === 'globe' ? 'globe' : 'map')
+    if (_.has(parameters, 'activity')) url += `/${parameters.activity}`
     if (parameters.bbox && !parameters.type) {
       url += `/${parameters.bbox[1]}/${parameters.bbox[0]}/${parameters.bbox[3]}/${parameters.bbox[2]}`
     }
