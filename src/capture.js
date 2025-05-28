@@ -81,7 +81,7 @@ export async function capture (parameters) {
     if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
     debug(`computed ${parameters.appName} url:`, url)
     await page.goto(url)
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await new Promise(resolve => setTimeout(resolve, 1000))
   } catch (error) {
     console.error(`<!> navigate to ${url} failed: ${error}`)
     return null
@@ -98,10 +98,10 @@ export async function capture (parameters) {
     writeTmpFile(tmpGeoJsonFile, JSON.stringify(parameters))
     try {
       debug('uploading temporary geosjon file')
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await new Promise(resolve => setTimeout(resolve, 1500))
       const loader = await page.$('#dropFileInput')
       await loader.uploadFile(path.join(getTmpDirName(), tmpGeoJsonFile))
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await new Promise(resolve => setTimeout(resolve, 1000))
     } catch (error) {
       console.error(`<!> upload features file failed: ${error}`)
     }
@@ -112,7 +112,7 @@ export async function capture (parameters) {
   // Process the layout components
   debug('process the layout components')
   const layout = _.get(parameters, 'layout', defaultLayout)
-  await new Promise(resolve => setTimeout(resolve, 1000))
+  await new Promise(resolve => setTimeout(resolve, 1500))
   await page.evaluate((layout) => {
     window.$layout.set(layout)
   }, layout)
