@@ -17,7 +17,7 @@ const appName = process.env.APP_NAME
 const activityValidator = function (req, res, next) {
   const activity = _.get(req.body, 'activity')
   if (activity) {
-    if (!_.includes(['map', 'globe'], activity)) res.status(404).json({ message: 'Invdalid "activity" property' })
+    if (!_.includes(['map', 'globe'], activity)) res.status(404).json({ message: 'Invalid "activity" property' })
     else next()
   } else {
     next()
@@ -28,7 +28,7 @@ const activityValidator = function (req, res, next) {
 const layersValidator = function (req, res, next) {
   const layers = _.get(req.body, 'layers')
   if (layers) {
-    if (!_.isArray(layers)) res.status(404).json({ message: 'Invdalid "layers" property' })
+    if (!_.isArray(layers)) res.status(404).json({ message: 'Invalid "layers" property' })
     else next()
   } else {
     next()
@@ -40,7 +40,7 @@ const sizeValidator = function (req, res, next) {
   const width = _.get(req.body, 'size.width')
   const height = _.get(req.body, 'size.height')
   if (width || height) {
-    if (width < 256 || width > 4000 || height < 256 || height > 4000) res.status(404).json({ message: 'Invdalid "size" property' })
+    if (width < 256 || width > 4000 || height < 256 || height > 4000) res.status(404).json({ message: 'Invalid "size" property' })
     else next()
   } else {
     next()
@@ -51,7 +51,7 @@ const sizeValidator = function (req, res, next) {
 const geoJsonValidator = function (req, res, next) {
   if (req.body.type === 'FeatureCollection' || req.body.type === 'Feature') {
     const errors = validateGeoJson(req.body)
-    if (errors.length > 0) res.status(422).json({ message: 'Invdalid "GeoJSON"', errors })
+    if (errors.length > 0) res.status(422).json({ message: 'Invalid "GeoJSON"', errors })
     else next()
   } else {
     next()
