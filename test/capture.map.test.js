@@ -56,6 +56,7 @@ function match (image) {
   }
   const numDiffs = pixelmatch(runImg.data, refImg.data, diff.data, width, height, options)
   const diffRatio = 100.0 * (numDiffs / (width * height))
+  console.log(`Match result for ${image}:`, diffRatio)
   return diffRatio < 5.0
 }
 
@@ -182,6 +183,7 @@ describe(`suite:${suite}`, () => {
     body.layers = ['Layers.OSM_BRIGHT', 'Layers.VIGICRUES']
     body.bbox = [0.2636, 46.32, 4.8834, 47.9844]
     body.size = { width: 2048, height: 1080 }
+    body.delay = 3000
     const res = await capture(body, 'default-locale')
     expect(res.status).to.equal(200)
     expect(match('default-locale')).beTrue()
@@ -194,6 +196,7 @@ describe(`suite:${suite}`, () => {
     body.layers = ['Layers.OSM_BRIGHT', 'Layers.VIGICRUES']
     body.bbox = [0.2636, 46.32, 4.8834, 47.9844]
     body.size = { width: 2048, height: 1080 }
+    body.delay = 3000
     const res = await capture(body, 'french-locale')
     expect(res.status).to.equal(200)
     expect(match('french-locale')).beTrue()

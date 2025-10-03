@@ -73,7 +73,7 @@ export async function createServer () {
       res.contentType('image/png')
       res.send(Buffer.from(buffer))
       const duration = new Date() - start
-      console.log('<> capture processed in %dms', duration)
+      console.log('[i] capture processed in %dms', duration)
     } else {
       res.status(500).json({ message: 'Internal service error' })
     }
