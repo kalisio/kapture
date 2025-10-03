@@ -128,7 +128,7 @@ export async function capture (parameters) {
   }
 
   // Wait for the page to be rendered
-  debug('wait for extra delay')
+  debug('wait for extra delay', parameters.delay)
   await new Promise(resolve => setTimeout(resolve, parameters.delay))
   // Take the screenshot
   debug('take the screenshot')
