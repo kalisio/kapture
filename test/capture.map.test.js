@@ -57,7 +57,7 @@ function match (image) {
   const numDiffs = pixelmatch(runImg.data, refImg.data, diff.data, width, height, options)
   const diffRatio = 100.0 * (numDiffs / (width * height))
   if (diffRatio < 5.0) return true
-  console.error(`<!> image diff ratio for for ${image}:`, diffRatio)
+  console.error(`<!> image diff ratio for ${image}:`, diffRatio)
   return false
 }
 
