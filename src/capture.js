@@ -93,17 +93,17 @@ export async function capture (parameters) {
     createTmpDir()
     // Define a temporary feature file name
     const tmpGeoJsonFile = 'features-' + crypto.randomBytes(4).readUInt32LE(0) + '.json'
-    // Write the file for droping it
+    // Write the file for dropping it
     debug('writing temporary geojson file:', tmpGeoJsonFile)
     writeTmpFile(tmpGeoJsonFile, JSON.stringify(parameters))
-    try {
-      debug('uploading temporary geosjon file')
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      const loader = await page.$('#dropFileInput')
-      await loader.uploadFile(path.join(getTmpDirName(), tmpGeoJsonFile))
+    debug('uploading temporary geosjon file')
+    await new Promise(resolve => setTimeout(resolve, 500))
+    const uploader = await page.waitForSelector('#dropFileInput', { timeout: 5000 })
+    if (uploader) {
+      await uploader.uploadFile(path.join(getTmpDirName(), tmpGeoJsonFile))
       await new Promise(resolve => setTimeout(resolve, 1000))
-    } catch (error) {
-      console.error(`<!> upload features file failed: ${error}`)
+    } else {
+      console.error('<!> upload features file failed: unable to find the #dropFileInput element')
     }
     // Delete the file
     debug('deleting temporary geojson file')
@@ -111,18 +111,22 @@ export async function capture (parameters) {
   }
   // Process the layout components
   debug('process the layout components')
+  await page.waitForFunction(() => window.$layout !== undefined)
   const layout = _.get(parameters, 'layout', defaultLayout)
-  await new Promise(resolve => setTimeout(resolve, 1500))
   await page.evaluate((layout) => {
     window.$layout.set(layout)
-  }, layout)
+  }, JSON.parse(JSON.stringify(layout)))
   // Wait for the network to be idle
   debug('wait for network to be idle')
   try {
-    await page.waitForNetworkIdle({ timeout: parameters.networkdIdleTimeout })
+    await page.waitForNetworkIdle({
+      timeout: parameters.networkdIdleTimeout,
+      idleTime: 500
+    })
   } catch (error) {
-    console.error(`<!> wait for networkd idle failed: ${error}`)
+    console.error(`<!> wait for networkd idle failed: ${error.message}`)
   }
+
   // Wait for the page to be rendered
   debug('wait for extra delay')
   await new Promise(resolve => setTimeout(resolve, parameters.delay))
