@@ -109,23 +109,29 @@ export async function capture (parameters) {
     debug('deleting temporary geojson file')
     deleteTmpFile(tmpGeoJsonFile)
   }
-  // Process the layout components
-  debug('process the layout components')
-  await page.waitForFunction(() => window.$layout !== undefined)
-  const layout = _.get(parameters, 'layout', defaultLayout)
-  await page.evaluate((layout) => {
-    window.$layout.set(layout)
-  }, JSON.parse(JSON.stringify(layout)))
   // Wait for the network to be idle
   debug('wait for network to be idle')
   try {
     await page.waitForNetworkIdle({
       timeout: parameters.networkdIdleTimeout,
-      idleTime: 500
+      idleTime: 1000
     })
   } catch (error) {
     console.error(`<!> wait for networkd idle failed: ${error.message}`)
   }
+  // Process the layout components
+  debug('waiting for $layout to be defined and ready...')
+  await page.waitForFunction(() => window.$layout !== undefined && typeof window.$layout.set === 'function')
+  debug('$layout detected and ready')
+  const layout = _.get(parameters, 'layout', defaultLayout)
+  debug('applying layout configuration:', layout)
+  await page.evaluate((layout) => {
+    try {
+      window.$layout.set(layout)
+    } catch (err) {
+      console.error('error while applying layout:', err)
+    }
+  }, JSON.parse(JSON.stringify(layout)))
 
   // Wait for the page to be rendered
   debug('wait for extra delay', parameters.delay)
