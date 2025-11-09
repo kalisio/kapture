@@ -120,16 +120,14 @@ export async function capture (parameters) {
     console.error(`<!> wait for networkd idle failed: ${error.message}`)
   }
   // Process the layout components
-  debug('waiting for $layout to be defined and ready...')
+  debug('process the layout components')
   await page.waitForFunction(() => window.$layout !== undefined && typeof window.$layout.set === 'function')
-  debug('$layout detected and ready')
   const layout = _.get(parameters, 'layout', defaultLayout)
-  debug('applying layout configuration:', layout)
   await page.evaluate((layout) => {
     try {
       window.$layout.set(layout)
-    } catch (err) {
-      console.error('error while applying layout:', err)
+    } catch (error) {
+      console.error('error while applying layout:', error)
     }
   }, JSON.parse(JSON.stringify(layout)))
 
