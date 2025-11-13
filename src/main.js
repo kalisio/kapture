@@ -40,7 +40,7 @@ const sizeValidator = function (req, res, next) {
   const width = _.get(req.body, 'size.width')
   const height = _.get(req.body, 'size.height')
   if (width || height) {
-    if (width < 256 || width > 4000 || height < 256 || height > 4000) res.status(404).json({ message: 'Invalid "size" property' })
+    if (width < 256 || width > 5000 || height < 256 || height > 5000) res.status(404).json({ message: 'Invalid "size" property' })
     else next()
   } else {
     next()
