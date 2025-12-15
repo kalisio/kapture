@@ -48,3 +48,5 @@ export APP_NAME=$APP_NAME
 ##
 
 run_lib_tests "$ROOT_DIR" "$CODE_COVERAGE" "$NODE_VER" "$MONGO_VER"
+
+cd "$ROOT_DIR" && sonar-scanner
