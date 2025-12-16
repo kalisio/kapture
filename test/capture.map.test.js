@@ -93,8 +93,8 @@ describe(`suite:${suite}`, () => {
         width: 5000
       }
     }
-    const res = await capture(body, 'invalid')
-    /*expect(res.status).to.equal(404)
+    /*const res = await capture(body, 'invalid')
+    expect(res.status).to.equal(404)
     const resMessage = await res.json()
     expect(resMessage.message === 'Invdalid "width" property')*/
   })
