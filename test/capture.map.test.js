@@ -94,9 +94,9 @@ describe(`suite:${suite}`, () => {
       }
     }
     const res = await capture(body, 'invalid')
-    // expect(res.status).to.equal(404)
-    // const resMessage = await res.json()
-    // expect(resMessage.message === 'Invdalid "width" property')
+    expect(res.status).to.equal(404)
+    const resMessage = await res.json()
+    expect(resMessage.message === 'Invdalid "width" property')
   })
     .timeout(25000)
 
@@ -104,7 +104,7 @@ describe(`suite:${suite}`, () => {
     const body = {}
     const res = await capture(body, 'default-view')
     expect(res.status).to.equal(200)
-    // expect(match('default-view')).beTrue()
+    expect(match('default-view')).beTrue()
   })
     .timeout(25000)
 
@@ -153,7 +153,7 @@ describe(`suite:${suite}`, () => {
     body.size = { width: 800, height: 600 }
     const res = await capture(body, 'gradient-layer')
     expect(res.status).to.equal(200)
-    // expect(match('gradient-layer')).beTrue()
+    expect(match('gradient-layer')).beTrue()
   })
     .timeout(25000)
 
@@ -164,7 +164,7 @@ describe(`suite:${suite}`, () => {
     body.bbox = [3.5, 51, 5.5, 53]
     const res = await capture(body, 'bounded-layer')
     expect(res.status).to.equal(200)
-    // expect(match('bounded-layer')).beTrue()
+    expect(match('bounded-layer')).beTrue()
   })
     .timeout(25000)
 
@@ -175,7 +175,7 @@ describe(`suite:${suite}`, () => {
     body.size = { width: 1200, height: 900 }
     const res = await capture(body, 'mask-layer')
     expect(res.status).to.equal(200)
-    // expect(match('mask-layer')).beTrue()
+    expect(match('mask-layer')).beTrue()
   })
 
   it('capture with default locale', async () => {
@@ -186,8 +186,8 @@ describe(`suite:${suite}`, () => {
     body.size = { width: 2048, height: 1080 }
     body.delay = 4000
     const res = await capture(body, 'default-locale')
-    // expect(res.status).to.equal(200)
-    // expect(match('default-locale')).beTrue()
+    expect(res.status).to.equal(200)
+    expect(match('default-locale')).beTrue()
   })
     .timeout(25000)
 
