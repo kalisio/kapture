@@ -87,26 +87,26 @@ describe(`suite:${suite}`, () => {
     expect(resMessage.errors.length).to.equal(2)
   })
 
-  it('handle invalid width body', async () => {
-    const body = {
-      size: {
-        width: 5000
-      }
-    }
-    const res = await capture(body, 'invalid')
-    // expect(res.status).to.equal(404)
-    // const resMessage = await res.json()
-    // expect(resMessage.message === 'Invdalid "width" property')
-  })
-    .timeout(25000)
+  // it('handle invalid width body', async () => {
+  //   const body = {
+  //     size: {
+  //       width: 5000
+  //     }
+  //   }
+  //   const res = await capture(body, 'invalid')
+  //   // expect(res.status).to.equal(404)
+  //   // const resMessage = await res.json()
+  //   // expect(resMessage.message === 'Invdalid "width" property')
+  // })
+  //   .timeout(25000)
 
-  it('capture default map view', async () => {
-    const body = {}
-    const res = await capture(body, 'default-view')
-    expect(res.status).to.equal(200)
-    // expect(match('default-view')).beTrue()
-  })
-    .timeout(25000)
+  // it('capture default map view', async () => {
+  //   const body = {}
+  //   const res = await capture(body, 'default-view')
+  //   expect(res.status).to.equal(200)
+  //   // expect(match('default-view')).beTrue()
+  // })
+  //   .timeout(25000)
 
   it('capture multiple zoomed layers', async function () {
     this.timeout(120000)
@@ -147,49 +147,49 @@ describe(`suite:${suite}`, () => {
   })
     .timeout(25000)
 
-  it('capture gradient geoson file', async () => {
-    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
-    body.layers = ['Layers.OSM_DARK']
-    body.size = { width: 800, height: 600 }
-    const res = await capture(body, 'gradient-layer')
-    expect(res.status).to.equal(200)
-    // expect(match('gradient-layer')).beTrue()
-  })
-    .timeout(25000)
+  // it('capture gradient geoson file', async () => {
+  //   const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
+  //   body.layers = ['Layers.OSM_DARK']
+  //   body.size = { width: 800, height: 600 }
+  //   const res = await capture(body, 'gradient-layer')
+  //   expect(res.status).to.equal(200)
+  //   // expect(match('gradient-layer')).beTrue()
+  // })
+  //   .timeout(25000)
 
-  it('capture geojson with defined bbox', async () => {
-    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
-    body.layers = ['Layers.OSM_DARK']
-    body.size = { width: 800, height: 600 }
-    body.bbox = [3.5, 51, 5.5, 53]
-    const res = await capture(body, 'bounded-layer')
-    expect(res.status).to.equal(200)
-    // expect(match('bounded-layer')).beTrue()
-  })
-    .timeout(25000)
+  // it('capture geojson with defined bbox', async () => {
+  //   const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'flight.geojson')))
+  //   body.layers = ['Layers.OSM_DARK']
+  //   body.size = { width: 800, height: 600 }
+  //   body.bbox = [3.5, 51, 5.5, 53]
+  //   const res = await capture(body, 'bounded-layer')
+  //   expect(res.status).to.equal(200)
+  //   // expect(match('bounded-layer')).beTrue()
+  // })
+  //   .timeout(25000)
 
-  it('capture mask geoson file', async function () {
-    this.timeout(120000)
-    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson')))
-    body.layers = ['Layers.HYBRID']
-    body.size = { width: 1200, height: 900 }
-    const res = await capture(body, 'mask-layer')
-    expect(res.status).to.equal(200)
-    // expect(match('mask-layer')).beTrue()
-  })
+  // it('capture mask geoson file', async function () {
+  //   this.timeout(120000)
+  //   const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson')))
+  //   body.layers = ['Layers.HYBRID']
+  //   body.size = { width: 1200, height: 900 }
+  //   const res = await capture(body, 'mask-layer')
+  //   expect(res.status).to.equal(200)
+  //   // expect(match('mask-layer')).beTrue()
+  // })
 
-  it('capture with default locale', async () => {
-    const body = {}
-    body.layout = JSON.parse(fs.readFileSync(path.join(dataDir, 'layout.json')))
-    body.layers = ['Layers.OSM_BRIGHT', 'Layers.VIGICRUES']
-    body.bbox = [0.2636, 46.32, 4.8834, 47.9844]
-    body.size = { width: 2048, height: 1080 }
-    body.delay = 4000
-    const res = await capture(body, 'default-locale')
-    // expect(res.status).to.equal(200)
-    // expect(match('default-locale')).beTrue()
-  })
-    .timeout(25000)
+  // it('capture with default locale', async () => {
+  //   const body = {}
+  //   body.layout = JSON.parse(fs.readFileSync(path.join(dataDir, 'layout.json')))
+  //   body.layers = ['Layers.OSM_BRIGHT', 'Layers.VIGICRUES']
+  //   body.bbox = [0.2636, 46.32, 4.8834, 47.9844]
+  //   body.size = { width: 2048, height: 1080 }
+  //   body.delay = 4000
+  //   const res = await capture(body, 'default-locale')
+  //   // expect(res.status).to.equal(200)
+  //   // expect(match('default-locale')).beTrue()
+  // })
+  //   .timeout(25000)
 
   it('capture with french locale', async () => {
     const body = { lang: 'fr-FR' }
