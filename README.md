@@ -2,6 +2,7 @@
 
 [![Latest Release](https://img.shields.io/github/v/tag/kalisio/kapture?sort=semver&label=latest)](https://github.com/kalisio/kapture/releases)
 [![CI](https://github.com/kalisio/kapture/actions/workflows/main.yaml/badge.svg)](https://github.com/kalisio/kapture/actions/workflows/main.yaml)
+[![Quality Gate Status](https://sonar.portal.kalisio.com/api/project_badges/measure?project=kalisio-kapture&metric=alert_status&token=sqb_ce15b40ea4df16b3ab256a57f76ac53f77524677)](https://sonar.portal.kalisio.com/dashboard?id=kalisio-kapture)
 [![Maintainability Issues](https://sonar.portal.kalisio.com/api/project_badges/measure?project=kalisio-kapture&metric=software_quality_maintainability_issues&token=sqb_ce15b40ea4df16b3ab256a57f76ac53f77524677)](https://sonar.portal.kalisio.com/dashboard?id=kalisio-kapture)
 [![Coverage](https://sonar.portal.kalisio.com/api/project_badges/measure?project=kalisio-kapture&metric=coverage&token=sqb_ce15b40ea4df16b3ab256a57f76ac53f77524677)](https://sonar.portal.kalisio.com/dashboard?id=kalisio-kapture)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
