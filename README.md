@@ -28,6 +28,7 @@ The body of the request must conform a **JSON** object with the following proper
 | `size` | specifies the capture size | `{ "width": 1024, "height": 768 }` |
 | `delay` | specified the waiting delay before capturing the screenshot (in milliseconds) | `1000` |
 | `networkIdleTimeout` | specified the maximum time to wait for network idle capturing the screenshot (in milliseconds) | `90000` |
+| `file` | optional file import (KML, GeoJSON, etc.) | - |
 
 The `layers` property must conform the following JSON schema: 
 
@@ -74,6 +75,18 @@ The `delay` property must conform the following JSON schema:
 "activity": {
   "type": "number",
   "default": "2000"
+}
+```
+
+The `file` property must conform the following JSON schema:
+
+* `mimeType` is used to determine the temporary file extension
+* `content` must contain the full file content as a string
+
+```json
+"file": {
+  "mimeType": "kml",
+  "content": "<kml>...</kml>"
 }
 ```
 

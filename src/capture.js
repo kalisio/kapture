@@ -86,28 +86,44 @@ export async function capture (parameters) {
     console.error(`<!> navigate to ${url} failed: ${error}`)
     return null
   }
-  // Process the features
-  if (parameters.type === 'FeatureCollection' || parameters.type === 'Feature') {
+  // Process the features (GeoJSON legacy or generic file import)
+  if (
+    parameters.type === 'FeatureCollection' ||
+    parameters.type === 'Feature' ||
+    (_.has(parameters, 'file') && _.has(parameters.file, 'mimeType') && _.has(parameters.file, 'content'))
+  ) {
     debug('process the features')
     // Create tmp directory if needed
     createTmpDir()
-    // Define a temporary feature file name
-    const tmpGeoJsonFile = 'features-' + crypto.randomBytes(4).readUInt32LE(0) + '.json'
-    // Write the file for dropping it
-    debug('writing temporary geojson file:', tmpGeoJsonFile)
-    writeTmpFile(tmpGeoJsonFile, JSON.stringify(parameters))
-    debug('uploading temporary geosjon file')
+    // File content & size
+    let fileContent
+    let fileExtension
+    if (parameters.type === 'FeatureCollection' || parameters.type === 'Feature') {
+      // GeoJSON legacy
+      fileContent = JSON.stringify(parameters)
+      fileExtension = 'geojson'
+    } else {
+      // Generic file import
+      const { mimeType, content } = parameters.file
+      fileContent = content
+      fileExtension = mimeType.toLowerCase()
+    }
+    const randomId = crypto.randomBytes(4).readUInt32LE(0)
+    const tmpFileName = `features-${randomId}.${fileExtension}`
+    debug('writing temporary feature file:', tmpFileName)
+    writeTmpFile(tmpFileName, fileContent)
+    debug('uploading temporary feature file')
     await new Promise(resolve => setTimeout(resolve, 500))
     const uploader = await page.waitForSelector('#dropFileInput', { timeout: 5000 })
     if (uploader) {
-      await uploader.uploadFile(path.join(getTmpDirName(), tmpGeoJsonFile))
+      await uploader.uploadFile(path.join(getTmpDirName(), tmpFileName))
       await new Promise(resolve => setTimeout(resolve, 1000))
     } else {
       console.error('<!> upload features file failed: unable to find the #dropFileInput element')
     }
     // Delete the file
     debug('deleting temporary geojson file')
-    deleteTmpFile(tmpGeoJsonFile)
+    deleteTmpFile(tmpFileName)
   }
   // Wait for the network to be idle
   debug('wait for network to be idle')

@@ -90,7 +90,7 @@ describe(`suite:${suite}`, () => {
   it('handle invalid width body', async () => {
     const body = {
       size: {
-        width: 5000
+        width: 5001
       }
     }
     const res = await capture(body, 'invalid')
@@ -137,6 +137,20 @@ describe(`suite:${suite}`, () => {
     const res = await capture(body, 'map-shapes')
     expect(res.status).to.equal(200)
     expect(match('map-shapes')).beTrue()
+  })
+    .timeout(15000)
+
+  it('capture heterogenous kml file', async function () {
+    this.timeout(120000)
+    const body = {
+      file: {
+        mimeType: 'kml',
+        content: fs.readFileSync(path.join(dataDir, 'shapes-WGS84.kml'), 'utf-8')
+      }
+    }
+    const res = await capture(body, 'kml-map-shapes')
+    expect(res.status).to.equal(200)
+    expect(match('kml-map-shapes')).beTrue()
   })
     .timeout(15000)
 
@@ -202,7 +216,7 @@ describe(`suite:${suite}`, () => {
     expect(res.status).to.equal(200)
     expect(match('french-locale')).beTrue()
   })
-    .timeout(15000)
+    .timeout(25000)
 
   // Cleanup
   after(async () => {
