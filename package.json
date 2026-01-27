@@ -1,7 +1,7 @@
 {
   "name": "kapture",
   "description": "Capture Kano Snapshots as a Service",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "type": "module",
   "main": "src/main.js",
   "bin": "src/bin.js",
