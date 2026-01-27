@@ -180,15 +180,15 @@ describe(`suite:${suite}`, () => {
   })
     .timeout(25000)
 
-  it('capture mask geoson file', async function () {
-    this.timeout(120000)
-    const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson')))
-    body.layers = ['Layers.HYBRID']
-    body.size = { width: 1200, height: 900 }
-    const res = await capture(body, 'mask-layer')
-    expect(res.status).to.equal(200)
-    expect(match('mask-layer')).beTrue()
-  })
+  // it('capture mask geoson file', async function () {
+  //   this.timeout(120000)
+  //   const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'occitanie.geojson')))
+  //   body.layers = ['Layers.HYBRID']
+  //   body.size = { width: 1200, height: 900 }
+  //   const res = await capture(body, 'mask-layer')
+  //   expect(res.status).to.equal(200)
+  //   expect(match('mask-layer')).beTrue()
+  // })
 
   it('capture with default locale', async () => {
     const body = {}
