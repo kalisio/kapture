@@ -3,6 +3,7 @@ import _ from 'lodash'
 import path from 'path'
 import crypto from 'crypto'
 import puppeteer from 'puppeteer'
+import { logger } from './logger.js'
 import { defaultLayout } from './utils.layout.js'
 import { getTmpDirName, createTmpDir, writeTmpFile, deleteTmpFile } from './utils.fs.js'
 
@@ -12,7 +13,7 @@ const debug = makeDebug('kapture:capture')
  *  Main capture function
  */
 export async function capture (parameters) {
-  console.log('[KAPTURE] capture requested with the following parameters: ', _.omit(parameters, 'jwt'))
+  logger.info('[KAPTURE] capture requested with the following parameters: ', _.omit(parameters, 'jwt', 'content'))
   // Instanciate the browser
   const browser = await puppeteer.launch({
     headless: 'new',
@@ -28,10 +29,10 @@ export async function capture (parameters) {
   debug('create the page')
   const page = await browser.newPage()
   page.on('error', error => {
-    console.error('<!> error happen at the page: ', error)
+    logger.error('<!> error happen at the page: ', error)
   })
   page.on('pageerror', error => {
-    console.error('<!> pageerror occurred: ', error)
+    logger.error('<!> pageerror occurred: ', error)
   })
   // Process the page language
   debug('configure the page language')
@@ -51,7 +52,7 @@ export async function capture (parameters) {
       deviceScaleFactor: 1
     })
   } catch (error) {
-    console.error(`<!> setting viewport failed: ${error}`)
+    logger.error(`<!> setting viewport failed: ${error}`)
     return null
   }
   // Process the local storage items
@@ -83,7 +84,7 @@ export async function capture (parameters) {
     await page.goto(url)
     await new Promise(resolve => setTimeout(resolve, 1000))
   } catch (error) {
-    console.error(`<!> navigate to ${url} failed: ${error}`)
+    logger.error(`<!> navigate to ${url} failed: ${error}`)
     return null
   }
   // Process the features (GeoJSON legacy or generic file import)
@@ -118,7 +119,7 @@ export async function capture (parameters) {
       await uploader.uploadFile(path.join(getTmpDirName(), tmpFileName))
       await new Promise(resolve => setTimeout(resolve, 1000))
     } else {
-      console.error('<!> upload features file failed: unable to find the #dropFileInput element')
+      logger.error('<!> upload features file failed: unable to find the #dropFileInput element')
     }
     // Delete the file
     debug('deleting temporary geojson file')
@@ -132,7 +133,7 @@ export async function capture (parameters) {
       idleTime: 1000
     })
   } catch (error) {
-    console.error(`<!> wait for networkd idle failed: ${error.message}`)
+    logger.error(`<!> wait for networkd idle failed: ${error.message}`)
   }
   // Process the layout components
   debug('process the layout components')
@@ -142,7 +143,7 @@ export async function capture (parameters) {
     try {
       window.$layout.set(layout)
     } catch (error) {
-      console.error('error while applying layout:', error)
+      logger.error('error while applying layout:', error)
     }
   }, JSON.parse(JSON.stringify(layout)))
 

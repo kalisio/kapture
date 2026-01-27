@@ -2,6 +2,7 @@ import _ from 'lodash'
 import cors from 'cors'
 import express from 'express'
 import { Buffer } from 'buffer'
+import { logger } from './logger.js'
 import { capture } from './capture.js'
 import { validateGeoJson } from './utils.geojson.js'
 
@@ -73,7 +74,7 @@ export async function createServer () {
       res.contentType('image/png')
       res.send(Buffer.from(buffer))
       const duration = new Date() - start
-      console.log('[i] capture processed in %dms', duration)
+      logger.info('[i] capture processed in %dms', duration)
     } else {
       res.status(500).json({ message: 'Internal service error' })
     }
@@ -87,6 +88,6 @@ export async function createServer () {
 
   // Serve the app
   const server = await app.listen(port)
-  console.log('[KAPTURE] server listening at %d (body limit %s, delay %s, network idle timeout %s)', port, bodyLimit, delay, networkdIdleTimeout)
+  logger.info('[KAPTURE] server listening at %d (body limit %s, delay %s, network idle timeout %s)', port, bodyLimit, delay, networkdIdleTimeout)
   return server
 }
