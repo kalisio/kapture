@@ -28,7 +28,8 @@ The body of the request must conform a **JSON** object with the following proper
 | `size` | specifies the capture size | `{ "width": 1024, "height": 768 }` |
 | `delay` | specified the waiting delay before capturing the screenshot (in milliseconds) | `1000` |
 | `networkIdleTimeout` | specified the maximum time to wait for network idle capturing the screenshot (in milliseconds) | `90000` |
-| `file` | optional file import (KML, GeoJSON, etc.) | - |
+| `type` | Declares the input data type | - |
+| `content` | Raw content for generic imports | - |
 
 The `layers` property must conform the following JSON schema: 
 
@@ -78,14 +79,15 @@ The `delay` property must conform the following JSON schema:
 }
 ```
 
-The `file` property must conform the following JSON schema:
+When `type` and `content` are provided, they allow rendering the data as an overlay.
+* `type` property declares the input data format (e.g. `kml`, `geojson`, etc.)
+* `content` contains the raw data as a string
 
-* `mimeType` is used to determine the temporary file extension
-* `content` must contain the full file content as a string
+Example:
 
 ```json
-"file": {
-  "mimeType": "kml",
+{
+  "type": "kml",
   "content": "<kml>...</kml>"
 }
 ```

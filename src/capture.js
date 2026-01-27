@@ -90,12 +90,11 @@ export async function capture (parameters) {
   if (
     parameters.type === 'FeatureCollection' ||
     parameters.type === 'Feature' ||
-    (_.has(parameters, 'file') && _.has(parameters.file, 'mimeType') && _.has(parameters.file, 'content'))
+    (_.has(parameters, 'type') && _.has(parameters, 'content'))
   ) {
     debug('process the features')
     // Create tmp directory if needed
     createTmpDir()
-    // File content & size
     let fileContent
     let fileExtension
     if (parameters.type === 'FeatureCollection' || parameters.type === 'Feature') {
@@ -103,10 +102,10 @@ export async function capture (parameters) {
       fileContent = JSON.stringify(parameters)
       fileExtension = 'geojson'
     } else {
-      // Generic file import
-      const { mimeType, content } = parameters.file
+      // Generic import
+      const { type, content } = parameters
       fileContent = content
-      fileExtension = mimeType.toLowerCase()
+      fileExtension = type.toLowerCase()
     }
     const randomId = crypto.randomBytes(4).readUInt32LE(0)
     const tmpFileName = `features-${randomId}.${fileExtension}`

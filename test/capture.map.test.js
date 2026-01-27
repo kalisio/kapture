@@ -143,10 +143,8 @@ describe(`suite:${suite}`, () => {
   it('capture heterogenous kml file', async function () {
     this.timeout(120000)
     const body = {
-      file: {
-        mimeType: 'kml',
-        content: fs.readFileSync(path.join(dataDir, 'shapes-WGS84.kml'), 'utf-8')
-      }
+      type: 'kml',
+      content: fs.readFileSync(path.join(dataDir, 'shapes-WGS84.kml'), 'utf-8')
     }
     const res = await capture(body, 'kml-map-shapes')
     expect(res.status).to.equal(200)
