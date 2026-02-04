@@ -104,8 +104,8 @@ export async function capture (parameters) {
       fileExtension = 'geojson'
     } else {
       // Generic import
-      const { type, content } = parameters
-      fileContent = content
+      const { type, content, encoding } = parameters
+      fileContent = (encoding === 'base64' ? Buffer.from(content, 'base64') : content)
       fileExtension = type.toLowerCase()
     }
     const randomId = crypto.randomBytes(4).readUInt32LE(0)

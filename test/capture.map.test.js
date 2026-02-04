@@ -152,6 +152,19 @@ describe(`suite:${suite}`, () => {
   })
     .timeout(15000)
 
+  it('capture heterogenous kml file base64 encoded', async function () {
+    this.timeout(120000)
+    const body = {
+      type: 'kml',
+      encoding: 'base64',
+      content: Buffer.from(fs.readFileSync(path.join(dataDir, 'shapes-WGS84.kml'), 'utf-8')).toString('base64')
+    }
+    const res = await capture(body, 'kml-map-shapes')
+    expect(res.status).to.equal(200)
+    expect(match('kml-map-shapes')).beTrue()
+  })
+    .timeout(15000)
+
   it('handle too large geojson file', async () => {
     const body = JSON.parse(fs.readFileSync(path.join(dataDir, 'adsb.geojson')))
     const res = await capture(body, 'adsb')
