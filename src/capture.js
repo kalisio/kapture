@@ -143,7 +143,9 @@ export async function capture (parameters) {
     try {
       window.$layout.set(layout)
     } catch (error) {
-      logger.error('error while applying layout:', error)
+      // Can't use logger here as we are in the context of the web page
+      //logger.error('error while applying layout:', error)
+      console.error('error while applying layout:', error)
     }
   }, JSON.parse(JSON.stringify(layout)))
 
