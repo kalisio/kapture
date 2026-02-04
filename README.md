@@ -30,6 +30,7 @@ The body of the request must conform a **JSON** object with the following proper
 | `networkIdleTimeout` | specified the maximum time to wait for network idle capturing the screenshot (in milliseconds) | `90000` |
 | `type` | Declares the input data type | - |
 | `content` | Raw content for generic imports | - |
+| `layout` | overrides application layout configuration, will do nothing if empty | `panes: { left: { opener: false, visible: false }, ... }, fab: { visible: false }` |
 
 The `layers` property must conform the following JSON schema: 
 

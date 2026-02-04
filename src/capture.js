@@ -139,15 +139,17 @@ export async function capture (parameters) {
   debug('process the layout components')
   await page.waitForFunction(() => window.$layout !== undefined && typeof window.$layout.set === 'function')
   const layout = _.get(parameters, 'layout', defaultLayout)
-  await page.evaluate((layout) => {
-    try {
-      window.$layout.set(layout)
-    } catch (error) {
-      // Can't use logger here as we are in the context of the web page
-      //logger.error('error while applying layout:', error)
-      console.error('error while applying layout:', error)
-    }
-  }, JSON.parse(JSON.stringify(layout)))
+  if (!_.isEmpty(layout)) {
+    await page.evaluate((layout) => {
+      try {
+        window.$layout.set(layout)
+      } catch (error) {
+        // Can't use logger here as we are in the context of the web page
+        //logger.error('error while applying layout:', error)
+        console.error('error while applying layout:', error)
+      }
+    }, JSON.parse(JSON.stringify(layout)))
+  }
 
   // Wait for the page to be rendered
   debug('wait for extra delay', parameters.delay)
