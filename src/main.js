@@ -88,6 +88,6 @@ export async function createServer () {
 
   // Serve the app
   const server = await app.listen(port)
-  logger.info('[KAPTURE] server listening at %d (body limit %s, delay %s, network idle timeout %s)', port, bodyLimit, delay, networkdIdleTimeout)
+  logger.info(`[KAPTURE] server listening at ${port} (body limit ${bodyLimit}, delay ${delay}, network idle timeout ${networkdIdleTimeout})`)
   return server
 }
