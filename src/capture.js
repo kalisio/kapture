@@ -10,6 +10,7 @@ import { getTmpDirName, createTmpDir, writeTmpFile, deleteTmpFile } from './util
 const debug = makeDebug('kapture:capture')
 // Useful for debug purpose
 const keepTmpFiles = process.env.KEEP_TEMPORARY_FILES || false
+const uploadFileDelay = process.env.UPLOAD_FILE_DELAY || 1000
 
 /**
  *  Main capture function
@@ -133,7 +134,7 @@ export async function capture (parameters) {
     const uploader = await page.waitForSelector('#dropFileInput', { timeout: 5000 })
     if (uploader) {
       await uploader.uploadFile(path.join(getTmpDirName(), tmpFileName))
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await new Promise(resolve => setTimeout(resolve, uploadFileDelay))
     } else {
       logger.error('<!> upload features file failed: unable to find the #dropFileInput element')
     }
