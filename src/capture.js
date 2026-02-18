@@ -25,7 +25,7 @@ export async function capture (parameters) {
       '--disable-dev-shm-usage'
     ]
   })
-  // Create the page and listen to page errors
+  // Create the page and listen to page messages/errors
   debug('create the page')
   const page = await browser.newPage()
   page.on('error', error => {
@@ -33,6 +33,9 @@ export async function capture (parameters) {
   })
   page.on('pageerror', error => {
     logger.error('<!> pageerror occurred: ', error)
+  })
+  page.on('console', message => {
+    debug(`console ${message.type()}: `, message.text())
   })
   // Process the page language
   debug('configure the page language')
