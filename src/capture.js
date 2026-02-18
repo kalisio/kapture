@@ -8,6 +8,8 @@ import { defaultLayout } from './utils.layout.js'
 import { getTmpDirName, createTmpDir, writeTmpFile, deleteTmpFile } from './utils.fs.js'
 
 const debug = makeDebug('kapture:capture')
+// Useful for debug purpose
+const keepTmpFiles = process.env.KEEP_TEMPORARY_FILES || false
 
 /**
  *  Main capture function
@@ -126,7 +128,7 @@ export async function capture (parameters) {
     }
     // Delete the file
     debug('deleting temporary geojson file')
-    deleteTmpFile(tmpFileName)
+    if (!keepTmpFiles) deleteTmpFile(tmpFileName)
   }
   // Wait for the network to be idle
   debug('wait for network to be idle')
