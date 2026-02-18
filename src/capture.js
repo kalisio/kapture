@@ -84,6 +84,17 @@ export async function capture (parameters) {
     _.forEach(parameters.layers, layer => {
       queryParams.push(`layers=${layer}`)
     })
+    if (parameters.parameters) {
+      _.forOwn(parameters.parameters, (value, key) => {
+        if (Array.isArray(value)) {
+          _.forEach(value, item => {
+            queryParams.push(`${key}=${item}`)
+          })
+        } else {
+          queryParams.push(`${key}=${value}`)
+        }
+      })
+    }
     if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
     debug(`computed ${parameters.appName} url:`, url)
     await page.goto(url)

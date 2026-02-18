@@ -24,12 +24,15 @@ The body of the request must conform a **JSON** object with the following proper
 | Property | Description | Defaults`|
 | --- | --- | -- |
 | `layers` | specifies the layers to display | `[]` | 
+| `time` | specifies the time to display | - | 
+| `bbox` | specifies the bounding box of the zone to display | - | 
 | `activity` | specifies the `map` or `globe` view | `map` |
 | `size` | specifies the capture size | `{ "width": 1024, "height": 768 }` |
 | `delay` | specified the waiting delay before capturing the screenshot (in milliseconds) | `1000` |
 | `networkIdleTimeout` | specified the maximum time to wait for network idle capturing the screenshot (in milliseconds) | `90000` |
 | `type` | Declares the input data type | - |
 | `content` | Raw content for generic imports | - |
+| `parameters` | Additional query parameters to be sent to the target activity | - |
 | `layout` | overrides application layout configuration, will do nothing if empty | `panes: { left: { opener: false, visible: false }, ... }, fab: { visible: false }` |
 
 The `layers` property must conform the following JSON schema: 
