@@ -24,6 +24,8 @@ export async function capture (parameters) {
       '--no-sandbox',
       '--hide-scrollbars',
       '--enable-webgl',
+      '--use-gl=swiftshader',
+      '--enable-unsafe-swiftshader',
       '--disable-gpu',
       '--disable-dev-shm-usage'
     ]
