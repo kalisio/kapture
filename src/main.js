@@ -9,6 +9,8 @@ import { validateGeoJson } from './utils.geojson.js'
 const port = process.env.PORT || 3000
 const bodyLimit = process.env.BODY_LIMIT || '100kb'
 const delay = process.env.DELAY || 2000
+const pageSetupDelay = process.env.PAGE_SETUP_DELAY || 2000
+const uploadFileDelay = process.env.UPLOAD_FILE_DELAY || 2000
 const networkdIdleTimeout = process.env.NETWORK_IDLE_TIMEOUT || 100000
 const appUrl = process.env.APP_URL
 const appJwt = process.env.APP_JWT
@@ -69,7 +71,7 @@ export async function createServer () {
   // Capture
   app.post('/capture', [activityValidator, layersValidator, sizeValidator, geoJsonValidator], async (req, res) => {
     const start = new Date()
-    const buffer = await capture(_.defaults(req.body, { url: appUrl, jwt: appJwt, delay, networkdIdleTimeout, appName }))
+    const buffer = await capture(_.defaults(req.body, { url: appUrl, jwt: appJwt, delay, pageSetupDelay, uploadFileDelay, networkdIdleTimeout, appName }))
     if (Buffer.isBuffer(Buffer.from(buffer))) {
       res.contentType('image/png')
       res.send(Buffer.from(buffer))

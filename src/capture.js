@@ -10,7 +10,6 @@ import { getTmpDirName, createTmpDir, writeTmpFile, deleteTmpFile } from './util
 const debug = makeDebug('kapture:capture')
 // Useful for debug purpose
 const keepTmpFiles = process.env.KEEP_TEMPORARY_FILES || false
-const uploadFileDelay = process.env.UPLOAD_FILE_DELAY || 1000
 
 /**
  *  Main capture function
@@ -101,7 +100,8 @@ export async function capture (parameters) {
     if (!_.isEmpty(queryParams)) url += `?${_.join(queryParams, '&')}`
     debug(`computed ${parameters.appName} url:`, url)
     await page.goto(url)
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    // Ensure some processing time so that the activity is setup
+    await new Promise(resolve => setTimeout(resolve, parameters.pageSetupDelay))
   } catch (error) {
     logger.error(`<!> navigate to ${url} failed: ${error}`)
     return null
@@ -132,11 +132,12 @@ export async function capture (parameters) {
     debug('writing temporary feature file:', tmpFileName)
     writeTmpFile(tmpFileName, fileContent)
     debug('uploading temporary feature file')
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await new Promise(resolve => setTimeout(resolve, 1000))
     const uploader = await page.waitForSelector('#dropFileInput', { timeout: 5000 })
     if (uploader) {
       await uploader.uploadFile(path.join(getTmpDirName(), tmpFileName))
-      await new Promise(resolve => setTimeout(resolve, uploadFileDelay))
+      // Ensure some processing time so that file content has been loaded
+      await new Promise(resolve => setTimeout(resolve, parameters.uploadFileDelay))
     } else {
       logger.error('<!> upload features file failed: unable to find the #dropFileInput element')
     }
