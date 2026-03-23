@@ -76,6 +76,7 @@ export async function capture (parameters) {
   let url = parameters.url + (basePath.endsWith('/') ? basePath.substring(0, basePath.length - 1) : basePath)
   try {
     if (_.has(parameters, 'activity')) url += `/${parameters.activity}`
+    else url += '/map' // Default for Kano
     if (parameters.bbox && !parameters.type) {
       url += `/${parameters.bbox[1]}/${parameters.bbox[0]}/${parameters.bbox[3]}/${parameters.bbox[2]}`
     }
