@@ -19,7 +19,8 @@ const suite = 'capture'
 
 async function capture (parameters, image) {
   // Make sure we have an activity set
-  if (!parameters.activity) parameters.activity = 'map'
+  // This should actually be automatically done by kapture so test it
+  //if (!parameters.activity) parameters.activity = 'map'
   // Setup the request url options
   const urlOptions = {
     method: 'POST',
