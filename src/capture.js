@@ -67,8 +67,8 @@ export async function capture (parameters) {
   await page.evaluateOnNewDocument(parameters => {
     window.localStorage.clear()
     window.localStorage.setItem(`${parameters.appName}-jwt`, parameters.jwt)
-    window.localStorage.setItem(`${parameters.appName}-welcome`, false)
-    window.localStorage.setItem(`${parameters.appName}-install`, false)
+    window.localStorage.setItem(`${parameters.appName}-welcome-prompt`, false)
+    window.localStorage.setItem(`${parameters.appName}-pwa-install-prompt`, false)
   }, parameters)
   // Goto the app url
   debug(`navigate to ${parameters.appName}`)
