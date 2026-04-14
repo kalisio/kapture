@@ -26,7 +26,7 @@ The body of the request must conform a **JSON** object with the following proper
 | `layers` | specifies the layers to display | `[]` | 
 | `time` | specifies the time to display | - | 
 | `bbox` | specifies the bounding box of the zone to display | - | 
-| `activity` | specifies the `map` or `globe` view | `map` |
+| `path` | specifies the frontend URL path to the activity | `/#/home/map` for Kano |
 | `size` | specifies the capture size | `{ "width": 1024, "height": 768 }` |
 | `delay` | specified the waiting delay before capturing the screenshot (in milliseconds) | `1000` |
 | `networkIdleTimeout` | specified the maximum time to wait for network idle capturing the screenshot (in milliseconds) | `90000` |
@@ -48,12 +48,12 @@ The `layers` property must conform the following JSON schema:
 
 The items must conform the [kano](https://kalisio.github.io/kano/) formalism, i.e. `Layers.MY_LAYER`. In addition and for backward compatibility, you can specify the layer name using kebab case: `layers-my-layer`, with or without the `layers-` prefix. 
 
-The `activity` property must conform the following JSON schema: 
+The `path` property must conform the following JSON schema: 
 
 ```json
-"activity": {
+"path": {
   "type": "string",
-  "pattern": "map|globe"
+  "default": ""
 }
 ```
 
@@ -77,7 +77,7 @@ The `size` property must conform the following JSON schema:
 The `delay` property must conform the following JSON schema: 
 
 ```json
-"activity": {
+"delay": {
   "type": "number",
   "default": "2000"
 }

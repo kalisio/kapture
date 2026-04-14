@@ -16,17 +16,6 @@ const appUrl = process.env.APP_URL
 const appJwt = process.env.APP_JWT
 const appName = process.env.APP_NAME
 
-// activity validator middleware
-const activityValidator = function (req, res, next) {
-  const activity = _.get(req.body, 'activity')
-  if (activity) {
-    if (!_.includes(['map', 'globe'], activity)) res.status(404).json({ message: 'Invalid "activity" property' })
-    else next()
-  } else {
-    next()
-  }
-}
-
 // layers validator middleware
 const layersValidator = function (req, res, next) {
   const layers = _.get(req.body, 'layers')
@@ -69,7 +58,7 @@ export async function createServer () {
   app.use(express.json({ limit: bodyLimit }))
 
   // Capture
-  app.post('/capture', [activityValidator, layersValidator, sizeValidator, geoJsonValidator], async (req, res) => {
+  app.post('/capture', [layersValidator, sizeValidator, geoJsonValidator], async (req, res) => {
     const start = new Date()
     const buffer = await capture(_.defaults(req.body, { url: appUrl, jwt: appJwt, delay, pageSetupDelay, uploadFileDelay, networkdIdleTimeout, appName }))
     if (Buffer.isBuffer(Buffer.from(buffer))) {
