@@ -72,11 +72,11 @@ export async function capture (parameters) {
   }, parameters)
   // Goto the app url
   debug(`navigate to ${parameters.appName}`)
-  const basePath = parameters.basePath || '/#/home'
+  const basePath = parameters.path || '/#/home'
   let url = parameters.url + (basePath.endsWith('/') ? basePath.substring(0, basePath.length - 1) : basePath)
   try {
-    if (_.has(parameters, 'activity')) url += `/${parameters.activity}`
-    else if (!url.endsWith('/map')) url += '/map' // Default for Kano
+    // Backward compatibility for Kano
+    if (!parameters.path) url += `/${_.get(parameters, 'activity', 'map')}`
     if (parameters.bbox && !parameters.type) {
       url += `/${parameters.bbox[1]}/${parameters.bbox[0]}/${parameters.bbox[3]}/${parameters.bbox[2]}`
     }
